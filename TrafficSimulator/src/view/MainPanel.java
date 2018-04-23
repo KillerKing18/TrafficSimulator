@@ -28,7 +28,7 @@ public class MainPanel extends JFrame implements TrafficSimulatorObserver {
 	private OutputStream _reportsOutputStream;
 	private File _inFile;
 	//PRUEBA COMMIT7SAMETIME
-	//HELLO AGREED
+	//HELLO CARLOS
 	
 	private final String EVENTS = "Events: ";
 	
