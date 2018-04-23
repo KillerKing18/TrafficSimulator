@@ -17,7 +17,7 @@ public abstract class TextAreaPanel extends JPanel{
 		textArea = new JTextArea(40,30);
 		textArea.setEditable(editable);
 		this.add(new JScrollPane(textArea));
-		this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK) ,title));
+		this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), title));
 		textArea.setFont(new Font("Sheriff", Font.ITALIC, 17));
 	}
 	

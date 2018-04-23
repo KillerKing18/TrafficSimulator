@@ -31,10 +31,33 @@ public class MainPanel extends JFrame implements TrafficSimulatorObserver {
 	
 	
 	private JPanel _mainPanel;
+	
+	
 	private JPanel _topPanel;
-	private JPanel _centerPanel;
+	
 	private EventsEditorPanel _eventsEditor;
 	private ReportsAreaPanel _reportsArea;
+	
+	// Down Panel
+	private JPanel _downPanel;
+		// Down Left Panel
+	private JPanel _downLeftPanel;
+			// Vehicles Table
+	private JPanel _vehiclesTablePanel;
+	private JTable _vehiclesTable;
+	private VehiclesTableModel _vehiclesTableModel;
+			// Roads Table
+	private JPanel _roadsTablePanel;
+	private JTable _roadsTable;
+	private RoadsTableModel _roadsTableModel;
+			// Junctions Table
+	private JPanel _junctionsTablePanel;
+	private JTable _junctionsTable;
+	private JunctionsTableModel _junctionsTableModel;
+		// Down Right Panel
+	private JPanel _downRightPanel;
+	
+	
 	private MenuBar _menuBar;
 
 	
@@ -73,6 +96,66 @@ public class MainPanel extends JFrame implements TrafficSimulatorObserver {
 		// Top Panel
 		createTopPanel();
 		_mainPanel.add(_topPanel);
+		
+		// Down Panel
+		createDownPanel();
+		_mainPanel.add(_downPanel);
+	}
+	
+	private void createDownPanel() {
+		_downPanel = new JPanel();
+		_downPanel.setLayout(new BoxLayout(_downPanel, BoxLayout.X_AXIS));
+		
+		createDownLeftPanel();
+		_downPanel.add(_downLeftPanel);
+		
+		createDownRightPanel();
+		_downPanel.add(_downRightPanel);		
+	}
+	
+	private void createDownRightPanel() {
+		_downRightPanel = new JPanel();
+	}
+	
+	private void createDownLeftPanel() {
+		_downLeftPanel = new JPanel();
+		_downLeftPanel.setLayout(new BoxLayout(_downLeftPanel, BoxLayout.Y_AXIS));
+		
+		// Vehicles Table
+		createVehiclesTable();
+		_downLeftPanel.add(_vehiclesTablePanel);
+		
+		// Roads Table
+		createRoadsTable();
+		_downLeftPanel.add(_roadsTablePanel);
+		
+		// Junctions Table
+		createJunctionsTable();
+		_downLeftPanel.add(_junctionsTablePanel);
+	}
+	
+	private void createVehiclesTable() {
+		_vehiclesTablePanel = new JPanel();
+		_vehiclesTableModel = new VehiclesTableModel();
+		_vehiclesTable = new JTable(_vehiclesTableModel);
+		_vehiclesTablePanel.add(new JScrollPane(_vehiclesTable));
+		_vehiclesTablePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Vehicles"));
+	}
+	
+	private void createRoadsTable() {
+		_roadsTablePanel = new JPanel();
+		_roadsTableModel = new RoadsTableModel();
+		_roadsTable = new JTable(_roadsTableModel);
+		_roadsTablePanel.add(new JScrollPane(_roadsTable));
+		_roadsTablePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Roads"));
+	}
+	
+	private void createJunctionsTable() {
+		_junctionsTablePanel = new JPanel();
+		_junctionsTableModel = new JunctionsTableModel();
+		_junctionsTable = new JTable(_junctionsTableModel);
+		_junctionsTablePanel.add(new JScrollPane(_junctionsTable));
+		_junctionsTablePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Junctions"));
 	}
 	
 	private void createTopPanel() throws IOException {
