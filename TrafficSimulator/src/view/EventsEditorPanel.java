@@ -1,10 +1,17 @@
 package view;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
+import javax.swing.BorderFactory;
+import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -22,7 +29,11 @@ import control.NewRoadEventBuilder;
 import control.NewRoundRobinJunctionEventBuilder;
 import control.NewVehicleEventBuilder;
 
-public class EventsEditorPanel extends TextAreaPanel{
+public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
+	
+	private File _inFile;
+	
+	private final String EVENTS = "Events: ";
 	
 	private static EventBuilder[] _events = {new NewMostCrowdedJunctionEventBuilder(), 
 		new NewRoundRobinJunctionEventBuilder(),
@@ -35,41 +46,31 @@ public class EventsEditorPanel extends TextAreaPanel{
 		new NewVehicleEventBuilder(),
 		new MakeVehicleFaultyEventBuilder()};
 
-	public EventsEditorPanel(String title, String text, boolean editable){
+	public EventsEditorPanel(String title, String text, boolean editable, File inFile) throws IOException{
 		super(title, editable);
-		this.setText(text);
+		_inFile = inFile;
+		if(_inFile != null)
+			setText(readFile());
+		_fc = new JFileChooser();
 		JPopupMenu _editorPopupMenu = new JPopupMenu();
 		
 		JMenuItem clearOption = new JMenuItem("Clear");
-		clearOption.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				EventsEditorPanel.this.clear();
-			}
-		});
+		clearOption.setActionCommand("CLEAR");
+		clearOption.addActionListener(this);
 
 		JMenuItem loadOption = new JMenuItem("Load");
-		loadOption.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//TODO 
-			}
-		});
+		loadOption.setActionCommand("LOAD");
+		loadOption.addActionListener(this);
 		
 		JMenuItem saveOption = new JMenuItem("Save");
-		saveOption.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//TODO 
-			}
-		});
+		saveOption.setActionCommand("SAVE");
+		saveOption.addActionListener(this);
 
 		JMenu subMenu = new JMenu("Add Template");
 
 		for (EventBuilder eb : _events) {
 			JMenuItem menuItem = new JMenuItem(eb.toString());
 			menuItem.addActionListener(new ActionListener() {
-
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					EventsEditorPanel.this.insert(eb.template() + "\n");
@@ -77,7 +78,6 @@ public class EventsEditorPanel extends TextAreaPanel{
 			});
 			subMenu.add(menuItem);
 		}
-
 		
 		_editorPopupMenu.add(subMenu);
 		_editorPopupMenu.addSeparator();
@@ -118,4 +118,63 @@ public class EventsEditorPanel extends TextAreaPanel{
 			}
 		});
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String str = e.getActionCommand();
+		switch (str){
+		case "LOAD":
+			loadFile();
+			break;
+		case "SAVE":
+			saveFile();
+			break;
+		case "CLEAR":
+			clear();
+			break;
+		}
+		
+	}
+
+	public void loadFile() {
+		int returnVal = this._fc.showOpenDialog(null);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			_inFile = this._fc.getSelectedFile();
+			try {
+				setText(readFile());
+				// TODO _control.restart();
+				// TODO panelBarraEstado.setMensaje("Fichero " + fichero.getName() + " de eventos cargado into the editor");
+			}
+			catch (IOException e) {
+				// TODO
+			}
+		}
+	}
+	
+	public void setText(String text) {
+		textArea.setText(text);
+		setBorder(BorderFactory.createTitledBorder
+				(BorderFactory.createLineBorder(Color.BLACK), EVENTS + _inFile.getName()));
+	}
+
+	private String readFile() throws IOException {
+		FileReader fr = new FileReader(_inFile);
+		BufferedReader br = new BufferedReader(fr);
+		String str = "";
+		String finalStr = "";
+		str = br.readLine();
+		while(str != null) {
+			if(!finalStr.equals(""))
+				finalStr += "\n";
+			finalStr = finalStr + str;
+			str = br.readLine();
+		}
+		return finalStr;
+	}
+
+	public void saveFile() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

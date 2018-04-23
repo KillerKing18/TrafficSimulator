@@ -28,12 +28,11 @@ public class MainPanel extends JFrame implements TrafficSimulatorObserver {
 	private OutputStream _reportsOutputStream;
 	private File _inFile;
 	
-	private final String EVENTS = "Events: ";
+	
 	
 	private JPanel _mainPanel;
 	private JPanel _topPanel;
 	private JPanel _centerPanel;
-	private JFileChooser _fc;
 	private EventsEditorPanel _eventsEditor;
 	private ReportsAreaPanel _reportsArea;
 	private MenuBar _menuBar;
@@ -42,7 +41,6 @@ public class MainPanel extends JFrame implements TrafficSimulatorObserver {
 	public MainPanel(TrafficSimulator model, String inFile, Controller control) throws IOException {
 		super("Traffic Simulator");
 		_control = control;
-		_fc = new JFileChooser();
 		_inFile = inFile == null ? null : new File(inFile);
 		initGUI();
 		model.addObserver(this);
@@ -50,17 +48,14 @@ public class MainPanel extends JFrame implements TrafficSimulatorObserver {
 
 	void initGUI() throws IOException{
 		this.setTitle("Traffic Simulator");
-		
-		// Menu Bar
-		createMenuBar();
-		this.setJMenuBar(_menuBar);
-		
-		// 
-		
+			
 		// Main Panel
 		createMainPanel();
 		this.setContentPane(_mainPanel);
 				
+		// Menu Bar
+		createMenuBar();
+		this.setJMenuBar(_menuBar);
 		
 		this.setSize(900,900);
 		this.setVisible(true);
@@ -68,7 +63,7 @@ public class MainPanel extends JFrame implements TrafficSimulatorObserver {
 	}
 	
 	private void createMenuBar() {
-		_menuBar = new MenuBar(this, _control);
+		_menuBar = new MenuBar(_eventsEditor, _control);
 	}
 	
 	private void createMainPanel() throws IOException {
@@ -94,51 +89,14 @@ public class MainPanel extends JFrame implements TrafficSimulatorObserver {
 	}
 	
 	private void createEventsEditor() throws IOException {
-		_eventsEditor = new EventsEditorPanel(EVENTS, "", true);
-		if(_inFile != null) {
-			_eventsEditor.setText(readFile(_inFile));
-			_eventsEditor.setBorder(BorderFactory.createTitledBorder
-				(BorderFactory.createLineBorder(Color.BLACK), EVENTS + _inFile.getName()));
-		}
+		_eventsEditor = new EventsEditorPanel("Events: ", "", true, _inFile);
 	}
 	
 	private void createReportsArea() {
 		_reportsArea = new ReportsAreaPanel("Reports", false, _control);
 	}
 
-	public void loadFile() {
-		int returnVal = this._fc.showOpenDialog(null);
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			File file = this._fc.getSelectedFile();
-			try {
-				String str = readFile(file);
-				// TODO _control.restart();
-				_inFile = file;
-				_eventsEditor.setText(str);
-				_eventsEditor.setBorder(BorderFactory.createTitledBorder
-						(BorderFactory.createLineBorder(Color.BLACK), EVENTS + _inFile.getName()));
-				// TODO panelBarraEstado.setMensaje("Fichero " + fichero.getName() + " de eventos cargado into the editor");
-			}
-			catch (IOException e) {
-				// TODO
-			}
-		}
-	}
-
-	private String readFile(File file) throws IOException {
-		FileReader fr = new FileReader(file);
-		BufferedReader br = new BufferedReader(fr);
-		String str = "";
-		String finalStr = "";
-		str = br.readLine();
-		while(str != null) {
-			if(!finalStr.equals(""))
-				finalStr += "\n";
-			finalStr = finalStr + str;
-			str = br.readLine();
-		}
-		return finalStr;
-	}
+	
 	
 	public void clearReports() {
 		_reportsArea.clear();

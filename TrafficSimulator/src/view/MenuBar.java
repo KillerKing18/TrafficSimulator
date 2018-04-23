@@ -13,7 +13,7 @@ import control.Controller;
 
 public class MenuBar extends JMenuBar{
 	
-	private MainPanel _mainPanel;
+	private EventsEditorPanel _eventsEditorPanel;
 	private final String LOAD_EVENTS = "load events";
 	private final String SAVE_EVENTS = "save events";
 	private final String SAVE_REPORT = "save reports";
@@ -24,9 +24,9 @@ public class MenuBar extends JMenuBar{
 	private final String RESET = "reset";
 	private final String REDIRECT_OUTPUT = "redirect output";
 	
-	public MenuBar(MainPanel mainPanel, Controller control){
+	public MenuBar(EventsEditorPanel eventsEditorPanel, Controller control){
 		super();
-		_mainPanel = mainPanel;
+		_eventsEditorPanel = eventsEditorPanel;
 		JMenu file = createFileMenu();
 		this.add(file);
 		JMenu simulator = createSimulatorMenu();
@@ -43,20 +43,15 @@ public class MenuBar extends JMenuBar{
 		// TODO Hacer funcion generica para crear los JMenuItem
 
 		loadEvents = new JMenuItem("Load Events");
-		loadEvents.setActionCommand(LOAD_EVENTS);
-		loadEvents.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				_mainPanel.loadFile();
-			}
-		});
+		loadEvents.setActionCommand("LOAD");
+		loadEvents.addActionListener(_eventsEditorPanel);
 		loadEvents.setMnemonic(KeyEvent.VK_L);
 		loadEvents.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L,
 				ActionEvent.ALT_MASK));
 
 		saveEvents = new JMenuItem("Save Events");
 		saveEvents.setActionCommand(SAVE_EVENTS);
-		//TODO saveEvents.addActionListener();
+		saveEvents.addActionListener(_eventsEditorPanel);
 		saveEvents.setMnemonic(KeyEvent.VK_S);
 		saveEvents.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				ActionEvent.ALT_MASK));
@@ -106,7 +101,7 @@ public class MenuBar extends JMenuBar{
 		clear.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				_mainPanel.clearReports();
+				//TODO _mainPanel.clearReports();
 			}
 			
 		});

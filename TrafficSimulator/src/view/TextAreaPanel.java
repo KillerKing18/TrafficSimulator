@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Font;
 
 import javax.swing.*;
 
@@ -9,6 +10,7 @@ import javax.swing.*;
 public abstract class TextAreaPanel extends JPanel{
 	
 	protected JTextArea textArea;
+	protected JFileChooser _fc;
 	
 	
 	public TextAreaPanel(String title, boolean editable){
@@ -16,7 +18,7 @@ public abstract class TextAreaPanel extends JPanel{
 		textArea.setEditable(editable);
 		this.add(new JScrollPane(textArea));
 		this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK) ,title));
-		
+		textArea.setFont(new Font("Sheriff", Font.ITALIC, 17));
 	}
 	
 	public String getText() {
