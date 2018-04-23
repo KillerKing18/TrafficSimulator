@@ -28,14 +28,18 @@ public class MainPanel extends JFrame implements TrafficSimulatorObserver {
 	private OutputStream _reportsOutputStream;
 	private File _inFile;
 	
-	
-	
 	private JPanel _mainPanel;
 	
-	
+	//Top panel
 	private JPanel _topPanel;
-	
+		//Left panel
 	private EventsEditorPanel _eventsEditor;
+		//Center up panel 
+	/*
+	private JPanel _eventsQueuePanel;
+	private JTable _eventsTable;
+	private QueueTableModel _eventsTableModel; */
+		//Right panel
 	private ReportsAreaPanel _reportsArea;
 	
 	// Down Panel
@@ -166,10 +170,26 @@ public class MainPanel extends JFrame implements TrafficSimulatorObserver {
 		createEventsEditor();
 		_topPanel.add(_eventsEditor);
 		
+		//Events Queue
+		/*
+		createQueueTable();
+		_topPanel.add(_eventsQueuePanel);
+		*/
 		// Reports Area
 		createReportsArea();
 		_topPanel.add(_reportsArea);
 	}
+	
+	/*
+	private void createQueueTable() {
+		_eventsQueuePanel = new JPanel();
+		_eventsTableModel = new QueueTableModel();
+		_eventsTable = new JTable(_eventsTableModel);
+		_eventsQueuePanel.add(new JScrollPane(_eventsTable));
+		_eventsQueuePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Events Queue"));
+	}*/
+	
+	
 	
 	private void createEventsEditor() throws IOException {
 		_eventsEditor = new EventsEditorPanel("Events: ", "", true, _inFile);
