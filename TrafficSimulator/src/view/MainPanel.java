@@ -27,7 +27,7 @@ public class MainPanel extends JFrame implements TrafficSimulatorObserver {
 	private List<Event> _events; // observer update methods
 	private OutputStream _reportsOutputStream;
 	private File _inFile;
-	// hello carlos
+	// branch carlos
 	
 	private final String EVENTS = "Events: ";
 	
