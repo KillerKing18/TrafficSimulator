@@ -190,7 +190,6 @@ public class MainPanel extends JFrame implements TrafficSimulatorObserver {
 	}*/
 	
 	
-	
 	private void createEventsEditor() throws IOException {
 		_eventsEditor = new EventsEditorPanel("Events: ", "", true, _inFile);
 	}
