@@ -33,10 +33,10 @@ public class NewVehicleEvent extends Event {
 			throw new SimulatorError("Problem executing a new_vehicle_event event. " + e.getMessage());
 		}
 	}
-	
-	/*
-	public String toString(){
-		//PRACTICA5
+
+	@Override
+	public String toString() {
+		return "New Vehicle " + _id;
 	}
-	*/
+
 }

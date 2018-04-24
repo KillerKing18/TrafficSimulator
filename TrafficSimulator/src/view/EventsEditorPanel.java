@@ -160,7 +160,7 @@ public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
 				// TODO panelBarraEstado.setMensaje("Fichero " + fichero.getName() + " de eventos cargado into the editor");
 			}
 			catch (IOException e) {
-				// TODO
+				e.printStackTrace();
 			}
 		}
 	}

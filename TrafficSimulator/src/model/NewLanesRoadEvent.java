@@ -25,9 +25,4 @@ public class NewLanesRoadEvent extends NewRoadEvent {
 		}
 	}
 	
-	/*
-	public String toString() {
-		//PRACTICA5
-	}
-	*/
 }

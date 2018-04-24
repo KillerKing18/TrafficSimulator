@@ -131,6 +131,10 @@ public class Junction extends SimulatedObject{
 			return _green;
 		}
 		
+		public String getId(){
+			return _road.getId();
+		}
+		
 		protected void setGreen(boolean green) {
 			_green = green;
 		}
@@ -170,5 +174,28 @@ public class Junction extends SimulatedObject{
 			queue += "])";
 			return queue;
 		}
+		
+	}
+
+	public String getReds() { //TODO
+			String reds = "[";
+			for(IncomingRoad r : _roads){
+				reds += "(" + r.getId() + ","; 
+				reds += r.hasGreenLight() ? "green," : "red,";
+				reds += "[])";
+			}
+			reds += "]";
+			return reds;
+	}
+
+	public String getGreens() { //TODO 
+			String greens = "[";
+			for(IncomingRoad r : _roads){
+				greens += "(" + r.getId() + ","; 
+				greens += r.hasGreenLight() ? "green," : "red,";
+				greens += "[])";
+			}
+			greens += "]";
+			return greens;
 	}
 }

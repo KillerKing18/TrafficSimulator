@@ -50,9 +50,8 @@ public class EventsQueueTable extends JPanel implements TrafficSimulatorObserver
 				v = "" + events_.get(rowIndex).getScheduledTime();
 				break;
 			case 2:
-				v = "";
-				// TODO
-				//v = "" + events_.get(rowIndex).getPositionIndex();
+				//TODO Revisar
+				v = "" + events_.get(rowIndex);
 				break;
 			default:
 				break;

@@ -21,9 +21,4 @@ public class NewDirtRoadEvent extends NewRoadEvent {
 		}
 	}
 	
-	/*
-	public String toString() {
-		//PRACTICA5
-	}
-	*/
 }

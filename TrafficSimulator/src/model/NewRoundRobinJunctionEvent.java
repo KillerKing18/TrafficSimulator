@@ -24,10 +24,5 @@ public class NewRoundRobinJunctionEvent extends NewJunctionEvent {
 			throw new SimulatorError("Problem executing a new_junction_event event. " + e.getMessage());
 		}
 	}
-	
-	/*
-	public String toString() {
-		//PRACTICA5
-	}
-	*/
+
 }

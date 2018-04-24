@@ -33,10 +33,11 @@ public class NewRoadEvent extends Event {
 			throw new SimulatorError("Problem executing a new_road_event event. " + e.getMessage());
 		}
 	}
-	
-	/*
+
+	@Override
 	public String toString() {
-		//PRACTICA5
+		return "New road " + _id;
 	}
-	*/
+	
+
 }

@@ -272,7 +272,8 @@ public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 
 	@Override
 	public void reset(int time, RoadMap map, List<Event> events) {
-		// TODO Auto-generated method stub
+		//TODO steps a 1 (?)
+		timeTextField.setText("" + 0);
 		
 	}
 }

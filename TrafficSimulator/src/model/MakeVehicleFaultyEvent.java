@@ -29,9 +29,16 @@ public class MakeVehicleFaultyEvent extends Event {
 		}
 	}
 	
-	/*
+	@Override
 	public String toString() {
-		//PRACTICA5
+		String veh = "";
+		veh += "Break Vehicles [";
+		for(String s: _vehicles){
+			veh += s + ",";
+		}
+	    veh = veh.substring(0, veh.length() - 1);
+	    veh += "]";
+		return veh;
 	}
-	*/
+	
 }

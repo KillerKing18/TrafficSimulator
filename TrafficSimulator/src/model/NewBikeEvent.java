@@ -26,9 +26,4 @@ public class NewBikeEvent extends NewVehicleEvent {
 		}
 	}
 	
-	/*
-	public String toString(){
-		//PRACTICA5
-	}
-	*/
 }
