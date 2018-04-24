@@ -51,6 +51,10 @@ public class Controller {
 		_sim.reset();
 	}
 	
+	public void setInputStream(InputStream is) {
+		_inputStream = is;
+	}
+	
 	public void setOutputStream(OutputStream outStream) {
 		_sim.setOutputStream(outStream);
 	}

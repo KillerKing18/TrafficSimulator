@@ -1,26 +1,15 @@
 package view;
 
 
-import graphlayout.Graph;
-import graphlayout.GraphComponent;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.util.List;
 
 import javax.swing.*;
 
-import model.Event;
-import model.RoadMap;
-import model.SimulatorError;
 import model.TrafficSimulator;
-import model.TrafficSimulatorObserver;
 import control.Controller;
 
 public class MainPanel extends JFrame{
@@ -29,9 +18,8 @@ public class MainPanel extends JFrame{
 	private Controller _control;
 	private File _inFile;
 	
-	
-	
 	private JPanel _mainPanel;
+	private MenuBar _menuBar;
 	
 	// Top Panel
 	private JPanel _topPanel;
@@ -41,7 +29,6 @@ public class MainPanel extends JFrame{
 	private EventsQueueTable _eventsQueue;
 		//Reports Area
 	private ReportsAreaPanel _reportsArea;
-	
 	// Down Panel
 	private JPanel _downPanel;
 		// Down Left Panel
@@ -54,11 +41,7 @@ public class MainPanel extends JFrame{
 	private JunctionsTable _junctionsTable;
 		// Down Right Panel
 	private JPanel _downRightPanel;
-	private GraphComponent _graphComp;
-	
-	
-	private MenuBar _menuBar;
-
+	private RoadMapGraph _roadmapGraph;
 	
 	public MainPanel(TrafficSimulator model, String inFile, Controller control) throws IOException {
 		super("Traffic Simulator");
@@ -113,9 +96,15 @@ public class MainPanel extends JFrame{
 	}
 	
 	private void createDownRightPanel() {
-		_downRightPanel = new JPanel(new BorderLayout());		
-		_graphComp = new GraphComponent();
-		_downRightPanel.add(_graphComp, BorderLayout.CENTER);
+		_downRightPanel = new JPanel();	
+		_downRightPanel.setLayout(new BorderLayout());
+		
+		createRoadMapGraph();
+		_downRightPanel.add(_roadmapGraph, BorderLayout.CENTER);
+	}
+	
+	private void createRoadMapGraph() {
+		_roadmapGraph = new RoadMapGraph(_model);
 	}
 	
 	private void createDownLeftPanel() {
@@ -168,7 +157,7 @@ public class MainPanel extends JFrame{
 	}
 	
 	private void createEventsEditor() throws IOException {
-		_eventsEditor = new EventsEditorPanel("Events: ", "", true, _inFile);
+		_eventsEditor = new EventsEditorPanel("Events: ", "", true, _inFile, _control);
 	}
 	
 	private void createEventsQueue() {
@@ -182,37 +171,5 @@ public class MainPanel extends JFrame{
 	
 	public void clearReports() {
 		_reportsArea.clear();
-	}
-	
-	protected void generateGraph() {
-/* TODO
-		Graph g = new Graph();
-		int numNodes = _rand.nextInt(20)+5;
-		int numEdges = _rand.nextInt(2*numNodes);		
-		
-		for (int i=0; i<numNodes; i++) {
-			g.addNode(new Node("n"+i));
-		}
-		
-		for (int i=0; i<numEdges; i++) {
-			int s = _rand.nextInt(numNodes);
-			int t = _rand.nextInt(numNodes);
-			if ( s == t ) {
-				t = (t + 1) % numNodes;
-			}
-			int l = _rand.nextInt(30)+20;
-			Edge e = new Edge("e"+i, g.getNodes().get(s), g.getNodes().get(t), l);
-			
-			int numDots = _rand.nextInt(5);
-			for(int j=0; j<numDots; j++) {
-				l = Math.max(0, _rand.nextBoolean() ? l/2 : l);
-				e.addDot( new Dot("d"+j, l));
-			}
-			
-			g.addEdge(e);
-		}
-		
-		_graphComp.setGraph(g);
-*/
 	}
 }

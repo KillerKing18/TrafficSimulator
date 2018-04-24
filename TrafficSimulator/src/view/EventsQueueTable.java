@@ -36,7 +36,7 @@ public class EventsQueueTable extends JPanel implements TrafficSimulatorObserver
 	
 		@Override
 		public int getRowCount() {
-			return map_ == null ? 0 : map_.getJunctions().size();
+			return events_ == null ? 0 : events_.size();
 		}
 		
 		@Override
@@ -44,15 +44,16 @@ public class EventsQueueTable extends JPanel implements TrafficSimulatorObserver
 			String v = null;
 			switch ( columnIndex ) {
 			case 0:
-				 v = "" + events_.get(rowIndex).getPositionIndex();
-				 break;
+				v = "" + events_.get(rowIndex).getPositionIndex();
+				break;
 			case 1:
-				 v = "" + events_.get(rowIndex).getScheduledTime();
-				 break;
+				v = "" + events_.get(rowIndex).getScheduledTime();
+				break;
 			case 2:
+				v = "";
 				// TODO
-				 //v = "" + events_.get(rowIndex).getPositionIndex();
-				 break;
+				//v = "" + events_.get(rowIndex).getPositionIndex();
+				break;
 			default:
 				break;
 			}

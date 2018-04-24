@@ -236,6 +236,7 @@ public class Main {
 		// TODO Para que sirve OutputStream e InputStream
 		TrafficSimulator sim = new TrafficSimulator();
 		Controller control = new Controller(sim, _timeLimit, is);
+		control.setEventBuilders(_events);
 		// TODO -o ignorar -t opcional
 		SwingUtilities.invokeAndWait(new Runnable() {
 			@Override

@@ -46,10 +46,16 @@ public class VehiclesTable extends JPanel implements TrafficSimulatorObserver {
 				 v = map_.getVehicles().get(rowIndex).getId();
 				 break;
 			case 1:
-				 v = map_.getVehicles().get(rowIndex).getRoad().getId();
+				if(map_.getVehicles().get(rowIndex).atDestination())
+					v = "arrived";
+				else
+					v = map_.getVehicles().get(rowIndex).getRoad().getId();
 				 break;
 			case 2:
-				 v = "" + map_.getVehicles().get(rowIndex).getLocation();
+				if(map_.getVehicles().get(rowIndex).atDestination())
+					v = "arrived";
+				else
+					v = "" + map_.getVehicles().get(rowIndex).getLocation();
 				 break;
 			case 3:
 				 v = "" + map_.getVehicles().get(rowIndex).getSpeed();

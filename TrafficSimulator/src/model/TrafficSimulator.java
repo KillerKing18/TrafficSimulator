@@ -57,7 +57,7 @@ public class TrafficSimulator implements Observable<TrafficSimulatorObserver> {
 			if(_outStream != null)
 				_outStream.write(_map.generateReport(_time).getBytes());
 			else {
-				throw new IOException("Problems with the _outStream at the Traffic Simulator");
+				// TODO throw new IOException("Problems with the _outStream at the Traffic Simulator");
 			}
 		}
 	}

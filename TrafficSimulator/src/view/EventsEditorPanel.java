@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -17,6 +18,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
 
+import control.Controller;
 import control.EventBuilder;
 import control.MakeVehicleFaultyEventBuilder;
 import control.NewBikeEventBuilder;
@@ -28,8 +30,11 @@ import control.NewMostCrowdedJunctionEventBuilder;
 import control.NewRoadEventBuilder;
 import control.NewRoundRobinJunctionEventBuilder;
 import control.NewVehicleEventBuilder;
+import model.SimulatorError;
 
 public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
+	
+	private Controller _control;
 	
 	private File _inFile;
 	
@@ -46,8 +51,9 @@ public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
 		new NewVehicleEventBuilder(),
 		new MakeVehicleFaultyEventBuilder()};
 
-	public EventsEditorPanel(String title, String text, boolean editable, File inFile) throws IOException{
+	public EventsEditorPanel(String title, String text, boolean editable, File inFile, Controller control) throws IOException{
 		super(title, editable);
+		_control = control;
 		_inFile = inFile;
 		if(_inFile != null)
 			setText(readFile());
@@ -128,6 +134,14 @@ public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
 			break;
 		case "SAVE":
 			saveFile();
+			break;
+		case "CHECK IN":
+			_control.setInputStream(new ByteArrayInputStream(this.getText().getBytes()));
+			try {
+				_control.loadEvents();
+			} catch (SimulatorError e1) {
+				e1.printStackTrace();
+			}
 			break;
 		case "CLEAR":
 			clear();

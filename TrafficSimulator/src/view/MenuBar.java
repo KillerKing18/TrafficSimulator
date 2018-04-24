@@ -3,6 +3,7 @@ package view;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -10,6 +11,7 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 import control.Controller;
+import model.SimulatorError;
 
 public class MenuBar extends JMenuBar{
 	
@@ -24,8 +26,11 @@ public class MenuBar extends JMenuBar{
 	private final String RESET = "reset";
 	private final String REDIRECT_OUTPUT = "redirect output";
 	
+	private Controller _control;
+	
 	public MenuBar(EventsEditorPanel eventsEditorPanel, Controller control){
 		super();
+		_control = control;
 		_eventsEditorPanel = eventsEditorPanel;
 		JMenu file = createFileMenu();
 		this.add(file);
@@ -39,7 +44,7 @@ public class MenuBar extends JMenuBar{
 		JMenu file = new JMenu("File");
 		file.setMnemonic(KeyEvent.VK_F);
 		
-		JMenuItem loadEvents, saveEvents, saveReport, exit;
+		JMenuItem loadEvents, saveEvents, checkinEvents, saveReport, exit;
 		// TODO Hacer funcion generica para crear los JMenuItem
 
 		loadEvents = new JMenuItem("Load Events");
@@ -50,10 +55,17 @@ public class MenuBar extends JMenuBar{
 				ActionEvent.ALT_MASK));
 
 		saveEvents = new JMenuItem("Save Events");
-		saveEvents.setActionCommand(SAVE_EVENTS);
+		saveEvents.setActionCommand("SAVE");
 		saveEvents.addActionListener(_eventsEditorPanel);
 		saveEvents.setMnemonic(KeyEvent.VK_S);
 		saveEvents.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+				ActionEvent.ALT_MASK));
+		
+		checkinEvents = new JMenuItem("Check-in Events");
+		checkinEvents.setActionCommand("CHECK IN");
+		checkinEvents.addActionListener(_eventsEditorPanel);
+		checkinEvents.setMnemonic(KeyEvent.VK_C);
+		checkinEvents.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
 				ActionEvent.ALT_MASK));
 		
 		saveReport = new JMenuItem("Save Report");
@@ -78,6 +90,7 @@ public class MenuBar extends JMenuBar{
 
 		file.add(loadEvents);
 		file.add(saveEvents);
+		file.add(checkinEvents);
 		file.addSeparator();
 		file.add(saveReport);
 		file.addSeparator();
@@ -123,7 +136,12 @@ public class MenuBar extends JMenuBar{
 		run.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO
+				try {
+					_control.run(1);
+				} catch (IOException | SimulatorError e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 

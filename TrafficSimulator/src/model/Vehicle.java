@@ -177,7 +177,7 @@ public class Vehicle extends SimulatedObject {
 			itinerary += j.getId() + ",";
 		}
 		if(!_itinerary.isEmpty())
-			itinerary = itinerary.substring(0, itinerary.length() - 2);
+			itinerary = itinerary.substring(0, itinerary.length() - 1);
 		itinerary += "]";
 		return itinerary;
 	}

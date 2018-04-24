@@ -77,7 +77,7 @@ public class RoadsTable extends JPanel implements TrafficSimulatorObserver {
 	}
 	
 	private void initGUI() {
-		this.setLayout( new BorderLayout() );
+		this.setLayout(new BorderLayout());
 		tableModel_ = new MyTableModel();
 		JTable t = new JTable(tableModel_); //t registra tableModel como un listener
 		this.add(new JScrollPane(t) , BorderLayout.CENTER);

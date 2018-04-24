@@ -141,7 +141,7 @@ public class Road extends SimulatedObject{
 			vehicles += v.getId() + ",";
 		}
 		if(!_vehicles.isEmpty())
-			vehicles = vehicles.substring(0, vehicles.length() - 2);
+			vehicles = vehicles.substring(0, vehicles.length() - 1);
 		vehicles += "]";
 		return vehicles;
 	}
