@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 
@@ -14,6 +15,7 @@ public abstract class TextAreaPanel extends JPanel{
 	
 	
 	public TextAreaPanel(String title, boolean editable){
+		this.setLayout( new BorderLayout() );
 		textArea = new JTextArea(40,30);
 		textArea.setEditable(editable);
 		this.add(new JScrollPane(textArea));

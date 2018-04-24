@@ -1,6 +1,10 @@
 package view;
 
 
+import graphlayout.Graph;
+import graphlayout.GraphComponent;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,27 +23,23 @@ import model.TrafficSimulator;
 import model.TrafficSimulatorObserver;
 import control.Controller;
 
-public class MainPanel extends JFrame implements TrafficSimulatorObserver {
+public class MainPanel extends JFrame{
 	
+	private TrafficSimulator _model;
 	private Controller _control;
-	private RoadMap _map; // observer update methods
-	private int _time; // observer update methods
-	private List<Event> _events; // observer update methods
-	private OutputStream _reportsOutputStream;
 	private File _inFile;
+	
+	
 	
 	private JPanel _mainPanel;
 	
-	//Top panel
+	// Top Panel
 	private JPanel _topPanel;
-		//Left panel
+		// Events Editor
 	private EventsEditorPanel _eventsEditor;
-		//Center up panel 
-	/*
-	private JPanel _eventsQueuePanel;
-	private JTable _eventsTable;
-	private QueueTableModel _eventsTableModel; */
-		//Right panel
+		// Events Queue
+	private EventsQueueTable _eventsQueue;
+		//Reports Area
 	private ReportsAreaPanel _reportsArea;
 	
 	// Down Panel
@@ -47,19 +47,14 @@ public class MainPanel extends JFrame implements TrafficSimulatorObserver {
 		// Down Left Panel
 	private JPanel _downLeftPanel;
 			// Vehicles Table
-	private JPanel _vehiclesTablePanel;
-	private JTable _vehiclesTable;
-	private VehiclesTableModel _vehiclesTableModel;
+	private VehiclesTable _vehiclesTable;
 			// Roads Table
-	private JPanel _roadsTablePanel;
-	private JTable _roadsTable;
-	private RoadsTableModel _roadsTableModel;
+	private RoadsTable _roadsTable;
 			// Junctions Table
-	private JPanel _junctionsTablePanel;
-	private JTable _junctionsTable;
-	private JunctionsTableModel _junctionsTableModel;
+	private JunctionsTable _junctionsTable;
 		// Down Right Panel
 	private JPanel _downRightPanel;
+	private GraphComponent _graphComp;
 	
 	
 	private MenuBar _menuBar;
@@ -68,9 +63,9 @@ public class MainPanel extends JFrame implements TrafficSimulatorObserver {
 	public MainPanel(TrafficSimulator model, String inFile, Controller control) throws IOException {
 		super("Traffic Simulator");
 		_control = control;
+		_model = model;
 		_inFile = inFile == null ? null : new File(inFile);
 		initGUI();
-		model.addObserver(this);
 	}
 
 	void initGUI() throws IOException{
@@ -118,7 +113,9 @@ public class MainPanel extends JFrame implements TrafficSimulatorObserver {
 	}
 	
 	private void createDownRightPanel() {
-		_downRightPanel = new JPanel();
+		_downRightPanel = new JPanel(new BorderLayout());		
+		_graphComp = new GraphComponent();
+		_downRightPanel.add(_graphComp, BorderLayout.CENTER);
 	}
 	
 	private void createDownLeftPanel() {
@@ -127,39 +124,30 @@ public class MainPanel extends JFrame implements TrafficSimulatorObserver {
 		
 		// Vehicles Table
 		createVehiclesTable();
-		_downLeftPanel.add(_vehiclesTablePanel);
+		_downLeftPanel.add(_vehiclesTable);
 		
 		// Roads Table
 		createRoadsTable();
-		_downLeftPanel.add(_roadsTablePanel);
+		_downLeftPanel.add(_roadsTable);
 		
 		// Junctions Table
 		createJunctionsTable();
-		_downLeftPanel.add(_junctionsTablePanel);
+		_downLeftPanel.add(_junctionsTable);
 	}
 	
 	private void createVehiclesTable() {
-		_vehiclesTablePanel = new JPanel();
-		_vehiclesTableModel = new VehiclesTableModel();
-		_vehiclesTable = new JTable(_vehiclesTableModel);
-		_vehiclesTablePanel.add(new JScrollPane(_vehiclesTable));
-		_vehiclesTablePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Vehicles"));
+		_vehiclesTable = new VehiclesTable(_model);
+		_vehiclesTable.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Vehicles"));
 	}
 	
 	private void createRoadsTable() {
-		_roadsTablePanel = new JPanel();
-		_roadsTableModel = new RoadsTableModel();
-		_roadsTable = new JTable(_roadsTableModel);
-		_roadsTablePanel.add(new JScrollPane(_roadsTable));
-		_roadsTablePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Roads"));
+		_roadsTable = new RoadsTable(_model);
+		_roadsTable.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Roads"));
 	}
 	
 	private void createJunctionsTable() {
-		_junctionsTablePanel = new JPanel();
-		_junctionsTableModel = new JunctionsTableModel();
-		_junctionsTable = new JTable(_junctionsTableModel);
-		_junctionsTablePanel.add(new JScrollPane(_junctionsTable));
-		_junctionsTablePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Junctions"));
+		_junctionsTable = new JunctionsTable(_model);
+		_junctionsTable.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Junctions"));
 	}
 	
 	private void createTopPanel() throws IOException {
@@ -170,69 +158,61 @@ public class MainPanel extends JFrame implements TrafficSimulatorObserver {
 		createEventsEditor();
 		_topPanel.add(_eventsEditor);
 		
-		//Events Queue
-		/*
-		createQueueTable();
-		_topPanel.add(_eventsQueuePanel);
-		*/
+		// Events Queue
+		createEventsQueue();
+		_topPanel.add(_eventsQueue);
+		
 		// Reports Area
 		createReportsArea();
 		_topPanel.add(_reportsArea);
 	}
 	
-	/*
-	private void createQueueTable() {
-		_eventsQueuePanel = new JPanel();
-		_eventsTableModel = new QueueTableModel();
-		_eventsTable = new JTable(_eventsTableModel);
-		_eventsQueuePanel.add(new JScrollPane(_eventsTable));
-		_eventsQueuePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Events Queue"));
-	}*/
-	
-	
 	private void createEventsEditor() throws IOException {
 		_eventsEditor = new EventsEditorPanel("Events: ", "", true, _inFile);
+	}
+	
+	private void createEventsQueue() {
+		_eventsQueue = new EventsQueueTable(_model);
+		_eventsQueue.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Events Queue"));
 	}
 	
 	private void createReportsArea() {
 		_reportsArea = new ReportsAreaPanel("Reports", false, _control);
 	}
-
-	
 	
 	public void clearReports() {
 		_reportsArea.clear();
 	}
-
-	@Override
-	public void registered(int time, RoadMap map, List<Event> events) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void simulatorError(int time, RoadMap map, List<Event> events, SimulatorError e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void advanced(int time, RoadMap map, List<Event> events) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void eventAdded(int time, RoadMap map, List<Event> events) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void reset(int time, RoadMap map, List<Event> events) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	
+	protected void generateGraph() {
+/* TODO
+		Graph g = new Graph();
+		int numNodes = _rand.nextInt(20)+5;
+		int numEdges = _rand.nextInt(2*numNodes);		
+		
+		for (int i=0; i<numNodes; i++) {
+			g.addNode(new Node("n"+i));
+		}
+		
+		for (int i=0; i<numEdges; i++) {
+			int s = _rand.nextInt(numNodes);
+			int t = _rand.nextInt(numNodes);
+			if ( s == t ) {
+				t = (t + 1) % numNodes;
+			}
+			int l = _rand.nextInt(30)+20;
+			Edge e = new Edge("e"+i, g.getNodes().get(s), g.getNodes().get(t), l);
+			
+			int numDots = _rand.nextInt(5);
+			for(int j=0; j<numDots; j++) {
+				l = Math.max(0, _rand.nextBoolean() ? l/2 : l);
+				e.addDot( new Dot("d"+j, l));
+			}
+			
+			g.addEdge(e);
+		}
+		
+		_graphComp.setGraph(g);
+*/
+	}
 }

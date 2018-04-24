@@ -170,4 +170,15 @@ public class Vehicle extends SimulatedObject {
 			location = "(" + this.getRoad().getId() + "," + this.getLocation() + ")";
 		is.setValue("location", location);
 	}
+	
+	public String getItineraryString(){
+		String itinerary = "[";
+		for(Junction j : _itinerary){
+			itinerary += j.getId() + ",";
+		}
+		if(!_itinerary.isEmpty())
+			itinerary = itinerary.substring(0, itinerary.length() - 2);
+		itinerary += "]";
+		return itinerary;
+	}
 }
