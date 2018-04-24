@@ -1,7 +1,5 @@
 package view;
 
-
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.io.File;
@@ -12,7 +10,7 @@ import javax.swing.*;
 import model.TrafficSimulator;
 import control.Controller;
 
-public class MainPanel extends JFrame{
+public class MainPanel extends JFrame {
 	
 	private TrafficSimulator _model;
 	private Controller _control;
@@ -20,6 +18,7 @@ public class MainPanel extends JFrame{
 	
 	private JPanel _mainPanel;
 	private MenuBar _menuBar;
+	private ToolBar _toolBar;
 	
 	// Top Panel
 	private JPanel _topPanel;
@@ -62,9 +61,17 @@ public class MainPanel extends JFrame{
 		createMenuBar();
 		this.setJMenuBar(_menuBar);
 		
+		// Tool Bar
+		createToolBar();
+		this.add(_toolBar);
+		
 		this.setSize(900,900);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	
+	private void createToolBar() {
+		_toolBar = new ToolBar(_eventsEditor, _control);
 	}
 	
 	private void createMenuBar() {
@@ -168,8 +175,6 @@ public class MainPanel extends JFrame{
 	private void createReportsArea() {
 		_reportsArea = new ReportsAreaPanel("Reports", false, _control);
 	}
-	
-	public void clearReports() {
-		_reportsArea.clear();
-	}
+
+
 }
