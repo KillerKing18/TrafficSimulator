@@ -4,16 +4,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.JToolBar;
+import javax.swing.SpinnerNumberModel;
 
 import control.Controller;
+import model.Event;
+import model.RoadMap;
 import model.SimulatorError;
+import model.TrafficSimulator;
+import model.TrafficSimulatorObserver;
 
-public class ToolBar extends JToolBar {
+public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 	
 	private JButton loadEventsButton;
 	private JButton saveEventsButton;
@@ -21,15 +30,27 @@ public class ToolBar extends JToolBar {
 	private JButton checkInEventsButton;
 	private JButton runButton;
 	private JButton resetButton;
-	private JSpinner time;
+	private JLabel stepsLabel;
+	private JSpinner stepsSpinner;
+	private JLabel timeLabel;
+	private JTextField timeTextField;
+	private JButton generateReportsButton;
+	private JButton clearReportsAreaButton;
+	private JButton saveReportsButton;
+	private JButton quitButton;
 	
 	private EventsEditorPanel _eventsEditorPanel;
+	private ReportsAreaPanel _reportsArea;
 	private Controller _control;
+	private TrafficSimulator _model;
 	
-	public ToolBar(EventsEditorPanel eventsEditorPanel, Controller control) {
+	public ToolBar(EventsEditorPanel eventsEditorPanel, ReportsAreaPanel reportsArea, Controller control, TrafficSimulator model) {
 		super();
 		_eventsEditorPanel = eventsEditorPanel;
+		_reportsArea = reportsArea;
 		_control = control;
+		_model = model;
+		_model.addObserver(this);
 		initGUI();
 	}
 
@@ -53,8 +74,34 @@ public class ToolBar extends JToolBar {
 		
 		createResetButton();
 		this.add(resetButton);
+		
+		createStepsLabel();
+		this.add(stepsLabel);
+		createStepsSpinner();
+		this.add(stepsSpinner);
+		
+		createTimeLabel();
+		this.add(timeLabel);
+		createTimeTextField();
+		this.add(timeTextField);
+		
+		this.addSeparator();
+		
+		createGenerateReportsButton();
+		this.add(generateReportsButton);
+		
+		createClearReportsAreaButton();
+		this.add(clearReportsAreaButton);
+		
+		createSaveReportsButton();
+		this.add(saveReportsButton);
+		
+		this.addSeparator();
+		
+		createQuitButton();
+		this.add(quitButton);
 	}
-	
+
 	private void createLoadEventsButton() {
 		loadEventsButton = new JButton();
 		loadEventsButton.setActionCommand("LOAD");
@@ -104,7 +151,7 @@ public class ToolBar extends JToolBar {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				try {
-					_control.run((Integer)time.getValue());
+					_control.run((Integer)stepsSpinner.getValue());
 				} catch (IOException | SimulatorError e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -125,7 +172,7 @@ public class ToolBar extends JToolBar {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				_control.reset();
+				_control.reset(); // TODO
 			}
 			
 		});
@@ -133,5 +180,99 @@ public class ToolBar extends JToolBar {
 		URL urlReset = this.getClass().getResource(pathReset);  
 		ImageIcon iconReset = new ImageIcon(urlReset);
 		resetButton.setIcon(iconReset);
+	}
+	
+	private void createStepsLabel() {
+		stepsLabel = new JLabel("Steps: ");
+	}
+	
+	private void createStepsSpinner() {
+		stepsSpinner = new JSpinner(new SpinnerNumberModel(0, 0, null, 1));
+	}
+	
+	private void createTimeLabel() {
+		timeLabel = new JLabel(" Time: ");
+	}
+	
+	private void createTimeTextField() {
+		timeTextField = new JTextField();
+		timeTextField.setEditable(false);
+	}
+	
+	private void createGenerateReportsButton() {
+		generateReportsButton = new JButton();
+		generateReportsButton.setActionCommand("GENERATE");
+		generateReportsButton.addActionListener(_reportsArea);
+		String pathGenerateReports = "/icons/report.png";  
+		URL urlGenerateReports = this.getClass().getResource(pathGenerateReports);  
+		ImageIcon iconGenerateReports = new ImageIcon(urlGenerateReports);
+		generateReportsButton.setIcon(iconGenerateReports);
+	}
+	
+	private void createClearReportsAreaButton() {
+		clearReportsAreaButton = new JButton();
+		clearReportsAreaButton.setActionCommand("CLEAR");
+		clearReportsAreaButton.addActionListener(_reportsArea);
+		String pathClearReportsArea = "/icons/delete_report.png";  
+		URL urlClearReportsArea = this.getClass().getResource(pathClearReportsArea);  
+		ImageIcon iconClearReportsArea = new ImageIcon(urlClearReportsArea);
+		clearReportsAreaButton.setIcon(iconClearReportsArea);
+	}
+
+	private void createSaveReportsButton() {
+		saveReportsButton = new JButton();
+		saveReportsButton.setActionCommand("SAVE");
+		saveReportsButton.addActionListener(_eventsEditorPanel);
+		String pathSaveReports = "/icons/save_report.png";  
+		URL urlSaveReports = this.getClass().getResource(pathSaveReports);  
+		ImageIcon iconSaveReports = new ImageIcon(urlSaveReports);
+		saveReportsButton.setIcon(iconSaveReports);
+	}
+	
+	private void createQuitButton() {
+		quitButton = new JButton();
+		quitButton.setActionCommand("QUIT");
+		quitButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		String pathQuit = "/icons/exit.png";  
+		URL urlQuit = this.getClass().getResource(pathQuit);  
+		ImageIcon iconQuit = new ImageIcon(urlQuit);
+		quitButton.setIcon(iconQuit);		
+	}
+
+	@Override
+	public void registered(int time, RoadMap map, List<Event> events) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void simulatorError(int time, RoadMap map, List<Event> events, SimulatorError e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void advanced(int time, RoadMap map, List<Event> events) {
+		timeTextField.setText("" + time);
+	}
+
+	@Override
+	public void eventAdded(int time, RoadMap map, List<Event> events) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reset(int time, RoadMap map, List<Event> events) {
+		// TODO Auto-generated method stub
+		
 	}
 }

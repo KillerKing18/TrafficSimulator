@@ -61,17 +61,9 @@ public class MainPanel extends JFrame {
 		createMenuBar();
 		this.setJMenuBar(_menuBar);
 		
-		// Tool Bar
-		createToolBar();
-		this.add(_toolBar);
-		
 		this.setSize(900,900);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-	
-	private void createToolBar() {
-		_toolBar = new ToolBar(_eventsEditor, _control);
 	}
 	
 	private void createMenuBar() {
@@ -82,13 +74,21 @@ public class MainPanel extends JFrame {
 		_mainPanel = new JPanel();
 		_mainPanel.setLayout(new BoxLayout(_mainPanel, BoxLayout.Y_AXIS));
 		
-		// Top Panel
 		createTopPanel();
+		
+		createDownPanel();
+		
+		createToolBar();
+		
+		_mainPanel.add(_toolBar);
+		
 		_mainPanel.add(_topPanel);
 		
-		// Down Panel
-		createDownPanel();
 		_mainPanel.add(_downPanel);
+	}
+	
+	private void createToolBar() {
+		_toolBar = new ToolBar(_eventsEditor, _reportsArea, _control, _model);
 	}
 	
 	private void createDownPanel() {

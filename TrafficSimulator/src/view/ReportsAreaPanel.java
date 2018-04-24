@@ -1,5 +1,7 @@
 package view;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import control.Controller;
@@ -8,7 +10,7 @@ import model.RoadMap;
 import model.SimulatorError;
 import model.TrafficSimulatorObserver;
 
-public class ReportsAreaPanel extends TextAreaPanel implements TrafficSimulatorObserver{
+public class ReportsAreaPanel extends TextAreaPanel implements TrafficSimulatorObserver, ActionListener{
 
 	public ReportsAreaPanel(String title, boolean editable, Controller control){
 		super(title, editable);
@@ -41,6 +43,12 @@ public class ReportsAreaPanel extends TextAreaPanel implements TrafficSimulatorO
 
 	@Override
 	public void reset(int time, RoadMap map, List<Event> events) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
