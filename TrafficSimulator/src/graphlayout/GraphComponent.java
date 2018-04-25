@@ -14,6 +14,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
 import model.Junction;
+import model.Junction.IncomingRoad;
 import model.Road;
 import model.Vehicle;
 
@@ -126,11 +127,20 @@ public class GraphComponent extends JComponent {
 			Point p2 = _nodesPisitions.get(r.getDestination().getId());
 
 			// draw the edge
-			Color arrowColor;
-			if(r.getDestination().getRoadsInfo().get(r.getDestination().getLightIndex()).getRoad() == r)
-				arrowColor = Color.GREEN;
-			else
-				arrowColor = Color.RED;
+			Color arrowColor = null;
+			// TODO
+			boolean found = false;
+			IncomingRoad ir = null;
+			for(int i = 0; i < r.getDestination().getRoadsInfo().size() && !found; i++) {
+				ir = r.getDestination().getRoadsInfo().get(i);
+				if(ir.getRoad() == r) {
+					found = true;
+					if(ir.hasGreenLight())
+						arrowColor = Color.GREEN;
+					else
+						arrowColor = Color.RED;
+				}
+			}
 			drawArrowLine(g, p1.cX, p1.cY, p2.cX, p2.cY, 15, 5, Color.BLACK, arrowColor);
 
 			// draw dots as circles. Dots at the same location are drawn with circles of
