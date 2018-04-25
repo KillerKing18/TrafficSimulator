@@ -42,12 +42,19 @@ public class MainPanel extends JFrame {
 	private JPanel _downRightPanel;
 	private RoadMapGraph _roadmapGraph;
 	
+	private StateBarPanel _statePanel;
+	
 	public MainPanel(TrafficSimulator model, String inFile, Controller control) throws IOException {
 		super("Traffic Simulator");
 		_control = control;
 		_model = model;
 		_inFile = inFile == null ? null : new File(inFile);
-		initGUI();
+		try {
+			initGUI();
+		} catch(IOException e){
+			_statePanel.setMessage("Error initializing the GUI!");
+			throw e;
+		}
 	}
 
 	void initGUI() throws IOException{
@@ -56,7 +63,11 @@ public class MainPanel extends JFrame {
 		// Main Panel
 		createMainPanel();
 		this.setContentPane(_mainPanel);
-				
+		
+		//State Bar
+		
+		addStateBar(_mainPanel);
+		
 		// Menu Bar
 		createMenuBar();
 		this.setJMenuBar(_menuBar);
@@ -66,6 +77,11 @@ public class MainPanel extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
+	private void addStateBar(JPanel _mainP) {
+		this._statePanel = new StateBarPanel("Welcome to the simulator!", this._model);
+		_mainP.add(_statePanel);
+	}
+
 	private void createMenuBar() {
 		_menuBar = new MenuBar(_eventsEditor, _control);
 	}
