@@ -12,7 +12,6 @@ import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 
 import model.Junction;
 import model.Junction.IncomingRoad;
@@ -20,16 +19,6 @@ import model.Road;
 import model.Vehicle;
 
 public class GraphComponent extends JComponent {
-	
-	private static String[] _images = {"/images/bowser.gif",
-			"/images/donkey.gif",
-			"/images/koopa.gif",
-			"/images/luigi.gif",
-			"/images/mario.gif",
-			"/images/peach.gif",
-			"/images/toad.gif",
-			"/images/yoshi.gif"
-			};
 
 	private static final long serialVersionUID = 1L;
 
@@ -222,7 +211,6 @@ public class GraphComponent extends JComponent {
 		try {
 		ImageIcon icon = new ImageIcon(getClass().getResource("/images/" + txt + ".gif"));
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(this, "Be aware that images couldnt be loaded", "Image Error", JOptionPane.ERROR_MESSAGE);
 			imagen = false;
 		}
 		if (!imagen)
