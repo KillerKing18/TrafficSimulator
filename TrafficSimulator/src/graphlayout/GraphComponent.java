@@ -207,10 +207,18 @@ public class GraphComponent extends JComponent {
 
 		// draw the point
 		g.setColor(c);
-		Random rnd = new Random();
-		Image img = new ImageIcon(getClass().getResource(_images[rnd.nextInt(_images.length)])).getImage();
-		g.drawImage(img, x1 + xDir * ((int) x) - diam / 2, y1 + yDir * ((int) y) - diam / 2, diam, diam, null);
-		//g.drawOval(x1 + xDir * ((int) x) - diam / 2, y1 + yDir * ((int) y) - diam / 2, diam, diam);
+		boolean imagen = true;
+		try {
+		ImageIcon icon = new ImageIcon(getClass().getResource("/images/" + txt + ".gif"));
+		} catch (Exception e) {
+			imagen = false;
+		}
+		if (!imagen)
+			g.drawOval(x1 + xDir * ((int) x) - diam / 2, y1 + yDir * ((int) y) - diam / 2, diam, diam);
+		else {
+			Image img = new ImageIcon(getClass().getResource("/images/" + txt + ".gif")).getImage();
+			g.drawImage(img, x1 + xDir * ((int) x) - diam / 2, y1 + yDir * ((int) y) - diam / 2, diam, diam, null);
+		}
 
 		// draw the text
 		g.setColor(Color.darkGray);
