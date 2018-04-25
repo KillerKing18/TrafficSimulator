@@ -57,6 +57,7 @@ public class MainPanel extends JFrame {
 			initGUI();
 		} catch (IOException e) {
 			_stateBar.setMessage("Error initializing the GUI!");
+			JOptionPane.showMessageDialog(this, "Problems initializing the GUI", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -74,6 +75,7 @@ public class MainPanel extends JFrame {
 		this.setSize(900,900);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	
 	}
 	
 	private void createMenuBar() {

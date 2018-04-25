@@ -3,6 +3,9 @@ package control;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import javax.swing.JOptionPane;
+
 import ini.Ini;
 import ini.IniSection;
 import model.Event;
@@ -70,6 +73,7 @@ public class Controller {
 			ini = new Ini(_inputStream);
 		}
 		catch(IOException e) {
+			
 			throw new SimulatorError("Error while reading the events: " + e);
 		}
 		for(IniSection sec : ini.getSections()) {

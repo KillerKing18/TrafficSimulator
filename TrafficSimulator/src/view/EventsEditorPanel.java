@@ -15,6 +15,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
 
@@ -140,6 +141,7 @@ public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
 			try {
 				_control.loadEvents();
 			} catch (SimulatorError e1) {
+				JOptionPane.showMessageDialog(this, "Error loading events", "Error", JOptionPane.ERROR_MESSAGE);
 				e1.printStackTrace();
 			}
 			break;
@@ -159,6 +161,7 @@ public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
 				// TODO panelBarraEstado.setMensaje("Fichero " + fichero.getName() + " de eventos cargado into the editor");
 			}
 			catch (IOException e) {
+				JOptionPane.showMessageDialog(this, "Problems loading file", "Error", JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
 			}
 		}

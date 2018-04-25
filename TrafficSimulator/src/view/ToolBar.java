@@ -148,8 +148,7 @@ public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					_control.run((Integer)stepsSpinner.getValue());
-				} catch (IOException | SimulatorError e1) {
-					// TODO Auto-generated catch block
+				} catch (IOException | SimulatorError e1) { //TODO excepciones sin mensaje?
 					e1.printStackTrace();
 				}
 			}

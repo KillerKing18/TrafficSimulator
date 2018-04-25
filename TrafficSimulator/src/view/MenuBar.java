@@ -139,7 +139,6 @@ public class MenuBar extends JMenuBar{
 				try {
 					_control.run(1);
 				} catch (IOException | SimulatorError e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}

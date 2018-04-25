@@ -167,6 +167,7 @@ public class TextEditorExample extends JFrame implements ActionListener {
 		try {
 			s = new Scanner(file).useDelimiter("\\A").next();
 		} catch (FileNotFoundException e) {
+			JOptionPane.showMessageDialog(this, "File not found!", "Error", JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
 
@@ -179,6 +180,7 @@ public class TextEditorExample extends JFrame implements ActionListener {
 			pw.print(content);
 			pw.close();
 		} catch (IOException e) {
+			JOptionPane.showMessageDialog(this, "Problems writting files!", "Error", JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
 	}

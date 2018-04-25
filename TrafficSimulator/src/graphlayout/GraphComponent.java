@@ -12,6 +12,7 @@ import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 
 import model.Junction;
 import model.Junction.IncomingRoad;
@@ -221,6 +222,7 @@ public class GraphComponent extends JComponent {
 		try {
 		ImageIcon icon = new ImageIcon(getClass().getResource("/images/" + txt + ".gif"));
 		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this, "Be aware that images couldnt be loaded", "Image Error", JOptionPane.ERROR_MESSAGE);
 			imagen = false;
 		}
 		if (!imagen)
