@@ -75,7 +75,6 @@ public class MainPanel extends JFrame {
 		this.setSize(900,900);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	
 	}
 	
 	private void createMenuBar() {

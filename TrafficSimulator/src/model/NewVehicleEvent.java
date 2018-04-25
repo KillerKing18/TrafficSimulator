@@ -30,7 +30,7 @@ public class NewVehicleEvent extends Event {
 			map.addVehicle(v);
 		}
 		catch(SimulatorError e) {
-			throw new SimulatorError("Problem executing a new_vehicle_event event. " + e.getMessage());
+			throw new SimulatorError("Problem executing a new_vehicle_event event for Vehicle " + _id + ". " + e.getMessage());
 		}
 	}
 

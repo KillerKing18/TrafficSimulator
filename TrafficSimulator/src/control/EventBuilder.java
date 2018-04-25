@@ -61,7 +61,7 @@ public abstract class EventBuilder {
 			String[] array = i.split(",");
 			for(int index = 0; index < array.length; index++) {
 				if(!isValidKey(array[index]))
-					throw new InvalidParametersException("The value " + array[index] + " for" + key + "is not a valid ID");
+					throw new InvalidParametersException("The value " + array[index] + " for " + key + " is not a valid ID");
 			}
 			return array;
 		}
@@ -72,7 +72,7 @@ public abstract class EventBuilder {
 	protected static int parsePosInt(IniSection section, String key) throws InvalidParametersException {
 		int i = parseInt(section, key);
 		if(i <= 0)
-			throw new InvalidParametersException("The value " + i + " for " + key + "should be positive");
+			throw new InvalidParametersException("The value " + i + " for " + key + " should be positive");
 		else
 			return i;
 	}
@@ -83,7 +83,7 @@ public abstract class EventBuilder {
 		if (str != null) {
 			 l = Long.parseLong(section.getValue(key));
 			 if(l <= 0)
-				 throw new InvalidParametersException("The value " + l + " for " + key + "should be positive");
+				 throw new InvalidParametersException("The value " + l + " for " + key + " should be positive");
 			 else
 				 return l;
 		}
@@ -94,7 +94,7 @@ public abstract class EventBuilder {
 	protected static int parseNonNegInt(IniSection section, String key, int defaultValue) throws InvalidParametersException {
 		int i = parseInt(section, key, defaultValue);
 		if(i < 0)
-			throw new InvalidParametersException("The value " + i + " for " + key + "should not be negative");
+			throw new InvalidParametersException("The value " + i + " for " + key + " should not be negative");
 		else
 			return i;
 	}
@@ -105,7 +105,7 @@ public abstract class EventBuilder {
 		if (str != null) {
 			 d = Double.parseDouble(section.getValue(key));
 			 if(d < 0)
-				 throw new InvalidParametersException("The value " + d + " for " + key + "should not be negative");
+				 throw new InvalidParametersException("The value " + d + " for " + key + " should not be negative");
 			 else
 				 return d;
 		}
@@ -116,12 +116,12 @@ public abstract class EventBuilder {
 	protected static String validID(IniSection section, String key) throws InvalidParametersException {
 		String s = section.getValue(key);
 		if(!isValidKey(s))
-			throw new InvalidParametersException("The value " + s + " for" + key + "is not a valid ID");
+			throw new InvalidParametersException("The value " + s + " for " + key + " is not a valid ID");
 		else
 			return s;
 	}
 	
 	private static boolean isValidKey(String id) {
-		return id != null && id.matches("[a-z0-9_]+");
+		return id != null && id.matches("[a-z0-9A-Z_]+");
 	}
 }

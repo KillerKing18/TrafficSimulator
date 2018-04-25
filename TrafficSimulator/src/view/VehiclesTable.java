@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -88,7 +89,10 @@ public class VehiclesTable extends JPanel implements TrafficSimulatorObserver {
 		this.setLayout( new BorderLayout() );
 		tableModel_ = new MyTableModel();
 		JTable t = new JTable(tableModel_); //t registra tableModel como un listener
-		this.add(new JScrollPane(t) , BorderLayout.CENTER);
+		t.setShowGrid(false);
+		JScrollPane jscroll = new JScrollPane(t);
+		jscroll.getViewport().setBackground(Color.WHITE);
+		this.add(jscroll, BorderLayout.CENTER);
 	}
 
 	@Override

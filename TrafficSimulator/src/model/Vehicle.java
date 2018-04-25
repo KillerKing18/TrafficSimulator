@@ -151,7 +151,8 @@ public class Vehicle extends SimulatedObject {
 				_atJunction = false;
 			}
 			else
-				throw new UnexistingObjectException("Next road not found!");
+				throw new UnexistingObjectException("Road from " + _itinerary.get(_itineraryIndex).getId() +
+						" to " + _itinerary.get(_itineraryIndex + 1).getId() + " not found!");
 		}
 	}
 	
