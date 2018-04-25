@@ -1,8 +1,11 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Graphics;
+import java.net.URL;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import graphlayout.Graph;
@@ -25,9 +28,17 @@ public class RoadMapGraph extends JPanel implements TrafficSimulatorObserver {
 	}
 	
 	private void initGUI() {
-		this.setLayout(new BorderLayout());
+		this.setLayout(new BorderLayout());		
 		_graph = new GraphComponent();
 		this.add(_graph, BorderLayout.CENTER);
+	}
+	
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		String pathBackground = "/images/background.png";  
+		URL urlBackground = this.getClass().getResource(pathBackground);  
+		ImageIcon iconBackground = new ImageIcon(urlBackground);
+		g.drawImage(iconBackground.getImage(), 0, 0, this.getWidth(), this.getHeight(), this);
 	}
 
 	@Override

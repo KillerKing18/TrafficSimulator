@@ -209,7 +209,7 @@ public class GraphComponent extends JComponent {
 		g.setColor(c);
 		boolean imagen = true;
 		try {
-		ImageIcon icon = new ImageIcon(getClass().getResource("/images/" + txt + ".gif"));
+			ImageIcon icon = new ImageIcon(getClass().getResource("/images/" + txt + ".gif"));
 		} catch (Exception e) {
 			imagen = false;
 		}
@@ -217,7 +217,7 @@ public class GraphComponent extends JComponent {
 			g.drawOval(x1 + xDir * ((int) x) - diam / 2, y1 + yDir * ((int) y) - diam / 2, diam, diam);
 		else {
 			Image img = new ImageIcon(getClass().getResource("/images/" + txt + ".gif")).getImage();
-			g.drawImage(img, x1 + xDir * ((int) x) - diam / 2, y1 + yDir * ((int) y) - diam / 2, diam, diam, null);
+			g.drawImage(img, x1 + xDir * ((int) x) - diam / 2, y1 + yDir * ((int) y) - diam / 2, diam, diam, this);
 		}
 
 		// draw the text
