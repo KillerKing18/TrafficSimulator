@@ -12,6 +12,11 @@ import control.Controller;
 
 public class MainPanel extends JFrame {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private TrafficSimulator _model;
 	private Controller _control;
 	private File _inFile;
@@ -19,6 +24,7 @@ public class MainPanel extends JFrame {
 	private JPanel _mainPanel;
 	private MenuBar _menuBar;
 	private ToolBar _toolBar;
+	private StateBarPanel _stateBar;
 	
 	// Top Panel
 	private JPanel _topPanel;
@@ -47,7 +53,11 @@ public class MainPanel extends JFrame {
 		_control = control;
 		_model = model;
 		_inFile = inFile == null ? null : new File(inFile);
-		initGUI();
+		try{
+			initGUI();
+		} catch (IOException e) {
+			_stateBar.setMessage("Error initializing the GUI!");
+		}
 	}
 
 	void initGUI() throws IOException{
@@ -80,15 +90,25 @@ public class MainPanel extends JFrame {
 		
 		createToolBar();
 		
+		createStateBar();
+		
 		_mainPanel.add(_toolBar);
 		
 		_mainPanel.add(_topPanel);
 		
 		_mainPanel.add(_downPanel);
+		
+		_mainPanel.add(_stateBar);
+	}
+	
+	private void createStateBar() {
+		_stateBar = new StateBarPanel();
+		_model.addObserver(_stateBar);
 	}
 	
 	private void createToolBar() {
 		_toolBar = new ToolBar(_eventsEditor, _reportsArea, _control, _model);
+		_model.addObserver(_toolBar);
 	}
 	
 	private void createDownPanel() {
@@ -111,7 +131,8 @@ public class MainPanel extends JFrame {
 	}
 	
 	private void createRoadMapGraph() {
-		_roadmapGraph = new RoadMapGraph(_model);
+		_roadmapGraph = new RoadMapGraph();
+		_model.addObserver(_roadmapGraph);
 	}
 	
 	private void createDownLeftPanel() {
@@ -132,17 +153,20 @@ public class MainPanel extends JFrame {
 	}
 	
 	private void createVehiclesTable() {
-		_vehiclesTable = new VehiclesTable(_model);
+		_vehiclesTable = new VehiclesTable();
+		_model.addObserver(_vehiclesTable);
 		_vehiclesTable.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Vehicles"));
 	}
 	
 	private void createRoadsTable() {
-		_roadsTable = new RoadsTable(_model);
+		_roadsTable = new RoadsTable();
+		_model.addObserver(_roadsTable);
 		_roadsTable.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Roads"));
 	}
 	
 	private void createJunctionsTable() {
-		_junctionsTable = new JunctionsTable(_model);
+		_junctionsTable = new JunctionsTable();
+		_model.addObserver(_junctionsTable);
 		_junctionsTable.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Junctions"));
 	}
 	
@@ -168,7 +192,8 @@ public class MainPanel extends JFrame {
 	}
 	
 	private void createEventsQueue() {
-		_eventsQueue = new EventsQueueTable(_model);
+		_eventsQueue = new EventsQueueTable();
+		_model.addObserver(_eventsQueue);
 		_eventsQueue.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Events Queue"));
 	}
 	

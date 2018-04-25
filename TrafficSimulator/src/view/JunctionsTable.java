@@ -64,9 +64,8 @@ public class JunctionsTable extends JPanel implements TrafficSimulatorObserver {
 		}
 	}
 	
-	public JunctionsTable(TrafficSimulator model) {
+	public JunctionsTable() {
 		initGUI();
-		model.addObserver(this);
 	}
 	
 	private void initGUI() {

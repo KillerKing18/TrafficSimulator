@@ -14,7 +14,6 @@ public class ReportsAreaPanel extends TextAreaPanel implements TrafficSimulatorO
 
 	public ReportsAreaPanel(String title, boolean editable, Controller control){
 		super(title, editable);
-		// TODO control.addObserver(this);
 	}
 
 	@Override

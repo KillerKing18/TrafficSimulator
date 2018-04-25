@@ -20,9 +20,8 @@ public class RoadMapGraph extends JPanel implements TrafficSimulatorObserver {
 	private GraphComponent _graph;
 	private RoadMap _map;
 	
-	public RoadMapGraph(TrafficSimulator model) {
+	public RoadMapGraph() {
 		initGUI();
-		model.addObserver(this);
 	}
 	
 	private void initGUI() {

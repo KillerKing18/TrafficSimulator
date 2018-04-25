@@ -71,9 +71,8 @@ public class RoadsTable extends JPanel implements TrafficSimulatorObserver {
 		}
 	}
 	
-	public RoadsTable(TrafficSimulator model) {
+	public RoadsTable() {
 		initGUI();
-		model.addObserver(this);
 	}
 	
 	private void initGUI() {

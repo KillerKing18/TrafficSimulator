@@ -80,9 +80,8 @@ public class VehiclesTable extends JPanel implements TrafficSimulatorObserver {
 		}
 	}
 	
-	public VehiclesTable(TrafficSimulator model) {
+	public VehiclesTable() {
 		initGUI();
-		model.addObserver(this);
 	}
 	
 	private void initGUI() {

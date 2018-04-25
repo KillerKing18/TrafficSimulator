@@ -63,9 +63,8 @@ public class EventsQueueTable extends JPanel implements TrafficSimulatorObserver
 		}
 	}
 	
-	public EventsQueueTable(TrafficSimulator model) {
+	public EventsQueueTable() {
 		initGUI();
-		model.addObserver(this);
 	}
 	
 	private void initGUI() {

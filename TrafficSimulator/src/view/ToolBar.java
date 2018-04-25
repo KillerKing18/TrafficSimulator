@@ -42,15 +42,12 @@ public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 	private EventsEditorPanel _eventsEditorPanel;
 	private ReportsAreaPanel _reportsArea;
 	private Controller _control;
-	private TrafficSimulator _model;
 	
 	public ToolBar(EventsEditorPanel eventsEditorPanel, ReportsAreaPanel reportsArea, Controller control, TrafficSimulator model) {
 		super();
 		_eventsEditorPanel = eventsEditorPanel;
 		_reportsArea = reportsArea;
 		_control = control;
-		_model = model;
-		_model.addObserver(this);
 		initGUI();
 	}
 
