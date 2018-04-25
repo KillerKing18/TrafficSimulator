@@ -4,10 +4,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.RenderingHints;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
 import model.Junction;
@@ -15,6 +18,16 @@ import model.Road;
 import model.Vehicle;
 
 public class GraphComponent extends JComponent {
+	
+	private static String[] _images = {"/images/bowser.gif",
+			"/images/donkey.gif",
+			"/images/koopa.gif",
+			"/images/luigi.gif",
+			"/images/mario.gif",
+			"/images/peach.gif",
+			"/images/toad.gif",
+			"/images/yoshi.gif"
+			};
 
 	private static final long serialVersionUID = 1L;
 
@@ -26,7 +39,7 @@ public class GraphComponent extends JComponent {
 	/**
 	 * The radius of each dot
 	 */
-	private static final int _dotRadius = 5;
+	private static final int _dotRadius = 40;
 
 	/**
 	 * An inner class that represent a location of a node. Fields cX and cY are the
@@ -113,7 +126,11 @@ public class GraphComponent extends JComponent {
 			Point p2 = _nodesPisitions.get(r.getDestination().getId());
 
 			// draw the edge
-			Color arrowColor = Math.random() > 0.5 ? Color.RED : Color.GREEN;
+			Color arrowColor;
+			if(r.getDestination().getRoadsInfo().get(r.getDestination().getLightIndex()).getRoad() == r)
+				arrowColor = Color.GREEN;
+			else
+				arrowColor = Color.RED;
 			drawArrowLine(g, p1.cX, p1.cY, p2.cX, p2.cY, 15, 5, Color.BLACK, arrowColor);
 
 			// draw dots as circles. Dots at the same location are drawn with circles of
@@ -125,7 +142,7 @@ public class GraphComponent extends JComponent {
 					lastLocation = v.getLocation();
 					diam = _dotRadius;
 				} else {
-					diam += _dotRadius;
+					diam -= _dotRadius / 2;
 				}
 				Color dotColor = Math.random() > 0.5 ? Color.MAGENTA : Color.ORANGE;
 				drawCircleOnALine(g, p1.cX, p1.cY, p2.cX, p2.cY, r.getLength(), v.getLocation(), diam, dotColor,
@@ -190,7 +207,10 @@ public class GraphComponent extends JComponent {
 
 		// draw the point
 		g.setColor(c);
-		g.drawOval(x1 + xDir * ((int) x) - diam / 2, y1 + yDir * ((int) y) - diam / 2, diam, diam);
+		Random rnd = new Random();
+		Image img = new ImageIcon(getClass().getResource(_images[rnd.nextInt(_images.length)])).getImage();
+		g.drawImage(img, x1 + xDir * ((int) x) - diam / 2, y1 + yDir * ((int) y) - diam / 2, diam, diam, null);
+		//g.drawOval(x1 + xDir * ((int) x) - diam / 2, y1 + yDir * ((int) y) - diam / 2, diam, diam);
 
 		// draw the text
 		g.setColor(Color.darkGray);

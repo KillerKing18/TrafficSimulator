@@ -176,8 +176,6 @@ public class Vehicle extends SimulatedObject {
 		for(Junction j : _itinerary){
 			itinerary += j.getId() + ",";
 		}
-		// if(!_itinerary.isEmpty()) TODO -> itinerary nunca estara empty
-			itinerary = itinerary.substring(0, itinerary.length() - 1);
 		itinerary += "]";
 		return itinerary;
 	}

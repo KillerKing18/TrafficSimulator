@@ -42,7 +42,7 @@ public class EventsQueueTable extends JPanel implements TrafficSimulatorObserver
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			String v = null;
-			switch ( columnIndex ) {
+			switch (columnIndex) {
 			case 0:
 				v = "" + events_.get(rowIndex).getPositionIndex();
 				break;
@@ -50,8 +50,7 @@ public class EventsQueueTable extends JPanel implements TrafficSimulatorObserver
 				v = "" + events_.get(rowIndex).getScheduledTime();
 				break;
 			case 2:
-				//TODO Revisar
-				v = "" + events_.get(rowIndex);
+				v = events_.get(rowIndex).toString();
 				break;
 			default:
 				break;

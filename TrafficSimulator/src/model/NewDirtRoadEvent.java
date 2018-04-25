@@ -21,4 +21,8 @@ public class NewDirtRoadEvent extends NewRoadEvent {
 		}
 	}
 	
+	@Override
+	public String toString() {
+		return "New Dirt Road " + _id;
+	}
 }

@@ -47,11 +47,11 @@ public class JunctionsTable extends JPanel implements TrafficSimulatorObserver {
 				 break;
 			case 1:
 				// TODO Flechas verdes que le llegan
-				v = map_.getJunctions().get(rowIndex).getReds();
+				v = map_.getJunctions().get(rowIndex).getGreens();
 				 break;
 			case 2:
 				// TODO Flechas rojas que le llegan
-				v = map_.getJunctions().get(rowIndex).getGreens();
+				v = map_.getJunctions().get(rowIndex).getReds();
 				 break;
 			default:
 				break;

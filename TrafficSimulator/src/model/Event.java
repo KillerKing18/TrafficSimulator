@@ -82,6 +82,4 @@ public abstract class Event {
 	public abstract void execute(RoadMap map, int time) throws SimulatorError;
 
 	public abstract String toString();
-
-
 }

@@ -36,8 +36,6 @@ public class NewRoadEvent extends Event {
 
 	@Override
 	public String toString() {
-		return "New road " + _id;
+		return "New Road " + _id;
 	}
-	
-
 }

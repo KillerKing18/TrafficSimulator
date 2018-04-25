@@ -96,14 +96,35 @@ public class Junction extends SimulatedObject{
 	}
 	
 	protected void fillReportDetails(IniSection is) {
+		is.setValue("queues", createQueuesString(0));
+	}
+	
+	protected String createQueuesString(int restriction) {
 		String queue = "";
-		int i = 0;
-		for(; i < _roads.size(); i++) {
-			queue += _roads.get(i).toString();
-			if(i != _roads.size() - 1)
-				queue += ",";	
+		if(restriction == 1 && _lightIndex != -1)
+			queue = _roads.get(_lightIndex).toString();
+		else {
+			for(IncomingRoad r : _roads) {
+				switch(restriction) {
+				case 0:	// All incoming roads
+					queue += r.toString() + ",";
+					break;
+				case 1:	// Only green incoming roads
+					if(r.hasGreenLight())
+						queue += r.toString() + ",";
+					break;
+				case -1:// Only red incoming roads
+					if(!r.hasGreenLight())
+						queue += r.toString() + ",";
+					break;
+				default:
+					break;
+				}	
+			}
+			if(queue.length() != 0)
+				queue = queue.substring(0, queue.length() - 1);
 		}
-		is.setValue("queues", queue);
+		return queue;
 	}
 	
 	/**
@@ -152,12 +173,11 @@ public class Junction extends SimulatedObject{
 		
 		protected String printQueue() {
 			String queue = "";
-			int j = 0;
-			for(; j < _queue.size(); j++) {
-				queue +=_queue.get(j).getId();
-				if(j != _queue.size() - 1)
-					queue += ",";
+			for(Vehicle v : _queue) {
+				queue += v.getId() + ",";
 			}
+			if(!_queue.isEmpty())
+				queue = queue.substring(0, queue.length() - 1);
 			return queue;
 		}
 		
@@ -165,10 +185,7 @@ public class Junction extends SimulatedObject{
 			String queue = "";
 			String light = "";
 			queue += "(" + _road.getId() + ",";
-			if(hasGreenLight())
-				light = "green";
-			else
-				light = "red";
+			light = hasGreenLight() ? "green" : "red";
 			queue += light + ",[";
 			queue += printQueue();
 			queue += "])";
@@ -177,24 +194,16 @@ public class Junction extends SimulatedObject{
 		
 	}
 
-	public String getReds() { //TODO
+	public String getReds() {
 			String reds = "[";
-			for(IncomingRoad r : _roads){
-				reds += "(" + r.getId() + ","; 
-				reds += r.hasGreenLight() ? "green," : "red,";
-				reds += "[])";
-			}
+			reds += createQueuesString(-1);
 			reds += "]";
 			return reds;
 	}
 
-	public String getGreens() { //TODO 
+	public String getGreens() {
 			String greens = "[";
-			for(IncomingRoad r : _roads){
-				greens += "(" + r.getId() + ","; 
-				greens += r.hasGreenLight() ? "green," : "red,";
-				greens += "[])";
-			}
+			greens += createQueuesString(1);
 			greens += "]";
 			return greens;
 	}

@@ -26,4 +26,8 @@ public class NewBikeEvent extends NewVehicleEvent {
 		}
 	}
 	
+	@Override
+	public String toString() {
+		return "New Bike " + _id;
+	}
 }

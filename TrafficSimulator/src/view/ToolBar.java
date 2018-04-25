@@ -149,7 +149,6 @@ public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				try {
 					_control.run((Integer)stepsSpinner.getValue());
 				} catch (IOException | SimulatorError e1) {
@@ -272,8 +271,7 @@ public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 
 	@Override
 	public void reset(int time, RoadMap map, List<Event> events) {
-		//TODO steps a 1 (?)
-		timeTextField.setText("" + 0);
+		timeTextField.setText("0");
 		
 	}
 }

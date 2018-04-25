@@ -156,7 +156,6 @@ public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
 			_inFile = this._fc.getSelectedFile();
 			try {
 				setText(readFile());
-				// TODO _control.restart();
 				// TODO panelBarraEstado.setMensaje("Fichero " + fichero.getName() + " de eventos cargado into the editor");
 			}
 			catch (IOException e) {
