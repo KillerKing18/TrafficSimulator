@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import exceptions.SameIdException;
 import exceptions.UnexistingObjectException;
 
@@ -104,6 +105,17 @@ public class RoadMap {
 		for(Road r: _roads)
 			report += r.generateReport(time) + "\n";
 		for(Vehicle v: _vehicles)
+			report += v.generateReport(time) + "\n";
+		return report;
+	}
+	
+	public String generateSelectedReports(int time, Vehicle[] vehicles, Road[] roads, Junction[] junctions) {
+		String report = "";
+		for(Junction j: junctions)
+			report += j.generateReport(time) + "\n";
+		for(Road r: roads)
+			report += r.generateReport(time) + "\n";
+		for(Vehicle v: vehicles)
 			report += v.generateReport(time) + "\n";
 		return report;
 	}

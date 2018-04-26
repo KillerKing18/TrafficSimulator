@@ -78,7 +78,7 @@ public class MainPanel extends JFrame {
 	}
 	
 	private void createMenuBar() {
-		_menuBar = new MenuBar(_eventsEditor, _control);
+		_menuBar = new MenuBar(_eventsEditor, _reportsArea, _toolBar, _control);
 	}
 	
 	private void createMainPanel() throws IOException {
@@ -199,7 +199,8 @@ public class MainPanel extends JFrame {
 	}
 	
 	private void createReportsArea() {
-		_reportsArea = new ReportsAreaPanel("Reports", false, _control);
+		_reportsArea = new ReportsAreaPanel(this, "Reports", false);
+		_model.addObserver(_reportsArea);
 	}
 
 

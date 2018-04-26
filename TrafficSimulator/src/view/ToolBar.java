@@ -147,7 +147,7 @@ public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					_control.run((Integer)stepsSpinner.getValue());
+					_control.run(getTime());
 				} catch (IOException | SimulatorError e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -161,6 +161,10 @@ public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 		runButton.setIcon(iconRun);
 	}
 	
+	public int getTime(){
+		return (Integer)stepsSpinner.getValue();
+	}
+	
 	private void createResetButton() {
 		resetButton = new JButton();
 		resetButton.setActionCommand("RESET");
@@ -169,6 +173,7 @@ public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				_control.reset(); // TODO
+				_eventsEditorPanel.clear();
 			}
 			
 		});
@@ -232,8 +237,7 @@ public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
+				System.exit(0);
 			}
 			
 		});

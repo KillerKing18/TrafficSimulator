@@ -4,33 +4,39 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import control.Controller;
+import model.Event;
+import model.RoadMap;
 import model.SimulatorError;
+import model.TrafficSimulatorObserver;
 
-public class MenuBar extends JMenuBar{
+public class MenuBar extends JMenuBar {
 	
 	private EventsEditorPanel _eventsEditorPanel;
-	private final String LOAD_EVENTS = "load events";
-	private final String SAVE_EVENTS = "save events";
-	private final String SAVE_REPORT = "save reports";
-	private final String EXIT = "exit";
-	private final String GENERATE = "generate reports";
-	private final String CLEAR = "clear reports";
-	private final String RUN = "save events";
-	private final String RESET = "reset";
-	private final String REDIRECT_OUTPUT = "redirect output";
+	private ReportsAreaPanel _reportsAreaPanel;
+	private ToolBar _toolBar;
 	
 	private Controller _control;
 	
-	public MenuBar(EventsEditorPanel eventsEditorPanel, Controller control){
+	private final String SAVE_REPORT = "save reports";
+	private final String RUN = "save events";
+	private final String REDIRECT_OUTPUT = "redirect output";
+	
+	
+	
+	public MenuBar(EventsEditorPanel eventsEditorPanel, ReportsAreaPanel reportsAreaPanel, ToolBar toolBar, Controller control){
 		super();
 		_control = control;
+		_toolBar = toolBar;
+		_reportsAreaPanel = reportsAreaPanel;
 		_eventsEditorPanel = eventsEditorPanel;
 		JMenu file = createFileMenu();
 		this.add(file);
@@ -76,7 +82,7 @@ public class MenuBar extends JMenuBar{
 				ActionEvent.ALT_MASK));
 		
 		exit = new JMenuItem("Exit");
-		exit.setActionCommand(EXIT);
+		exit.setActionCommand("EXIT");
 		exit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -106,18 +112,12 @@ public class MenuBar extends JMenuBar{
 		JMenuItem generate, clear;
 
 		generate = new JMenuItem("Generate");
-		generate.setActionCommand(GENERATE);
-		//TODO generate.addActionListener();
+		generate.setActionCommand("GENERATE");
+		generate.addActionListener(_reportsAreaPanel);
 
 		clear = new JMenuItem("Clear");
-		clear.setActionCommand(CLEAR);
-		clear.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//TODO _mainPanel.clearReports();
-			}
-			
-		});
+		clear.setActionCommand("CLEAR");
+		clear.addActionListener(_reportsAreaPanel);
 
 		reports.add(generate);
 		reports.add(clear);
@@ -137,17 +137,25 @@ public class MenuBar extends JMenuBar{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					_control.run(1);
+					_control.run(_toolBar.getTime());
 				} catch (IOException | SimulatorError e1) {
-					// TODO Auto-generated catch block
+					// TODO
 					e1.printStackTrace();
 				}
 			}
 		});
 
 		reset = new JMenuItem("Reset");
-		run.setActionCommand(RESET);
-		//TODO reset.addActionListener();
+		run.setActionCommand("RESET");
+		reset.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				_control.reset(); // TODO
+				_eventsEditorPanel.clear();
+			}
+			
+		});
 		
 		redirectOutput = new JMenuItem("Redirect Output");
 		redirectOutput.setActionCommand(REDIRECT_OUTPUT);
