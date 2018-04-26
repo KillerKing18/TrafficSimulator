@@ -8,7 +8,14 @@ import java.io.IOException;
 import javax.swing.*;
 
 import model.TrafficSimulator;
+import music.Music;
 import control.Controller;
+import javax.sound.*;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class MainPanel extends JFrame {
 	
@@ -17,6 +24,7 @@ public class MainPanel extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private Music music;
 	private TrafficSimulator _model;
 	private Controller _control;
 	private File _inFile;
@@ -54,14 +62,21 @@ public class MainPanel extends JFrame {
 		_model = model;
 		_inFile = inFile == null ? null : new File(inFile);
 		try{
-			initGUI();
+			initGUIandMusic();
 		} catch (IOException e) {
 			_stateBar.setMessage("Error initializing the GUI!");
 			JOptionPane.showMessageDialog(this, "Problems initializing the GUI", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
-	void initGUI() throws IOException{
+	void initGUIandMusic() throws IOException{
+		
+		//Music
+		music = new Music("songHC.wav");
+		music.loop();
+	
+		//GUI
+		
 		this.setTitle("Traffic Simulator");
 			
 		// Main Panel
