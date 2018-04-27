@@ -1,28 +1,39 @@
 package view;
 
-import java.awt.event.ActionEvent;
+import java.awt.Dimension;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JSpinner;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.SpinnerNumberModel;
 
-import control.Controller;
 import model.Event;
 import model.RoadMap;
 import model.SimulatorError;
-import model.TrafficSimulator;
 import model.TrafficSimulatorObserver;
 
 public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private static String[] _songs = {"BowserCastleMarioKart",
+			"Kirby",
+			"MooMooFarmMarioKart",
+			"MountWarioMarioKart",
+			"SuperMarioWorldAthletic",
+			"SweetSweetCanyonMarioKart",
+			"ToadHarborMarioKart",
+			"WarioGoldMineMarioKart",
+			"YoshiCircuitMarioKart"};
 	
 	private JButton loadEventsButton;
 	private JButton saveEventsButton;
@@ -34,42 +45,53 @@ public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 	private JSpinner stepsSpinner;
 	private JLabel timeLabel;
 	private JTextField timeTextField;
+	private JButton playMusicButton;
+	private JButton stopMusicButton;
+	private JButton randomMusicButton;
+	private JComboBox<String> playList;
 	private JButton generateReportsButton;
 	private JButton clearReportsAreaButton;
 	private JButton saveReportsButton;
 	private JButton quitButton;
 	
+	private MainPanel _mainPanel;
 	private EventsEditorPanel _eventsEditorPanel;
 	private ReportsAreaPanel _reportsArea;
-	private Controller _control;
 	
-	public ToolBar(EventsEditorPanel eventsEditorPanel, ReportsAreaPanel reportsArea, Controller control, TrafficSimulator model) {
+	public ToolBar(MainPanel mainPanel, EventsEditorPanel eventsEditorPanel, ReportsAreaPanel reportsArea) {
 		super();
+		_mainPanel = mainPanel;
 		_eventsEditorPanel = eventsEditorPanel;
 		_reportsArea = reportsArea;
-		_control = control;
 		initGUI();
 	}
 
-	private void initGUI() {	
-		createLoadEventsButton();
+	private void initGUI() {
+		loadEventsButton = new JButton();
+		createGenericButton(loadEventsButton, "LOAD", _eventsEditorPanel, "/icons/open.png");
 		this.add(loadEventsButton);
 		
-		createSaveEventsButton();
+		saveEventsButton = new JButton();
+		createGenericButton(saveEventsButton, "SAVE", _eventsEditorPanel, "/icons/save.png");
 		this.add(saveEventsButton);
 		
-		createClearEventsButton();
+		clearEventsButton = new JButton();
+		createGenericButton(clearEventsButton, "CLEAR", _eventsEditorPanel, "/icons/clear.png");
 		this.add(clearEventsButton);
 		
 		this.addSeparator();
 		
-		createCheckInEventsButton();
+		checkInEventsButton = new JButton();
+		createGenericButton(checkInEventsButton, "CHECK IN", _eventsEditorPanel, "/icons/events.png");
 		this.add(checkInEventsButton);
 		
-		createRunButton();
+		runButton = new JButton();
+		createGenericButton(runButton, "RUN", _mainPanel, "/icons/play.png");
 		this.add(runButton);
 		
-		createResetButton();
+		
+		resetButton = new JButton();
+		createGenericButton(resetButton, "RESET", _mainPanel, "/icons/reset.png");
 		this.add(resetButton);
 		
 		createStepsLabel();
@@ -84,105 +106,55 @@ public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 		
 		this.addSeparator();
 		
-		createGenerateReportsButton();
+		playMusicButton = new JButton();
+		createGenericButton(playMusicButton, "PLAY", _mainPanel, "/icons/play_music.png");
+		this.add(playMusicButton);
+		
+		stopMusicButton = new JButton();
+		createGenericButton(stopMusicButton, "STOP", _mainPanel, "/icons/stop_music.png");
+		this.add(stopMusicButton);
+		
+		randomMusicButton = new JButton();
+		createGenericButton(randomMusicButton, "RANDOM", _mainPanel, "/icons/random_music.png");
+		this.add(randomMusicButton);
+		
+		playList = new JComboBox<String>(_songs);
+		playList.setSelectedIndex(0);
+		playList.setActionCommand("PLAYLIST");
+		playList.addActionListener(_mainPanel);
+		this.add(playList);
+		
+		this.addSeparator();
+		
+		generateReportsButton = new JButton();
+		createGenericButton(generateReportsButton, "GENERATE", _reportsArea, "/icons/report.png");
 		this.add(generateReportsButton);
 		
-		createClearReportsAreaButton();
+		clearReportsAreaButton = new JButton();
+		createGenericButton(clearReportsAreaButton, "CLEAR", _reportsArea, "/icons/delete_report.png");
 		this.add(clearReportsAreaButton);
 		
-		createSaveReportsButton();
+		saveReportsButton = new JButton();
+		createGenericButton(saveReportsButton, "SAVE", _reportsArea, "/icons/save_report.png");
 		this.add(saveReportsButton);
 		
 		this.addSeparator();
 		
-		createQuitButton();
+		quitButton = new JButton();
+		createGenericButton(quitButton, "QUIT", _mainPanel, "/icons/exit.png");
 		this.add(quitButton);
 	}
-
-	private void createLoadEventsButton() {
-		loadEventsButton = new JButton();
-		loadEventsButton.setActionCommand("LOAD");
-		loadEventsButton.addActionListener(_eventsEditorPanel);
-		String pathLoad = "/icons/open.png";  
-		URL urlLoad = this.getClass().getResource(pathLoad);  
-		ImageIcon iconLoad = new ImageIcon(urlLoad);
-		loadEventsButton.setIcon(iconLoad);
-	}
 	
-	private void createSaveEventsButton() {
-		saveEventsButton = new JButton();
-		saveEventsButton.setActionCommand("SAVE");
-		saveEventsButton.addActionListener(_eventsEditorPanel);
-		String pathSave = "/icons/save.png";  
-		URL urlSave = this.getClass().getResource(pathSave);  
-		ImageIcon iconSave = new ImageIcon(urlSave);
-		saveEventsButton.setIcon(iconSave);
-	}
-	
-	private void createClearEventsButton() {
-		clearEventsButton = new JButton();
-		clearEventsButton.setActionCommand("CLEAR");
-		clearEventsButton.addActionListener(_eventsEditorPanel);
-		String pathClear = "/icons/clear.png";  
-		URL urlClear = this.getClass().getResource(pathClear);  
-		ImageIcon iconClear = new ImageIcon(urlClear);
-		clearEventsButton.setIcon(iconClear);
-	}
-	
-	private void createCheckInEventsButton() {
-		checkInEventsButton = new JButton();
-		checkInEventsButton.setActionCommand("CHECK IN");
-		checkInEventsButton.addActionListener(_eventsEditorPanel);
-		String pathCheckIn = "/icons/events.png";  
-		URL urlCheckIn = this.getClass().getResource(pathCheckIn);  
-		ImageIcon iconCheckIn = new ImageIcon(urlCheckIn);
-		checkInEventsButton.setIcon(iconCheckIn);
-	}
-	
-	private void createRunButton() {
-		runButton = new JButton();
-		runButton.setActionCommand("RUN");
-		runButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					_control.run(getTime());
-				} catch (IOException | SimulatorError e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-			
-		});
-		String pathRun = "/icons/play.png";  
-		URL urlRun = this.getClass().getResource(pathRun);  
-		ImageIcon iconRun = new ImageIcon(urlRun);
-		runButton.setIcon(iconRun);
+	private void createGenericButton(JButton button, String actionCommand, ActionListener actionListener, String path) {
+		button.setActionCommand(actionCommand);
+		button.addActionListener(actionListener);
+		button.setIcon(new ImageIcon(this.getClass().getResource(path)));
 	}
 	
 	public int getTime(){
 		return (Integer)stepsSpinner.getValue();
 	}
-	
-	private void createResetButton() {
-		resetButton = new JButton();
-		resetButton.setActionCommand("RESET");
-		resetButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				_control.reset(); // TODO
-				_eventsEditorPanel.clear();
-			}
-			
-		});
-		String pathReset = "/icons/reset.png";  
-		URL urlReset = this.getClass().getResource(pathReset);  
-		ImageIcon iconReset = new ImageIcon(urlReset);
-		resetButton.setIcon(iconReset);
-	}
-	
+		
 	private void createStepsLabel() {
 		stepsLabel = new JLabel("Steps: ");
 	}
@@ -200,56 +172,13 @@ public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 		timeTextField.setEditable(false);
 	}
 	
-	private void createGenerateReportsButton() {
-		generateReportsButton = new JButton();
-		generateReportsButton.setActionCommand("GENERATE");
-		generateReportsButton.addActionListener(_reportsArea);
-		String pathGenerateReports = "/icons/report.png";  
-		URL urlGenerateReports = this.getClass().getResource(pathGenerateReports);  
-		ImageIcon iconGenerateReports = new ImageIcon(urlGenerateReports);
-		generateReportsButton.setIcon(iconGenerateReports);
-	}
-	
-	private void createClearReportsAreaButton() {
-		clearReportsAreaButton = new JButton();
-		clearReportsAreaButton.setActionCommand("CLEAR");
-		clearReportsAreaButton.addActionListener(_reportsArea);
-		String pathClearReportsArea = "/icons/delete_report.png";  
-		URL urlClearReportsArea = this.getClass().getResource(pathClearReportsArea);  
-		ImageIcon iconClearReportsArea = new ImageIcon(urlClearReportsArea);
-		clearReportsAreaButton.setIcon(iconClearReportsArea);
-	}
-
-	private void createSaveReportsButton() {
-		saveReportsButton = new JButton();
-		saveReportsButton.setActionCommand("SAVE");
-		saveReportsButton.addActionListener(_eventsEditorPanel);
-		String pathSaveReports = "/icons/save_report.png";  
-		URL urlSaveReports = this.getClass().getResource(pathSaveReports);  
-		ImageIcon iconSaveReports = new ImageIcon(urlSaveReports);
-		saveReportsButton.setIcon(iconSaveReports);
-	}
-	
-	private void createQuitButton() {
-		quitButton = new JButton();
-		quitButton.setActionCommand("QUIT");
-		quitButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-			
-		});
-		String pathQuit = "/icons/exit.png";  
-		URL urlQuit = this.getClass().getResource(pathQuit);  
-		ImageIcon iconQuit = new ImageIcon(urlQuit);
-		quitButton.setIcon(iconQuit);		
+	public JComboBox<String> getComboBox() {
+		return playList;
 	}
 
 	@Override
 	public void registered(int time, RoadMap map, List<Event> events) {
-		// TODO Auto-generated method stub
+		timeTextField.setText("0");
 		
 	}
 

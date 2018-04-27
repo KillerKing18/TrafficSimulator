@@ -11,6 +11,11 @@ import model.TrafficSimulatorObserver;
 
 public class ReportsAreaPanel extends TextAreaPanel implements TrafficSimulatorObserver, ActionListener{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private RoadMap _map;
 	private int _time;
 	private DialogWindow _dialog;

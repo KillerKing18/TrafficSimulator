@@ -2,29 +2,37 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 import javax.swing.*;
 
+import model.SimulatorError;
 import model.TrafficSimulator;
 import music.Music;
 import control.Controller;
-import javax.sound.*;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
-public class MainPanel extends JFrame {
+public class MainPanel extends JFrame implements ActionListener{
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private Music music;
+	private static String[] _songs = {"BowserCastleMarioKart.wav",
+			"Kirby.wav",
+			"MooMooFarmMarioKart.wav",
+			"MountWarioMarioKart.wav",
+			"SuperMarioWorldAthletic.wav",
+			"SweetSweetCanyonMarioKart.wav",
+			"ToadHarborMarioKart.wav",
+			"WarioGoldMineMarioKart.wav",
+			"YoshiCircuitMarioKart.wav"};
+	
+	private Music _music;
 	private TrafficSimulator _model;
 	private Controller _control;
 	private File _inFile;
@@ -72,8 +80,8 @@ public class MainPanel extends JFrame {
 	void initGUIandMusic() throws IOException{
 		
 		//Music
-		music = new Music("songHC.wav");
-		music.loop();
+		_music = new Music("src/music/" + _songs[0]);
+		_music.loop();
 	
 		//GUI
 		
@@ -123,7 +131,7 @@ public class MainPanel extends JFrame {
 	}
 	
 	private void createToolBar() {
-		_toolBar = new ToolBar(_eventsEditor, _reportsArea, _control, _model);
+		_toolBar = new ToolBar(this, _eventsEditor, _reportsArea);
 		_model.addObserver(_toolBar);
 	}
 	
@@ -216,6 +224,53 @@ public class MainPanel extends JFrame {
 	private void createReportsArea() {
 		_reportsArea = new ReportsAreaPanel(this, "Reports", false);
 		_model.addObserver(_reportsArea);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String str = e.getActionCommand();
+		switch (str){
+		case "RESET":
+			_control.reset();
+			_eventsEditor.clear();
+			_reportsArea.clear();
+			break;
+		case "RUN":
+			try {
+				_control.run(_toolBar.getTime());
+			} catch (IOException | SimulatorError e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			break;
+		case "QUIT":
+			System.exit(0);
+			break;
+		case "PLAY":
+			_music.loop();
+			break;
+		case "STOP":
+			_music.stop();
+			break;
+		case "RANDOM":
+			_music.stop();
+			Random rnd = new Random();
+			int selected = rnd.nextInt(_songs.length);
+			_music = new Music("src/music/" + _songs[selected]);
+			_toolBar.getComboBox().setSelectedIndex(selected);
+			_music.loop();
+			break;
+		case "PLAYLIST":
+			JComboBox<String> comboBox = (JComboBox<String>)e.getSource();
+			_music.stop();
+			_music = new Music("src/music/" + (String)comboBox.getSelectedItem() + ".wav");
+			_music.loop();
+			break;
+		default:
+			break;
+		}
+		
 	}
 
 

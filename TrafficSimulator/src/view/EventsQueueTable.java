@@ -12,16 +12,25 @@ import javax.swing.table.AbstractTableModel;
 import model.Event;
 import model.RoadMap;
 import model.SimulatorError;
-import model.TrafficSimulator;
 import model.TrafficSimulatorObserver;
 
 public class EventsQueueTable extends JPanel implements TrafficSimulatorObserver {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	MyTableModel tableModel_;
 	RoadMap map_;
 	List<Event> events_;
 	
 	class MyTableModel extends AbstractTableModel {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
 		String[] header = { "#", "Time", "Type" };
 		
 		@Override

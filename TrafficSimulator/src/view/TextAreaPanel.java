@@ -10,6 +10,11 @@ import javax.swing.*;
 
 public abstract class TextAreaPanel extends JPanel{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	protected JTextArea textArea;
 	protected JFileChooser _fc;
 	

@@ -15,10 +15,14 @@ import model.Junction;
 import model.Road;
 import model.RoadMap;
 import model.SimulatorError;
-import model.TrafficSimulator;
 import model.TrafficSimulatorObserver;
 
 public class RoadMapGraph extends JPanel implements TrafficSimulatorObserver {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	private GraphComponent _graph;
 	private RoadMap _map;

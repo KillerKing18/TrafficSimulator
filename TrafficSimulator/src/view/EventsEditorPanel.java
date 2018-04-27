@@ -17,7 +17,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
-import javax.swing.JTextArea;
 
 import control.Controller;
 import control.EventBuilder;
@@ -35,6 +34,11 @@ import model.SimulatorError;
 
 public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private Controller _control;
 	
 	private File _inFile;
@@ -185,6 +189,7 @@ public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
 			finalStr = finalStr + str;
 			str = br.readLine();
 		}
+		br.close();
 		return finalStr;
 	}
 

@@ -12,8 +12,8 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Music {
     private Clip clip;
+    
     public Music(String fileName) {
-
         try {
             File file = new File(fileName);
 
@@ -48,10 +48,12 @@ public class Music {
         clip.setFramePosition(0);  
         clip.start();
     }
+    
     public void loop(){
         clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
+    
     public void stop(){
-            clip.stop();
-        }
+    	clip.stop();
     }
+   }
