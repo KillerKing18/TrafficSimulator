@@ -11,6 +11,11 @@ package model;
  */
 public class SimulatorError extends Exception {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public SimulatorError(String str){
 		super(str);
 	}

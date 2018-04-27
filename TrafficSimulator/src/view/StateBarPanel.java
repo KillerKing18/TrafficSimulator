@@ -34,31 +34,23 @@ public class StateBarPanel extends JPanel implements TrafficSimulatorObserver {
 
 	@Override
 	public void registered(int time, RoadMap map, List<Event> events) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void simulatorError(int time, RoadMap map, List<Event> events, SimulatorError e) {
 		infoExecution.setText("Error with the simulator!");
-		
 	}
 
 	@Override
 	public void advanced(int time, RoadMap map, List<Event> events) {
-		infoExecution.setText("Advanced!");
-		
 	}
 
 	@Override
 	public void eventAdded(int time, RoadMap map, List<Event> events) {
-		infoExecution.setText("Event [" + events.get(events.size() - 1).toString() + "] added!");
-		
 	}
 
 	@Override
 	public void reset(int time, RoadMap map, List<Event> events) {
 		infoExecution.setText("Simulator reseted...");
-		
 	}
 }

@@ -2,17 +2,17 @@ package model;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 import exceptions.*;
-import misc.SortedArrayList;
 
 public class TrafficSimulator implements Observable<TrafficSimulatorObserver> {
 	
 	private List<TrafficSimulatorObserver> _observers;
 	private RoadMap _map;
-	private SortedArrayList<Event> _events;
+	private ArrayList<Event> _events;
 	private int _time;
 	private OutputStream _outStream;
 	protected Comparator<Event> _comparator;
@@ -21,10 +21,10 @@ public class TrafficSimulator implements Observable<TrafficSimulatorObserver> {
 	
 	public TrafficSimulator() {
 		_outStream = null;
-		_observers = new SortedArrayList<>();
+		_observers = new ArrayList<>();
 		_time = 0;
 		_map = new RoadMap();
-		_events = new SortedArrayList<Event>();
+		_events = new ArrayList<Event>();
 		_comparator = new Comparator<Event>() {
 			public int compare(Event e1, Event e2) {
 				if(e1._time < e2._time)
@@ -56,9 +56,6 @@ public class TrafficSimulator implements Observable<TrafficSimulatorObserver> {
 			notifyAdvanced();
 			if(_outStream != null)
 				_outStream.write(_map.generateReport(_time).getBytes());
-			else {
-				// TODO throw new IOException("Problems with the _outStream at the Traffic Simulator");
-			}
 		}
 	}
 
@@ -114,7 +111,6 @@ public class TrafficSimulator implements Observable<TrafficSimulatorObserver> {
 	private void notifyError(SimulatorError err) {
 		for(TrafficSimulatorObserver observer : _observers)
 			observer.simulatorError(_time, _map, _events, err);
-		// TODO DONDE SE LE LLAMA
 	}
 
 	private void notifyEventAdded() {

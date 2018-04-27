@@ -15,9 +15,7 @@ public abstract class TextAreaPanel extends JPanel{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	protected JTextArea textArea;
-	protected JFileChooser _fc;
-	
+	protected JTextArea textArea;	
 	
 	public TextAreaPanel(String title, boolean editable){
 		this.setLayout( new BorderLayout() );

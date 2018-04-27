@@ -163,7 +163,12 @@ public class Main {
 	private static void parseStepsOption(CommandLine line) throws ParseException {
 		String t = line.getOptionValue("t", _timeLimitDefaultValue.toString());
 		try {
-			_timeLimit = Integer.parseInt(t);
+			if(_mode == ExecutionMode.BATCH)
+				_timeLimit = Integer.parseInt(t);
+			else {
+				t = line.getOptionValue("t", "0");
+				_timeLimit = Integer.parseInt(t);
+			}
 			assert (_timeLimit < 0);
 		} catch (Exception e) {
 			throw new ParseException("Invalid value for time limit: " + t);
@@ -178,6 +183,7 @@ public class Main {
 	 * @throws IOException
 	 * @throws SimulatorError
 	 */
+	@SuppressWarnings("unused")
 	private static void test(String path) throws IOException, SimulatorError {
 
 		File dir = new File(path);
@@ -233,18 +239,15 @@ public class Main {
 		InputStream is = null;
 		if (_inFile != null)
 			is = new FileInputStream(new File(_inFile));
-		// TODO Para que sirve OutputStream e InputStream
 		TrafficSimulator sim = new TrafficSimulator();
 		Controller control = new Controller(sim, _timeLimit, is);
 		control.setEventBuilders(_events);
-		// TODO -o ignorar -t opcional
 		SwingUtilities.invokeAndWait(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					new MainPanel(sim, _inFile, control);
+					new MainPanel(sim, _inFile, control, _timeLimit);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

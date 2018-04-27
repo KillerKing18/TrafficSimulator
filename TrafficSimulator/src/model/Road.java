@@ -1,8 +1,8 @@
 package model;
 
 import ini.IniSection;
-import misc.SortedArrayList;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class Road extends SimulatedObject{
 	
 	protected Junction _srcJunc;
 	protected Junction _destJunc;
-	protected SortedArrayList<Vehicle> _vehicles;
+	protected ArrayList<Vehicle> _vehicles;
 	protected int _length;
 	protected int _maxSpeed;
 	protected Comparator<Vehicle> _comparator;
@@ -29,7 +29,7 @@ public class Road extends SimulatedObject{
 		_srcJunc = src;
 		_length = length;
 		_maxSpeed = maxSpeed;
-		_vehicles = new SortedArrayList<Vehicle>();
+		_vehicles = new ArrayList<Vehicle>();
 		_numVehicles = 0;
 		_comparator = new Comparator<Vehicle>() {
 

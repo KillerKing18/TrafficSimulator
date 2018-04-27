@@ -1,52 +1,25 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.util.List;
-
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
-
-import model.Event;
-import model.RoadMap;
-import model.SimulatorError;
-import model.TrafficSimulatorObserver;
-
-public class EventsQueueTable extends JPanel implements TrafficSimulatorObserver {
+public class EventsQueueTable extends GenericTable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	MyTableModel tableModel_;
-	RoadMap map_;
-	List<Event> events_;
-	
-	class MyTableModel extends AbstractTableModel {
+	class MyEventsQueueTableModel extends MyGenericTableModel {
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
 		
-		String[] header = { "#", "Time", "Type" };
-		
-		@Override
-		public int getColumnCount() {
-			return header.length;
-		}
-		
-		@Override
-		public String getColumnName(int columnIndex) {
-			
-			return header[columnIndex];
+		public MyEventsQueueTableModel() {
+			header = new String[]{ "#", "Time", "Type" };
 		}
 	
 		@Override
 		public int getRowCount() {
-			return events_ == null ? 0 : events_.size();
+			return events == null ? 0 : events.size();
 		}
 		
 		@Override
@@ -54,13 +27,13 @@ public class EventsQueueTable extends JPanel implements TrafficSimulatorObserver
 			String v = null;
 			switch (columnIndex) {
 			case 0:
-				v = "" + events_.get(rowIndex).getPositionIndex();
+				v = "" + events.get(rowIndex).getPositionIndex();
 				break;
 			case 1:
-				v = "" + events_.get(rowIndex).getScheduledTime();
+				v = "" + events.get(rowIndex).getScheduledTime();
 				break;
 			case 2:
-				v = events_.get(rowIndex).toString();
+				v = events.get(rowIndex).toString();
 				break;
 			default:
 				break;
@@ -77,48 +50,8 @@ public class EventsQueueTable extends JPanel implements TrafficSimulatorObserver
 		initGUI();
 	}
 	
-	private void initGUI() {
-		this.setLayout( new BorderLayout() );
-		tableModel_ = new MyTableModel();
-		JTable t = new JTable(tableModel_); //t registra tableModel como un listener
-		t.setShowGrid(false);
-		JScrollPane jscroll = new JScrollPane(t);
-		jscroll.getViewport().setBackground(Color.WHITE);
-		this.add(jscroll, BorderLayout.CENTER);
+	protected void initGUI() {
+		tableModel = new MyEventsQueueTableModel();
+		super.initGUI();
 	}
-
-	@Override
-	public void registered(int time, RoadMap map, List<Event> events) {
-		map_ = map;
-		events_ = events;
-		tableModel_.refresh();
-	}
-
-	@Override
-	public void simulatorError(int time, RoadMap map, List<Event> events, SimulatorError e) {
-		map_ = map;
-		events_ = events;
-		tableModel_.refresh();
-	}
-
-	@Override
-	public void advanced(int time, RoadMap map, List<Event> events) {
-		map_ = map;
-		events_ = events;
-		tableModel_.refresh();
-	}
-
-	@Override
-	public void eventAdded(int time, RoadMap map, List<Event> events) {
-		map_ = map;
-		events_ = events;
-		tableModel_.refresh();
-	}
-
-	@Override
-	public void reset(int time, RoadMap map, List<Event> events) {
-		map_ = map;
-		events_ = events;
-		tableModel_.refresh();
-	}	
 }

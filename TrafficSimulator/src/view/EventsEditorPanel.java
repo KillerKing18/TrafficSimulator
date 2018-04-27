@@ -8,8 +8,10 @@ import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
@@ -17,19 +19,10 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import control.Controller;
 import control.EventBuilder;
-import control.MakeVehicleFaultyEventBuilder;
-import control.NewBikeEventBuilder;
-import control.NewCarEventBuilder;
-import control.NewDirtRoadEventBuilder;
-import control.NewJunctionEventBuilder;
-import control.NewLanesRoadEventBuilder;
-import control.NewMostCrowdedJunctionEventBuilder;
-import control.NewRoadEventBuilder;
-import control.NewRoundRobinJunctionEventBuilder;
-import control.NewVehicleEventBuilder;
 import model.SimulatorError;
 
 public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
@@ -38,63 +31,50 @@ public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
+	private StateBarPanel _stateBarPanel;
 	private Controller _control;
-	
 	private File _inFile;
-	
-	private final String EVENTS = "Events: ";
-	
-	private static EventBuilder[] _events = {new NewMostCrowdedJunctionEventBuilder(), 
-		new NewRoundRobinJunctionEventBuilder(),
-		new NewJunctionEventBuilder(),
-		new NewLanesRoadEventBuilder(),
-		new NewDirtRoadEventBuilder(),
-		new NewRoadEventBuilder(),
-		new NewBikeEventBuilder(),
-		new NewCarEventBuilder(),
-		new NewVehicleEventBuilder(),
-		new MakeVehicleFaultyEventBuilder()};
+	protected JFileChooser _fc;
 
-	public EventsEditorPanel(String title, String text, boolean editable, File inFile, Controller control) throws IOException{
+	public EventsEditorPanel(String title, String text, boolean editable, File inFile, Controller control, StateBarPanel stateBarPanel) throws IOException{
 		super(title, editable);
+		
+		_stateBarPanel = stateBarPanel;
 		_control = control;
+		_fc = new JFileChooser();
+		_fc.setCurrentDirectory(new File("."));
+		_fc.setMultiSelectionEnabled(false);
+		_fc.setFileFilter(new FileNameExtensionFilter("Archivos INI", "ini"));
 		_inFile = inFile;
 		if(_inFile != null)
-			setText(readFile());
-		_fc = new JFileChooser();
-		JPopupMenu _editorPopupMenu = new JPopupMenu();
+			setText(readFile());	
 		
-		JMenuItem clearOption = new JMenuItem("Clear");
-		clearOption.setActionCommand("CLEAR");
-		clearOption.addActionListener(this);
+		initGUI();
+	}
+	
+	private void initGUI() {
 
-		JMenuItem loadOption = new JMenuItem("Load");
-		loadOption.setActionCommand("LOAD");
-		loadOption.addActionListener(this);
-		
-		JMenuItem saveOption = new JMenuItem("Save");
-		saveOption.setActionCommand("SAVE");
-		saveOption.addActionListener(this);
+		JPopupMenu _editorPopupMenu = new JPopupMenu();
 
 		JMenu subMenu = new JMenu("Add Template");
 
-		for (EventBuilder eb : _events) {
+		for (EventBuilder eb : _control.getEventBuilders()) {
 			JMenuItem menuItem = new JMenuItem(eb.toString());
 			menuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					EventsEditorPanel.this.insert(eb.template() + "\n");
+					EventsEditorPanel.this.insert("\n" + eb.template() + "\n");
 				}
 			});
 			subMenu.add(menuItem);
 		}
-		
+				
 		_editorPopupMenu.add(subMenu);
 		_editorPopupMenu.addSeparator();
-		_editorPopupMenu.add(loadOption);
-		_editorPopupMenu.add(saveOption);
-		_editorPopupMenu.add(clearOption);
+		_editorPopupMenu.add(createMenuItem("Load", "LOAD", this));
+		_editorPopupMenu.add(createMenuItem("Save", "SAVE", this));
+		_editorPopupMenu.add(createMenuItem("Clear", "CLEAR", this));
 		
 
 		// connect the popup menu to the text area _editor
@@ -129,6 +109,15 @@ public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
 			}
 		});
 	}
+	
+	private JMenuItem createMenuItem(String title, String actionCommand, ActionListener actionListener) {
+		JMenuItem menuItem = new JMenuItem(title);
+		
+		menuItem.setActionCommand(actionCommand);
+		menuItem.addActionListener(actionListener);
+		
+		return menuItem;
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -138,12 +127,17 @@ public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
 			loadFile();
 			break;
 		case "SAVE":
-			saveFile();
+			try {
+				saveFile();
+			} catch (FileNotFoundException e2) {
+				e2.printStackTrace();
+			}
 			break;
 		case "CHECK IN":
 			_control.setInputStream(new ByteArrayInputStream(this.getText().getBytes()));
 			try {
 				_control.loadEvents();
+				_stateBarPanel.setMessage("Events loaded into the simulator!");
 			} catch (SimulatorError e1) {
 				JOptionPane.showMessageDialog(this, "Error loading events", "Error", JOptionPane.ERROR_MESSAGE);
 				e1.printStackTrace();
@@ -151,18 +145,18 @@ public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
 			break;
 		case "CLEAR":
 			clear();
+			_stateBarPanel.setMessage("Events editor cleared");
 			break;
 		}
-		
 	}
 
-	public void loadFile() {
-		int returnVal = this._fc.showOpenDialog(null);
+	private void loadFile() {
+		int returnVal = this._fc.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			_inFile = this._fc.getSelectedFile();
 			try {
 				setText(readFile());
-				// TODO panelBarraEstado.setMensaje("Fichero " + fichero.getName() + " de eventos cargado into the editor");
+				_stateBarPanel.setMessage("File '" + _inFile.getName() + "' loaded");
 			}
 			catch (IOException e) {
 				JOptionPane.showMessageDialog(this, "Problems loading file", "Error", JOptionPane.ERROR_MESSAGE);
@@ -174,7 +168,7 @@ public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
 	public void setText(String text) {
 		textArea.setText(text);
 		setBorder(BorderFactory.createTitledBorder
-				(BorderFactory.createLineBorder(Color.BLACK), EVENTS + _inFile.getName()));
+				(BorderFactory.createLineBorder(Color.BLACK), "Events: " + _inFile.getName()));
 	}
 
 	private String readFile() throws IOException {
@@ -193,9 +187,22 @@ public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
 		return finalStr;
 	}
 
-	public void saveFile() {
-		// TODO Auto-generated method stub
-		
+	private void saveFile() throws FileNotFoundException {
+		int returnVal = _fc.showOpenDialog(this);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			File file = _fc.getSelectedFile();
+			String path = file.getAbsolutePath();
+			PrintWriter printWriter = new PrintWriter(file);
+			printWriter.print(getText());
+			printWriter.close();
+			if(!path.endsWith(".ini")) {
+				File temp = new File(path + ".ini");
+				file.renameTo(temp);
+				_stateBarPanel.setMessage("Events saved in " + temp.getName());
+			}
+			else
+				_stateBarPanel.setMessage("Events saved in " + file.getName());
+		}
 	}
 
 }

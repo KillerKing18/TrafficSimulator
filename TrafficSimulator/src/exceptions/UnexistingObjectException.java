@@ -6,6 +6,11 @@ package exceptions;
  */
 public class UnexistingObjectException extends ExecutionOfEventException {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private static final String message = "Reference to an object that does not exist!";
 	
 	public UnexistingObjectException() {

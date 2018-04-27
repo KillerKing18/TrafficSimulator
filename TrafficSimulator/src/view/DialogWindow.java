@@ -82,9 +82,9 @@ class DialogWindow extends JDialog {
 		_roadsList = new JList<>(_roadsListModel);
 		_junctionsList = new JList<>(_junctionsListModel);
 
-		addCleanSelectionListner(_vehiclesList);
-		addCleanSelectionListner(_roadsList);
-		addCleanSelectionListner(_junctionsList);
+		addCleanSelectionListener(_vehiclesList);
+		addCleanSelectionListener(_roadsList);
+		addCleanSelectionListener(_junctionsList);
 
 		vehiclesPanel.add(new JScrollPane(_vehiclesList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
@@ -99,6 +99,17 @@ class DialogWindow extends JDialog {
 		JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		mainPanel.add(buttonsPanel, BorderLayout.PAGE_END);
 
+		JButton okButton = new JButton("Generate");
+		okButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				_status = 1;
+				DialogWindow.this.setVisible(false);
+			}
+		});
+		buttonsPanel.add(okButton);
+		
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
 
@@ -109,17 +120,6 @@ class DialogWindow extends JDialog {
 			}
 		});
 		buttonsPanel.add(cancelButton);
-
-		JButton okButton = new JButton("OK");
-		okButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				_status = 1;
-				DialogWindow.this.setVisible(false);
-			}
-		});
-		buttonsPanel.add(okButton);
 
 		mainPanel.add(buttonsPanel, BorderLayout.PAGE_END);
 
@@ -137,7 +137,7 @@ class DialogWindow extends JDialog {
 		setVisible(false);
 	}
 
-	private void addCleanSelectionListner(JList<?> list) {
+	private void addCleanSelectionListener(JList<?> list) {
 		list.addKeyListener(new KeyListener() {
 
 			@Override

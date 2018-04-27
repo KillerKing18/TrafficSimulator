@@ -3,15 +3,13 @@ package view;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
-
 import control.Controller;
-import model.SimulatorError;
 
 public class MenuBar extends JMenuBar {
 	
@@ -20,150 +18,77 @@ public class MenuBar extends JMenuBar {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private MainPanel _mainPanel;
 	private EventsEditorPanel _eventsEditorPanel;
 	private ReportsAreaPanel _reportsAreaPanel;
-	private ToolBar _toolBar;
 	
-	private Controller _control;
-	
-	private final String SAVE_REPORT = "save reports";
-	private final String RUN = "save events";
-	private final String REDIRECT_OUTPUT = "redirect output";
-	
-	
-	
-	public MenuBar(EventsEditorPanel eventsEditorPanel, ReportsAreaPanel reportsAreaPanel, ToolBar toolBar, Controller control){
+	public MenuBar(MainPanel mainPanel, EventsEditorPanel eventsEditorPanel, ReportsAreaPanel reportsAreaPanel, ToolBar toolBar, Controller control){
 		super();
-		_control = control;
-		_toolBar = toolBar;
+		_mainPanel = mainPanel;
 		_reportsAreaPanel = reportsAreaPanel;
 		_eventsEditorPanel = eventsEditorPanel;
-		JMenu file = createFileMenu();
-		this.add(file);
-		JMenu simulator = createSimulatorMenu();
-		this.add(simulator);
-		JMenu reports = createReportsMenu();
-		this.add(reports);
+		initGUI();
+	}
+	
+	private void initGUI() {
+		this.add(createFileMenu());
+		this.add(createSimulatorMenu());
+		this.add(createReportsMenu());
 	}
 	
 	public JMenu createFileMenu() {
 		JMenu file = new JMenu("File");
 		file.setMnemonic(KeyEvent.VK_F);
-		
-		JMenuItem loadEvents, saveEvents, checkinEvents, saveReport, exit;
-		// TODO Hacer funcion generica para crear los JMenuItem
 
-		loadEvents = new JMenuItem("Load Events");
-		loadEvents.setActionCommand("LOAD");
-		loadEvents.addActionListener(_eventsEditorPanel);
-		loadEvents.setMnemonic(KeyEvent.VK_L);
-		loadEvents.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L,
-				ActionEvent.ALT_MASK));
-
-		saveEvents = new JMenuItem("Save Events");
-		saveEvents.setActionCommand("SAVE");
-		saveEvents.addActionListener(_eventsEditorPanel);
-		saveEvents.setMnemonic(KeyEvent.VK_S);
-		saveEvents.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
-				ActionEvent.ALT_MASK));
-		
-		checkinEvents = new JMenuItem("Check-in Events");
-		checkinEvents.setActionCommand("CHECK IN");
-		checkinEvents.addActionListener(_eventsEditorPanel);
-		checkinEvents.setMnemonic(KeyEvent.VK_C);
-		checkinEvents.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
-				ActionEvent.ALT_MASK));
-		
-		saveReport = new JMenuItem("Save Report");
-		saveReport.setActionCommand(SAVE_REPORT);
-		//TODO saveReport.addActionListener();
-		saveReport.setMnemonic(KeyEvent.VK_R);
-		saveReport.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R,
-				ActionEvent.ALT_MASK));
-		
-		exit = new JMenuItem("Exit");
-		exit.setActionCommand("EXIT");
-		exit.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-			
-		});
-		exit.setMnemonic(KeyEvent.VK_E);
-		exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
-				ActionEvent.ALT_MASK));
-
-		file.add(loadEvents);
-		file.add(saveEvents);
-		file.add(checkinEvents);
+		file.add(createJMenuItem("Load Events", "LOAD", _eventsEditorPanel, KeyEvent.VK_L));
+		file.add(createJMenuItem("Save Events", "SAVE", _eventsEditorPanel, KeyEvent.VK_S));
+		file.add(createJMenuItem("Check-in Events", "CHECK IN", _eventsEditorPanel, KeyEvent.VK_C));
 		file.addSeparator();
-		file.add(saveReport);
+		file.add(createJMenuItem("Save Reports", "SAVE", _reportsAreaPanel, KeyEvent.VK_R));
 		file.addSeparator();
-		file.add(exit);
+		file.add(createJMenuItem("Exit", "QUIT", _mainPanel, KeyEvent.VK_E));
 		
 		return file;
 	}
 	
-	public JMenu createReportsMenu() {
+	private JMenuItem createJMenuItem(String title, String actionCommand, ActionListener actionListener, int mnemonic) {
+		JMenuItem menuItem = new JMenuItem(title);
+		menuItem.setActionCommand(actionCommand);
+		menuItem.addActionListener(actionListener);
+		menuItem.setMnemonic(mnemonic);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(mnemonic, ActionEvent.ALT_MASK));
+		return menuItem;
+	}
+	
+	private JMenu createReportsMenu() {
 		JMenu reports = new JMenu("Reports");
 		reports.setMnemonic(KeyEvent.VK_R);
 		
-		JMenuItem generate, clear;
-
-		generate = new JMenuItem("Generate");
-		generate.setActionCommand("GENERATE");
-		generate.addActionListener(_reportsAreaPanel);
-
-		clear = new JMenuItem("Clear");
-		clear.setActionCommand("CLEAR");
-		clear.addActionListener(_reportsAreaPanel);
-
-		reports.add(generate);
-		reports.add(clear);
+		reports.add(createJMenuItem("Generate", "GENERATE", _reportsAreaPanel));
+		reports.add(createJMenuItem("Clear", "CLEAR", _reportsAreaPanel));
 		
 		return reports;
+	}
+	
+	private JMenuItem createJMenuItem(String title, String actionCommand, ActionListener actionListener) {
+		JMenuItem menuItem = new JMenuItem(title);
+		menuItem.setActionCommand(actionCommand);
+		menuItem.addActionListener(actionListener);
+		return menuItem;
 	}
 
 	public JMenu createSimulatorMenu() {
 		JMenu simulator = new JMenu("Simulator");
 		simulator.setMnemonic(KeyEvent.VK_S);
 		
-		JMenuItem run, reset, redirectOutput;
-
-		run = new JMenuItem("Run");
-		run.setActionCommand(RUN);
-		run.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					_control.run(_toolBar.getTime());
-				} catch (IOException | SimulatorError e1) {
-					// TODO
-					e1.printStackTrace();
-				}
-			}
-		});
-
-		reset = new JMenuItem("Reset");
-		run.setActionCommand("RESET");
-		reset.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				_control.reset(); // TODO
-				_eventsEditorPanel.clear();
-			}
-			
-		});
+		simulator.add(createJMenuItem("Run", "RUN", _mainPanel));
+		simulator.add(createJMenuItem("Reset", "RESET", _mainPanel));
 		
-		redirectOutput = new JMenuItem("Redirect Output");
-		redirectOutput.setActionCommand(REDIRECT_OUTPUT);
-		//TODO redirectOutput.addActionListener();
-
-		simulator.add(run);
-		simulator.add(reset);
-		simulator.add(redirectOutput);
+		JCheckBoxMenuItem redirect = new JCheckBoxMenuItem("Redirect Output");
+		redirect.setActionCommand("REDIRECT");
+		redirect.addActionListener(_mainPanel);
+		redirect.setSelected(true);
+		simulator.add(redirect);
 		
 		return simulator;
 	}

@@ -48,37 +48,31 @@ public class RoadMapGraph extends JPanel implements TrafficSimulatorObserver {
 	@Override
 	public void registered(int time, RoadMap map, List<Event> events) {
 		_map = map;
-		generateGraph();
 	}
 
 	@Override
 	public void simulatorError(int time, RoadMap map, List<Event> events, SimulatorError e) {
-		_map = map;
-		generateGraph();
 	}
 
 	@Override
 	public void advanced(int time, RoadMap map, List<Event> events) {
-		_map = map;
+		_graph.setAvanzado(true);
 		generateGraph();
 	}
 
 	@Override
 	public void eventAdded(int time, RoadMap map, List<Event> events) {
-		_map = map;
-		generateGraph();
 	}
 
 	@Override
 	public void reset(int time, RoadMap map, List<Event> events) {
-		_map = map;
+		_graph.reset();
 		generateGraph();
 	}
 	
 	protected void generateGraph() {
-
 		Graph g = new Graph();
-
+		
 		for(Junction j : _map.getJunctions()) {
 			g.addNode(j);
 		}
@@ -88,7 +82,6 @@ public class RoadMapGraph extends JPanel implements TrafficSimulatorObserver {
 		}
 		
 		_graph.setGraph(g);
-
 	}
 
 }

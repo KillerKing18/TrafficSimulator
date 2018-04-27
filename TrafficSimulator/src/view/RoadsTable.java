@@ -1,51 +1,25 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.util.List;
-
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
-
-import model.Event;
-import model.RoadMap;
-import model.SimulatorError;
-import model.TrafficSimulatorObserver;
-
-public class RoadsTable extends JPanel implements TrafficSimulatorObserver {
+public class RoadsTable extends GenericTable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	MyTableModel tableModel_;
-	RoadMap map_;
-	
-	class MyTableModel extends AbstractTableModel {
+	class MyRoadsTableModel extends MyGenericTableModel {
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
 		
-		String[] header = { "ID", "Source", "Target", "Length", "Max Speed", "Vehicles" };
-		
-		@Override
-		public int getColumnCount() {
-			return header.length;
-		}
-		
-		@Override
-		public String getColumnName(int columnIndex) {
-			
-			return header[columnIndex];
+		public MyRoadsTableModel() {
+			header = new String[]{ "ID", "Source", "Target", "Length", "Max Speed", "Vehicles" };
 		}
 	
 		@Override
 		public int getRowCount() {
-			return map_ == null ? 0 : map_.getRoads().size();
+			return map == null ? 0 : map.getRoads().size();
 		}
 		
 		@Override
@@ -53,31 +27,27 @@ public class RoadsTable extends JPanel implements TrafficSimulatorObserver {
 			String v = null;
 			switch ( columnIndex ) {
 			case 0:
-				 v = map_.getRoads().get(rowIndex).getId();
+				 v = map.getRoads().get(rowIndex).getId();
 				 break;
 			case 1:
-				 v = map_.getRoads().get(rowIndex).getSource().getId();
+				 v = map.getRoads().get(rowIndex).getSource().getId();
 				 break;
 			case 2:
-				 v = map_.getRoads().get(rowIndex).getDestination().getId();
+				 v = map.getRoads().get(rowIndex).getDestination().getId();
 				 break;
 			case 3:
-				 v = "" + map_.getRoads().get(rowIndex).getLength();
+				 v = "" + map.getRoads().get(rowIndex).getLength();
 				 break;
 			case 4:
-				 v = "" + map_.getRoads().get(rowIndex).getMaxSpeed();
+				 v = "" + map.getRoads().get(rowIndex).getMaxSpeed();
 				 break;
 			case 5:
-				 v = "" + map_.getRoads().get(rowIndex).getVehiclesString();
+				 v = "" + map.getRoads().get(rowIndex).getVehiclesString();
 				 break;
 			default:
 				break;
 			}
 			return v;
-		}
-		
-		void refresh() {
-			fireTableStructureChanged();
 		}
 	}
 	
@@ -85,44 +55,8 @@ public class RoadsTable extends JPanel implements TrafficSimulatorObserver {
 		initGUI();
 	}
 	
-	private void initGUI() {
-		this.setLayout(new BorderLayout());
-		tableModel_ = new MyTableModel();
-		JTable t = new JTable(tableModel_); //t registra tableModel como un listener
-		t.setShowGrid(false);
-		JScrollPane jscroll = new JScrollPane(t);
-		jscroll.getViewport().setBackground(Color.WHITE);
-		this.add(jscroll, BorderLayout.CENTER);
+	protected void initGUI() {
+		tableModel = new MyRoadsTableModel();
+		super.initGUI();
 	}
-
-	@Override
-	public void registered(int time, RoadMap map, List<Event> events) {
-		map_ = map;
-		tableModel_.refresh();
-	}
-
-	@Override
-	public void simulatorError(int time, RoadMap map, List<Event> events,
-			SimulatorError e) {
-		map_ = map;
-		tableModel_.refresh();
-	}
-
-	@Override
-	public void advanced(int time, RoadMap map, List<Event> events) {
-		map_ = map;
-		tableModel_.refresh();
-	}
-
-	@Override
-	public void eventAdded(int time, RoadMap map, List<Event> events) {
-		map_ = map;
-		tableModel_.refresh();
-	}
-
-	@Override
-	public void reset(int time, RoadMap map, List<Event> events) {
-		map_ = map;
-		tableModel_.refresh();
-	}	
 }

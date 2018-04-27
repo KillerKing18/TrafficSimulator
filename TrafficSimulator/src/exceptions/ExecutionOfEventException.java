@@ -6,6 +6,11 @@ import model.SimulatorError;
  */
 public class ExecutionOfEventException extends SimulatorError {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private static final String message = "Error during the execution of an event!";
 	
 	public ExecutionOfEventException() {

@@ -7,6 +7,11 @@ import model.SimulatorError;
  */
 public class InvalidParametersException extends SimulatorError {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private static final String message = "Reference to an object that does not exist!";
 		
 	public InvalidParametersException() {
