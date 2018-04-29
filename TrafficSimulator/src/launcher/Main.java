@@ -36,11 +36,12 @@ import ini.Ini;
 import model.SimulatorError;
 import model.TrafficSimulator;
 import view.MainPanel;
+import view.RacingPanel;
 
 public class Main {
 	
-	private enum ExecutionMode{
-		BATCH("batch"), GUI("gui");
+	public enum ExecutionMode{
+		BATCH("batch"), GUI("gui"), RACING("race");
 		
 		private String modeDescription;
 		private static ExecutionMode[] modes = ExecutionMode.values();
@@ -246,7 +247,15 @@ public class Main {
 			@Override
 			public void run() {
 				try {
-					new MainPanel(sim, _inFile, control, _timeLimit);
+					switch(_mode) {
+					case GUI:
+						new MainPanel(sim, _inFile, control, _timeLimit);	
+						break;
+					case RACING:
+						new RacingPanel(sim, _inFile, control, _timeLimit);
+					default:
+						break;
+					}	
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -258,35 +267,27 @@ public class Main {
 		parseArgs(args);
 		if (_mode == ExecutionMode.BATCH)
 			startBatchMode();
-		else if (_mode == ExecutionMode.GUI)
+		else if (_mode == ExecutionMode.GUI || _mode == ExecutionMode.RACING)
 			startGUIMode();
 		else
 			throw new SimulatorError("Unknown mode.");
 	}
 
 	public static void main(String[] args) throws IOException, SimulatorError, InvocationTargetException, InterruptedException {
-
-		/* example command lines:
-		
+		/*
 		 -i resources/examples/events/basic/ex1.ini
 		 -i resources/examples/events/basic/ex1.ini -o ex1.out
 		 -i resources/examples/events/basic/ex1.ini -t 20
 		 -i resources/examples/events/basic/ex1.ini -o ex1.out -t 20
 		 --help
 		
-
-		 Call test in order to test the simulator on all examples in a directory.
-		
 	    	test("resources/examples/events/basic");
-
-		 Call start to start the simulator from command line, etc.
-		 
+		
+		
+		test("resources/ini1.ini", "resources/output.ini.out", "resources/ini1.ini.eout", 10);
+		test("resources/err");
+		test("resources/advanced10");
 		*/
-		
-		
-		//test("resources/ini1.ini", "resources/output.ini.out", "resources/ini1.ini.eout", 10);
-		//test("resources/err");
-		//test("resources/advanced10");
 		start(args);
 	}
 

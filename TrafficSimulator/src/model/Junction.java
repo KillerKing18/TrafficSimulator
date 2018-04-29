@@ -22,8 +22,11 @@ public class Junction extends SimulatedObject{
 	private int _lightIndex;
 	protected Map<Junction, Road> _outgoingRoads;
 	
+	protected int arrived;
+	
 	public Junction(String id) {
 		super(id);
+		arrived = 0;
 		_roads = new ArrayList<IncomingRoad>();
 		_incomingRoadsString = new HashMap<String, IncomingRoad>();
 		_incomingRoadsJunction = new HashMap<Junction, Road>();
@@ -57,8 +60,9 @@ public class Junction extends SimulatedObject{
 	void enter(String idRoad, Vehicle v) throws UnexistingObjectException {
 		if(_incomingRoadsString.get(idRoad) == null)
 			throw new UnexistingObjectException("The vehicle " + v.getId() + " had a problem trying to enter the junction");
-		else
+		else {
 			_incomingRoadsString.get(idRoad).addVehicle(v);
+		}
 	}
 	
 	void advance() throws SimulatorError {
@@ -163,6 +167,8 @@ public class Junction extends SimulatedObject{
 		protected void advanceFirstVehicle() throws SimulatorError {
 			if(_queue.size() > 0) {
 				_queue.get(0).moveToNextRoad();
+				if(_queue.get(0).atDestination())
+					_queue.get(0).getItinerary().get(_queue.get(0).getItineraryIndex()).increaseArrivals();
 				_queue.remove(0);
 			}
 		}
@@ -206,5 +212,13 @@ public class Junction extends SimulatedObject{
 			greens += createQueuesString(1);
 			greens += "]";
 			return greens;
+	}
+	
+	public int getArrivedVehicles() {
+		return arrived;
+	}
+	
+	public void increaseArrivals() {
+		arrived++;
 	}
 }

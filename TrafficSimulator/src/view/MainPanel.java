@@ -2,70 +2,57 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Random;
-
 import javax.swing.*;
 
-import model.SimulatorError;
 import model.TrafficSimulator;
-import music.Music;
 import control.Controller;
 
-public class MainPanel extends JFrame implements ActionListener{
+public class MainPanel extends JFrame implements ActionListener {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static String[] _songs = {"BowserCastleMarioKart.wav",
-			"Kirby.wav",
-			"MooMooFarmMarioKart.wav",
-			"MountWarioMarioKart.wav",
-			"SuperMarioWorldAthletic.wav",
-			"SweetSweetCanyonMarioKart.wav",
-			"ToadHarborMarioKart.wav",
-			"WarioGoldMineMarioKart.wav",
-			"YoshiCircuitMarioKart.wav"};
+	protected TrafficSimulator _model;
+	protected Controller _control;
+	protected File _inFile;
+	protected OutputStream _outputStream;
+	protected int _steps;
 	
-	private Music _music;
-	private TrafficSimulator _model;
-	private Controller _control;
-	private File _inFile;
-	private OutputStream _outputStream;
-	private int _steps;
 	
-	private JPanel _mainPanel;
-	private MenuBar _menuBar;
-	private ToolBar _toolBar;
-	private StateBarPanel _stateBar;
+	protected JPanel _mainPanel;
+	protected MenuBar _menuBar;
+	protected ToolBar _toolBar;
+	protected StateBarPanel _stateBar;
 	
 	// Top Panel
-	private JPanel _topPanel;
+	protected JPanel _topPanel;
 		// Events Editor
-	private EventsEditorPanel _eventsEditor;
+	protected EventsEditorPanel _eventsEditor;
 		// Events Queue
-	private EventsQueueTable _eventsQueue;
+	protected EventsQueueTable _eventsQueue;
 		//Reports Area
-	private ReportsAreaPanel _reportsArea;
+	protected ReportsAreaPanel _reportsArea;
 	// Down Panel
-	private JPanel _downPanel;
+	protected JPanel _downPanel;
 		// Down Left Panel
-	private JPanel _downLeftPanel;
+	protected JPanel _downLeftPanel;
 			// Vehicles Table
-	private VehiclesTable _vehiclesTable;
+	protected VehiclesTable _vehiclesTable;
 			// Roads Table
-	private RoadsTable _roadsTable;
+	protected RoadsTable _roadsTable;
 			// Junctions Table
-	private JunctionsTable _junctionsTable;
+	protected JunctionsTable _junctionsTable;
 		// Down Right Panel
-	private JPanel _downRightPanel;
-	private RoadMapGraph _roadmapGraph;
+	protected JPanel _downRightPanel;
+	protected RoadMapGraph _roadmapGraph;
 	
 	public MainPanel(TrafficSimulator model, String inFile, Controller control, int steps) throws IOException {
 		super("Traffic Simulator");
@@ -84,39 +71,35 @@ public class MainPanel extends JFrame implements ActionListener{
 			}
 		};
 		try{
-			initGUIandMusic();
+			initGUI();
 		} catch (IOException e) {
-			_stateBar.setMessage("Error initializing the GUI!");
-			JOptionPane.showMessageDialog(this, "Problems initializing the GUI", "Error", JOptionPane.ERROR_MESSAGE);
 		}
+		this.setMinimumSize(new Dimension(1000, 1000));
+		this.setPreferredSize(new Dimension(1000, 1000));
+		this.setMaximumSize(new Dimension(1000, 1000));
+		this.setResizable(false);
 	}
 
-	void initGUIandMusic() throws IOException{
-		
-		//Music
-		_music = new Music("src/music/" + _songs[2]);
-	
-		//GUI
+	protected void initGUI() throws IOException {
 		this.setTitle("Traffic Simulator");
 			
-			// Main Panel
+		// Main Panel
 		createMainPanel();
 		this.setContentPane(_mainPanel);
 				
-			// Menu Bar
+		// Menu Bar
 		createMenuBar();
 		this.setJMenuBar(_menuBar);
 		
-		this.setSize(1000,1000);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
-	private void createMenuBar() {
+	protected void createMenuBar() {
 		_menuBar = new MenuBar(this, _eventsEditor, _reportsArea, _toolBar, _control);
 	}
 	
-	private void createMainPanel() throws IOException {
+	protected void createMainPanel() throws IOException {
 		_mainPanel = new JPanel();
 		_mainPanel.setLayout(new BoxLayout(_mainPanel, BoxLayout.Y_AXIS));
 		
@@ -142,12 +125,12 @@ public class MainPanel extends JFrame implements ActionListener{
 		_model.addObserver(_stateBar);
 	}
 	
-	private void createToolBar() {
+	protected void createToolBar() {
 		_toolBar = new ToolBar(this, _eventsEditor, _reportsArea, _steps);
 		_model.addObserver(_toolBar);
 	}
 	
-	private void createDownPanel() {
+	protected void createDownPanel() {
 		_downPanel = new JPanel();
 		_downPanel.setLayout(new BoxLayout(_downPanel, BoxLayout.X_AXIS));
 		
@@ -166,12 +149,12 @@ public class MainPanel extends JFrame implements ActionListener{
 		_downRightPanel.add(_roadmapGraph, BorderLayout.CENTER);
 	}
 	
-	private void createRoadMapGraph() {
+	protected void createRoadMapGraph() {
 		_roadmapGraph = new RoadMapGraph();
 		_model.addObserver(_roadmapGraph);
 	}
 	
-	private void createDownLeftPanel() {
+	protected void createDownLeftPanel() {
 		_downLeftPanel = new JPanel();
 		_downLeftPanel.setLayout(new BoxLayout(_downLeftPanel, BoxLayout.Y_AXIS));
 		
@@ -188,7 +171,7 @@ public class MainPanel extends JFrame implements ActionListener{
 		_downLeftPanel.add(_junctionsTable);
 	}
 	
-	private void createVehiclesTable() {
+	protected void createVehiclesTable() {
 		_vehiclesTable = new VehiclesTable();
 		_model.addObserver(_vehiclesTable);
 		_vehiclesTable.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Vehicles"));
@@ -206,8 +189,11 @@ public class MainPanel extends JFrame implements ActionListener{
 		_junctionsTable.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Junctions"));
 	}
 	
-	private void createTopPanel() throws IOException {
+	protected void createTopPanel() throws IOException {
 		_topPanel = new JPanel();
+		_topPanel.setMinimumSize(new Dimension(1000, 200));
+		_topPanel.setPreferredSize(new Dimension(1000, 200));
+		_topPanel.setMaximumSize(new Dimension(1000, 200));
 		_topPanel.setLayout(new BoxLayout(_topPanel, BoxLayout.X_AXIS));
 		
 		// Events Editor
@@ -223,7 +209,7 @@ public class MainPanel extends JFrame implements ActionListener{
 		_topPanel.add(_reportsArea);
 	}
 	
-	private void createEventsEditor() throws IOException {
+	protected void createEventsEditor() throws IOException {
 		_eventsEditor = new EventsEditorPanel("Events: ", "", true, _inFile, _control, _stateBar);
 	}
 	
@@ -239,7 +225,6 @@ public class MainPanel extends JFrame implements ActionListener{
 		_model.setOutputStream(_outputStream);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String str = e.getActionCommand();
@@ -255,32 +240,12 @@ public class MainPanel extends JFrame implements ActionListener{
 			try {
 				_control.run(_toolBar.getTime());
 				_stateBar.setMessage(_toolBar.getTime() + " steps advanced!");
-			} catch (IOException | SimulatorError e1) {
+			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
 			break;
 		case "QUIT":
 			System.exit(0);
-			break;
-		case "PLAY":
-			_music.loop();
-			break;
-		case "STOP":
-			_music.stop();
-			break;
-		case "RANDOM":
-			_music.stop();
-			Random rnd = new Random();
-			int selected = rnd.nextInt(_songs.length);
-			_music = new Music("src/music/" + _songs[selected]);
-			_toolBar.getComboBox().setSelectedIndex(selected);
-			_music.loop();
-			break;
-		case "PLAYLIST":
-			JComboBox<String> comboBox = (JComboBox<String>)e.getSource();
-			_music.stop();
-			_music = new Music("src/music/" + (String)comboBox.getSelectedItem() + ".wav");
-			_music.loop();
 			break;
 		case "REDIRECT":
 			JCheckBoxMenuItem redirect = (JCheckBoxMenuItem)e.getSource();

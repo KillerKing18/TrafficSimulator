@@ -25,7 +25,7 @@ public class VehiclesTable extends GenericTable {
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			String v = null;
-			switch ( columnIndex ) {
+			switch (columnIndex) {
 			case 0:
 				 v = map.getVehicles().get(rowIndex).getId();
 				 break;

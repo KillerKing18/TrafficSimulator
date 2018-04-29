@@ -180,4 +180,8 @@ public class Vehicle extends SimulatedObject {
 		itinerary += "]";
 		return itinerary;
 	}
+	
+	public int getItineraryIndex() {
+		return _itineraryIndex;
+	}
 }

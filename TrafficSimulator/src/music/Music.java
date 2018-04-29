@@ -3,6 +3,7 @@ package music;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -56,4 +57,4 @@ public class Music {
     public void stop(){
     	clip.stop();
     }
-   }
+}

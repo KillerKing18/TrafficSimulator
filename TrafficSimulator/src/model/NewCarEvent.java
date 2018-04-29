@@ -23,6 +23,7 @@ public class NewCarEvent extends NewVehicleEvent {
 		_faultProbability = faultProbability;
 		_seed = seed;
 	}
+	
 	public void execute(RoadMap map, int time) throws SimulatorError {
 		try{
 			List<Junction> itinerary = Event.parseListOfJunctions(map, _itinerary);

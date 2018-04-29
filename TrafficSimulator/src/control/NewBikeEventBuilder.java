@@ -16,7 +16,7 @@ public class NewBikeEventBuilder extends EventBuilder{
 	public NewBikeEventBuilder() {
 		_tag = "new_vehicle";
 		_keys = new String[] {"time", "id", "itinerary", "max_speed", "type"};
-		_defaultValues = new String[] {"", "", "", "", "", "bike"};
+		_defaultValues = new String[] {"", "", "", "", "bike"};
 	}
 		
 	public Event parse(IniSection section) throws InvalidParametersException {

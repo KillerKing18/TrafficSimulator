@@ -4,13 +4,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
 import model.Junction;
@@ -18,19 +16,10 @@ import model.Junction.IncomingRoad;
 import model.Road;
 import model.Vehicle;
 
-public class GraphComponent extends JComponent implements Runnable {
+public class GraphComponent extends JComponent {	
 	
-	private Thread hilo;
-	private final int DELAY=5;
-	protected Map<String, Integer> _x;
-	protected Map<String, Integer> _y;
-	protected Map<String, Integer> _x_past;
-	protected Map<String, Integer> _y_past;
-	protected Map<String, Integer> _x_current;
-	protected Map<String, Integer> _y_current;
-	private boolean empezado;
-	private boolean avanzado;
-	
+	protected boolean empezado;
+	protected boolean avanzado;
 
 	private static final long serialVersionUID = 1L;
 
@@ -42,7 +31,7 @@ public class GraphComponent extends JComponent implements Runnable {
 	/**
 	 * The radius of each dot
 	 */
-	private static final int _dotRadius = 40;
+	protected static final int _dotRadius = 40;
 
 	/**
 	 * An inner class that represent a location of a node. Fields cX and cY are the
@@ -82,18 +71,7 @@ public class GraphComponent extends JComponent implements Runnable {
 	private int _lastWidth;
 	private int _lastHeight;
 
-	public GraphComponent() {
-		 setDoubleBuffered(true);
-		 empezado = false;
-		 avanzado = false;
-		 _x = new HashMap<String, Integer>();
-		 _y = new HashMap<String, Integer>();
-		 _x_past = new HashMap<String, Integer>();
-		 _y_past = new HashMap<String, Integer>();
-		 _x_current = new HashMap<String, Integer>();
-		 _y_current = new HashMap<String, Integer>();
-		
-		
+	public GraphComponent() {		
 		_nodesPisitions = new HashMap<>();
 		setMinimumSize(new Dimension(500, 500));
 		setPreferredSize(new Dimension(500, 500));
@@ -237,32 +215,15 @@ public class GraphComponent extends JComponent implements Runnable {
 
 		// draw the point
 		g.setColor(c);
-		try {
-			Image img = new ImageIcon(getClass().getResource("/images/" + txt + ".gif")).getImage();
-			if(!empezado) {
-				_x_past.put(txt, x1 + xDir * ((int) x) - diam / 2);
-				_y_past.put(txt, y1 + yDir * ((int) y) - diam / 2);
-				_x_current.put(txt, _x_past.get(txt));
-				_y_current.put(txt, _y_past.get(txt));
-			}
-			else {
-				if(avanzado) {
-					_x_past.put(txt, _x.get(txt));
-					_y_past.put(txt, _y.get(txt));
-				}
-			}
-			_x.put(txt, x1 + xDir * ((int) x) - diam / 2);
-			_y.put(txt, y1 + yDir * ((int) y) - diam / 2);
-			int positionX = _x_current.get(txt);
-			int positionY = _y_current.get(txt);
-			g.drawImage(img,positionX, positionY, diam, diam, this);
-		} catch (Exception e) {
-			g.drawOval(x1 + xDir * ((int) x) - diam / 2, y1 + yDir * ((int) y) - diam / 2, diam, diam);
-		}
-
+		drawVehicle(g, x, y, x1, y1, diam, xDir, yDir, txt);
+		
 		// draw the text
 		g.setColor(Color.darkGray);
 		g.drawString(txt, x1 + xDir * ((int) x) - diam / 2, y1 + yDir * ((int) y) - diam / 2);
+	}
+	
+	protected void drawVehicle(Graphics g, double x, double y, int x1, int y1, int diam, int xDir, int yDir, String txt) {
+		g.drawOval(x1 + xDir * ((int) x) - diam / 2, y1 + yDir * ((int) y) - diam / 2, diam, diam);
 	}
 
 	/**
@@ -302,65 +263,11 @@ public class GraphComponent extends JComponent implements Runnable {
 	public void refresh() {
 		repaint();
 	}
-
-	@Override
-	public void run() {
-		while(true){
-            ciclo();
-            repaint();
-            try{
-                Thread.sleep(DELAY);
-            }catch(InterruptedException err){
-                System.out.println(err);
-            }
-        }
+	
+	public void reset() {
 	}
 	
-	public void ciclo(){
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		 	for (String key : _x.keySet()) {
-		        int viejox = _x_past.get(key);
-		        int viejoy = _y_past.get(key);
-		        int nuevox = _x.get(key);
-		        int nuevoy = _y.get(key);
-		        
-		        
-		        int nextPositionX = _x_current.get(key) + ((nuevox - viejox) / 5);
-		        int nextPositionY = _y_current.get(key) + ((nuevoy - viejoy) / 5);
-		        	if((viejox < nuevox && nextPositionX >= nuevox) || 
-			        		(viejox > nuevox && nextPositionX <= nuevox) ||
-			        		(viejoy < nuevoy && nextPositionY >= nuevoy) ||
-			        		(viejoy > nuevoy && nextPositionY <= nuevoy) ||
-			        		nextPositionX == _x_current.get(key)) {
-			        	_x_current.put(key, viejox);
-			        	_y_current.put(key, viejoy);
-			        }
-			        else {
-			        	_x_current.put(key, nextPositionX);
-			        	_y_current.put(key, nextPositionY);
-			        }
-		    }
-    }
-
-	 @Override
-    public void addNotify(){
-        super.addNotify();
-        hilo = new Thread(this);
-        hilo.start();
-    }
-	 
-	public void reset() {
-		 empezado = false;
-		 avanzado = false;
-		 _x = new HashMap<String, Integer>();
-		 _y = new HashMap<String, Integer>();
-		 _x_past = new HashMap<String, Integer>();
-		 _y_past = new HashMap<String, Integer>();
-		 _x_current = new HashMap<String, Integer>();
-		 _y_current = new HashMap<String, Integer>();
+	public void setEmpezado(boolean b) {
+		empezado = b;
 	}
 }
