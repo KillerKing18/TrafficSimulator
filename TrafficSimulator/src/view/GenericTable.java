@@ -23,7 +23,7 @@ public abstract class GenericTable extends JPanel implements TrafficSimulatorObs
 	protected RoadMap map;
 	protected List<Event> events;
 	
-	abstract class MyGenericTableModel extends AbstractTableModel {
+	public abstract class MyGenericTableModel extends AbstractTableModel {
 		/**
 		 * 
 		 */

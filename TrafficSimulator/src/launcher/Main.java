@@ -35,8 +35,8 @@ import control.NewVehicleEventBuilder;
 import ini.Ini;
 import model.SimulatorError;
 import model.TrafficSimulator;
+import racingview.RacingPanel;
 import view.MainPanel;
-import view.RacingPanel;
 
 public class Main {
 	

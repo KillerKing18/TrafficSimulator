@@ -1,5 +1,7 @@
-package view;
+package racingview;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
@@ -50,8 +52,6 @@ public class CharacterChooserPanel extends ChooserPanel {
 		button.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -59,27 +59,30 @@ public class CharacterChooserPanel extends ChooserPanel {
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				_imagesPanel.removeAll();
-				ImageIcon icon2 = new ImageIcon(this.getClass().getResource("/images/" + path + ".gif"));
-				icon2.setImage(icon2.getImage().getScaledInstance(75, 75, 1));
-				_imagesPanel.add(new JLabel(icon2));
-				JPanel temp = new JPanel();
-				temp.setLayout(new GridLayout(2, 1));
+				JPanel temp1 = new JPanel();
+				temp1.setLayout(new BorderLayout());
+				temp1.setPreferredSize(new Dimension(200, 150));
+				temp1.setMaximumSize(new Dimension(200, 150));
+				temp1.setMinimumSize(new Dimension(200, 150));
+				ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/" + path + ".gif"));
+				icon.setImage(icon.getImage().getScaledInstance(75, 75, 1));
+				temp1.add(new JLabel(icon));
+				_imagesPanel.add(temp1);
+				JPanel temp2 = new JPanel();
+				temp2.setLayout(new GridLayout(2, 1));
 				JLabel speed = new JLabel("Speed : " + _speedMap.get(path));
 				speed.setFont(new Font("Sheriff", Font.BOLD, 25));
-				temp.add(speed);
+				temp2.add(speed);
 				JLabel luck = new JLabel("Luck : " + _luckMap.get(path));
 				luck.setFont(new Font("Sheriff", Font.BOLD, 25));
-				temp.add(luck);
-				_imagesPanel.add(temp);
+				temp2.add(luck);
+				_imagesPanel.add(temp2);
 				_imagesPanel.repaint();
 				updateUI();
-				
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {

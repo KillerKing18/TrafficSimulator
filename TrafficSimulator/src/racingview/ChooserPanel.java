@@ -1,4 +1,4 @@
-package view;
+package racingview;
 
 import java.awt.GridLayout;
 

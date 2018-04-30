@@ -1,8 +1,11 @@
-package view;
+package racingview;
 
 import java.awt.Color;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class SelectedCupTable extends GenericRacingTable {
 
@@ -18,7 +21,7 @@ public class SelectedCupTable extends GenericRacingTable {
 		private static final long serialVersionUID = 1L;
 		
 		public MySelectedCupTableModel() {
-			header = new String[]{ "Name", "Previous", "Next" };
+			header = new String[]{ "Race", "Name" };
 		}
 		
 		@Override
@@ -34,19 +37,10 @@ public class SelectedCupTable extends GenericRacingTable {
 			String v = null;
 			switch (columnIndex) {
 			case 0:
-				 v = _cupChooserPanel.getCupsMap().get(_cupChooserPanel.getSelectedCup())[rowIndex];
+				 v = "#" + (rowIndex + 1);
 				 break;
 			case 1:
-				 if(rowIndex != 0)
-					v = _cupChooserPanel.getCupsMap().get(_cupChooserPanel.getSelectedCup())[rowIndex - 1];
-				 else
-					v = _cupChooserPanel.getCupsMap().get(_cupChooserPanel.getSelectedCup())[_cupChooserPanel.getCupsMap().get(_cupChooserPanel.getSelectedCup()).length - 1];
-				 break;
-			case 2:
-				 if(rowIndex != _cupChooserPanel.getCupsMap().get(_cupChooserPanel.getSelectedCup()).length - 1)
-					v = _cupChooserPanel.getCupsMap().get(_cupChooserPanel.getSelectedCup())[rowIndex + 1];
-				 else
-					v = _cupChooserPanel.getCupsMap().get(_cupChooserPanel.getSelectedCup())[0];
+				 v = _cupChooserPanel.getCupsMap().get(_cupChooserPanel.getSelectedCup())[rowIndex];
 				 break;
 			default:
 				break;
@@ -55,7 +49,7 @@ public class SelectedCupTable extends GenericRacingTable {
 		}
 	}
 	
-	public SelectedCupTable() {
+	public SelectedCupTable(JPanel selectedCupImage) {
 		initGUI();
 	}
 	
@@ -66,8 +60,13 @@ public class SelectedCupTable extends GenericRacingTable {
 	
 	@Override
 	public void cupSelected() {
-		setBorder(BorderFactory.createTitledBorder
-				(BorderFactory.createLineBorder(Color.BLACK), "Cup: " + _cupChooserPanel.getSelectedCup()));
 		tableModel.refresh();
+		_selectedCupImage.removeAll();
+		ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/" + _cupChooserPanel.getSelectedCup() + "trophy" + ".jpg"));
+		icon.setImage(icon.getImage().getScaledInstance(390, 230, 1));
+		_selectedCupImage.add(new JLabel(icon));
+		_selectedCupImage.updateUI();
+		_selectedCupPanel.setBorder(BorderFactory.createTitledBorder
+				(BorderFactory.createLineBorder(Color.BLACK), "Cup: " + _cupChooserPanel.getSelectedCup()));
 	}
 }

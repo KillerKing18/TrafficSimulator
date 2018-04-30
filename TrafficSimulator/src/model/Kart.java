@@ -15,32 +15,55 @@ public class Kart extends Vehicle {
 	protected int _luck;
 	protected Random _random;
 	protected boolean _newLap;
+	protected int _lap;
+	protected boolean _itembox;
+	protected int _racePosition;
 
 	public Kart(String id, int maxSpeed, List<Junction> itinerary, int luck) {
 		super(id, maxSpeed, itinerary);
 		_luck = luck;
 		_random = new Random();
 		_newLap = false;
+		_lap = 0;
+		_itembox = true;
+	}
+	
+	public int getLap() {
+		return _lap;
 	}
 
 	void advance() throws UnexistingObjectException {
 		if(_itinerary.get(_itineraryIndex) == _itinerary.get(0) && !_atJunction && _itineraryIndex != 0 && _newLap) {
-			_newLap = false;
-			if (_random.nextInt(101) < _luck) {
-				_currentSpeed = _currentSpeed * 2;
-				ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/boost.gif"));
-				Music music = new Music("src/music/itemboxboost.wav");
+			_lap++;
+			if(_racePosition == 1) {
+				ImageIcon flagicon = new ImageIcon(this.getClass().getResource("/images/newlap.png"));
+				flagicon.setImage(flagicon.getImage().getScaledInstance(300, 200, 1));
+				Music music = new Music("src/music/lap.wav");
 				music.play();
+				JOptionPane.showMessageDialog(null, "LAP " + _lap, "New Lap", JOptionPane.INFORMATION_MESSAGE, flagicon);
+				music.stop();
 				music = null;
-				JOptionPane.showMessageDialog(null, _id + " found an Item Box...\nEXTRA BOOST!", "Item Box", JOptionPane.INFORMATION_MESSAGE, icon);
 			}
-			else {
-				ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/boo.gif"));
-				Music music = new Music("src/music/itemboxboo.wav");
-				music.play();
-				music = null;
-				JOptionPane.showMessageDialog(null, _id + " found an Item Box...\nBOO!", "Item Box", JOptionPane.WARNING_MESSAGE, icon);
-				makeFaulty(1);
+			_newLap = false;
+			if(_itembox) {
+				if (_random.nextInt(101) < _luck) {
+					_currentSpeed = _currentSpeed * 2;
+					ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/boost.gif"));
+					Music music = new Music("src/music/itemboxboost.wav");
+					music.play();
+					JOptionPane.showMessageDialog(null, _id + " found an Item Box...\nEXTRA BOOST!", "Item Box", JOptionPane.INFORMATION_MESSAGE, icon);
+					music.stop();
+					music = null;
+				}
+				else {
+					ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/boo.gif"));
+					Music music = new Music("src/music/itemboxboo.wav");
+					music.play();
+					JOptionPane.showMessageDialog(null, _id + " found an Item Box...\nBOO!", "Item Box", JOptionPane.WARNING_MESSAGE, icon);
+					music.stop();
+					music = null;
+					makeFaulty(1);
+				}
 			}
 		}
 		int previous = _itineraryIndex;
@@ -52,5 +75,13 @@ public class Kart extends Vehicle {
 	protected void fillReportDetails(IniSection is) {
 		is.setValue("type", "kart");
 		super.fillReportDetails(is);
+	}
+	
+	public void changeItemBox() {
+		_itembox = !_itembox;
+	}
+	
+	public void setRacePosition(int position) {
+		_racePosition = position;
 	}
 }

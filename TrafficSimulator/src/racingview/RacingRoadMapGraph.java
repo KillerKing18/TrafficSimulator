@@ -1,4 +1,4 @@
-package view;
+package racingview;
 
 import java.awt.BorderLayout;
 import java.awt.Graphics;
@@ -7,6 +7,7 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 
 import graphlayout.RacingGraphComponent;
+import view.RoadMapGraph;
 
 public class RacingRoadMapGraph extends RoadMapGraph {
 

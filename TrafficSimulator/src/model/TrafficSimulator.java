@@ -15,7 +15,8 @@ public class TrafficSimulator implements Observable<TrafficSimulatorObserver> {
 	private ArrayList<Event> _events;
 	private int _time;
 	private OutputStream _outStream;
-	protected Comparator<Event> _comparator;
+	protected Comparator<Event> _eventsComparator;
+	protected Comparator<Vehicle> _kartsComparator;
 	protected int _numEvents;
 
 	private int arrivedVehicles;
@@ -26,7 +27,7 @@ public class TrafficSimulator implements Observable<TrafficSimulatorObserver> {
 		_time = 0;
 		_map = new RoadMap();
 		_events = new ArrayList<Event>();
-		_comparator = new Comparator<Event>() {
+		_eventsComparator = new Comparator<Event>() {
 			public int compare(Event e1, Event e2) {
 				if(e1._time < e2._time)
 					return -1;
@@ -37,6 +38,32 @@ public class TrafficSimulator implements Observable<TrafficSimulatorObserver> {
 						return -1;
 					else
 						return 1;
+				}
+			}
+		};
+		_kartsComparator = new Comparator<Vehicle>() {
+			public int compare(Vehicle v1, Vehicle  v2) {
+				if (v1.getItineraryIndex() > v2.getItineraryIndex())
+					return -1;
+				else if (v1.getItineraryIndex() < v2.getItineraryIndex())
+					return 1;
+				else {
+					if (v1.getAtJunction() && !v2.getAtJunction())
+						return 1;
+					else if (!v1.getAtJunction() && v2.getAtJunction())
+						return -1;
+					else {
+						if(v1.getLocation() > v2.getLocation())
+							return -1;
+						else if (v1.getLocation() < v2.getLocation())
+							return 1;
+						else {
+							if(v1.getPositionIndex() < v2.getPositionIndex())
+								return -1;
+							else
+								return 1;
+						}
+					}
 				}
 			}
 		};
@@ -56,6 +83,11 @@ public class TrafficSimulator implements Observable<TrafficSimulatorObserver> {
 				j.advance();
 				arrivedVehicles += j.getArrivedVehicles();
 			}
+			// TODO solo para RACING
+			_map.getVehicles().sort(_kartsComparator);
+			for(int i = 0; i < _map.getVehicles().size(); i++)
+				((Kart) _map.getVehicles().get(i)).setRacePosition(i + 1);
+			// TODO solo para RACING
 			_time++;
 			notifyAdvanced();
 			if(_outStream != null)
@@ -82,7 +114,7 @@ public class TrafficSimulator implements Observable<TrafficSimulatorObserver> {
 			}
 			_events.add(e);
 			notifyEventAdded();
-			_events.sort(_comparator);
+			_events.sort(_eventsComparator);
 		}
 		else {
 			SimulatorError err = new SimulatorError("Null event tried to be added.");
@@ -150,5 +182,9 @@ public class TrafficSimulator implements Observable<TrafficSimulatorObserver> {
 	
 	public int getTime() {
 		return _time;
+	}
+	
+	public RoadMap getRoadMap() {
+		return _map;
 	}
 }

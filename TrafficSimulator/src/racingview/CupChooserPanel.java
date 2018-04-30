@@ -1,5 +1,8 @@
-package view;
+package racingview;
 
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.HashMap;
@@ -8,6 +11,7 @@ import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class CupChooserPanel extends ChooserPanel {
 
@@ -34,6 +38,7 @@ public class CupChooserPanel extends ChooserPanel {
 	public CupChooserPanel(String[] items) {
 		super(items);
 		circuits = items;
+		_selectedCup = "Mushroom";
 		_cupsMap = new HashMap<String, String[]>();
 		_cupsMap.put(circuits[0], _junctions[0]);
 		_cupsMap.put(circuits[1], _junctions[1]);
@@ -43,7 +48,6 @@ public class CupChooserPanel extends ChooserPanel {
 		_cupsMap.put(circuits[5], _junctions[5]);
 		_cupsMap.put(circuits[6], _junctions[6]);
 		_cupsMap.put(circuits[7], _junctions[7]);
-		
 	}
 	
 	public Map<String, String[]> getCupsMap(){
@@ -52,6 +56,15 @@ public class CupChooserPanel extends ChooserPanel {
 	
 	public String getSelectedCup() {
 		return _selectedCup;
+	}
+	
+	public void setSelectedCup(int laps) {
+		String[] junctions = _cupsMap.get(_selectedCup);
+		String[] itinerary = new String[(junctions.length * laps) + 1];
+		for(int i = 0; i < (junctions.length * laps) + 1; i++)
+			itinerary[i] = junctions[i % junctions.length];
+		_imagesPanel.setItinerary(itinerary);
+		_imagesPanel.setJunctions(junctions);
 	}
 
 	@Override
@@ -65,12 +78,6 @@ public class CupChooserPanel extends ChooserPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				_selectedCup = path;
-				String[] junctions = _cupsMap.get(path);
-				String[] itinerary = new String[(junctions.length * 3) + 1];
-				for(int i = 0; i < (junctions.length * 3) + 1; i++)
-					itinerary[i] = junctions[i % junctions.length];
-				_imagesPanel.setItinerary(itinerary);
-				_imagesPanel.setJunctions(junctions);
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -79,15 +86,28 @@ public class CupChooserPanel extends ChooserPanel {
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				/* TODO
 				_imagesPanel.removeAll();
-				ImageIcon icon2 = new ImageIcon(this.getClass().getResource("/images/" + path + ".gif"));
-				icon2.setImage(icon2.getImage().getScaledInstance(75, 75, 1));
-				_imagesPanel.add(new JLabel(icon2));
-				_imagesPanel.add(new JTextArea("Speed : 80\nLuck: 80"));
+				JPanel temp1 = new JPanel();
+				temp1.setPreferredSize(new Dimension(205, 150));
+				temp1.setMaximumSize(new Dimension(205, 150));
+				temp1.setMinimumSize(new Dimension(205, 150));
+				ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/" + path + "trophy" + ".jpg"));
+				icon.setImage(icon.getImage().getScaledInstance(205, 150, 1));
+				temp1.add(new JLabel(icon));
+				_imagesPanel.add(temp1);
+				JPanel temp2 = new JPanel();
+				temp2.setPreferredSize(new Dimension(195, 150));
+				temp2.setMaximumSize(new Dimension(195, 150));
+				temp2.setMinimumSize(new Dimension(195, 150));
+				temp2.setLayout(new GridLayout(_cupsMap.get(path).length, 1));
+				for(int i = 0; i < _cupsMap.get(path).length; i++) {
+					JLabel label = new JLabel("  " + (i + 1) + " - " + _cupsMap.get(path)[i]);
+					label.setFont(new Font("Sheriff", Font.BOLD, 15));
+					temp2.add(label);
+				}
+				_imagesPanel.add(temp2);
 				_imagesPanel.repaint();
 				updateUI();
-				*/
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
@@ -105,6 +125,6 @@ public class CupChooserPanel extends ChooserPanel {
 	}
 	
 	public void reset() {
-		_selectedCup = null;
+		_selectedCup = "Mushroom";
 	}
 }

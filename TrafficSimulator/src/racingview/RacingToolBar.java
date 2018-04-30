@@ -1,4 +1,4 @@
-package view;
+package racingview;
 
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
@@ -10,12 +10,26 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
+import view.MainPanel;
+import view.ReportsAreaPanel;
+import view.ToolBar;
+
 public class RacingToolBar extends ToolBar {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	protected JButton playMusicButton;
+	protected JButton stopMusicButton;
+	protected JButton randomMusicButton;
+	protected JComboBox<String> playList;
+	protected JLabel itemBoxLabel;
+	protected JButton itemBoxButton;
+	protected boolean itemBoxActivated;
+	protected JLabel lapsLabel;
+	protected JSpinner lapsSpinner;
 	
 	private static String[] _songs = {"BowserCastleMarioKart",
 			"Kirby",
@@ -76,11 +90,25 @@ public class RacingToolBar extends ToolBar {
 		playList.setPreferredSize(new Dimension(170, 50));
 		playList.setMaximumSize(new Dimension(170, 50));
 		
+		itemBoxLabel = new JLabel("Item Box ");
+		itemBoxButton = new JButton();
+		createGenericButton(itemBoxButton, "ITEM BOX", _mainPanel, "/icons/itembox.png", "Item Box");
+		itemBoxButton.setEnabled(false);
+		itemBoxActivated = true;
+		
+		//Laps
+		lapsLabel = new JLabel("Laps: ");
+		
+		lapsSpinner = new JSpinner(new SpinnerNumberModel(3, 1, null, 1));
+		lapsSpinner.setMinimumSize(new Dimension(50, 50));
+		lapsSpinner.setPreferredSize(new Dimension(50, 50));
+		lapsSpinner.setMaximumSize(new Dimension(50, 50));
+		
 		// Exit
 		quitButton = new JButton();
 		createGenericButton(quitButton, "QUIT", _mainPanel, "/icons/exit.png", "Exit");
 		
-		authors = new JLabel("Developed by Álvaro López & Carlos Bilbao");
+		authors = new JLabel("Álvaro López García");
 		
 		addComponents();
 		
@@ -89,11 +117,16 @@ public class RacingToolBar extends ToolBar {
 		setMaximumSize(new Dimension(1000, 50));
 	}
 	
+	public int getLaps() {
+		return (Integer)lapsSpinner.getValue();
+	}
+	
 	@Override
 	protected void addComponents() {
 		this.add(runButton);
 		this.add(resetButton);
 		this.add(stepsLabel);
+		this.addSeparator();
 		this.add(stepsSpinner);
 		this.add(timeLabel);
 		this.add(timeTextField);
@@ -103,11 +136,34 @@ public class RacingToolBar extends ToolBar {
 		this.add(randomMusicButton);
 		this.add(playList);
 		this.addSeparator();
-		this.add(quitButton);
+		this.add(itemBoxLabel);
+		this.add(itemBoxButton);
 		this.addSeparator();
-		this.addSeparator();
+		this.add(lapsLabel);
+		this.add(lapsSpinner);
 		this.addSeparator();
 		this.add(authors);
+		this.addSeparator();
+		this.add(quitButton);
 	}
 
+	public JComboBox<String> getComboBox() {
+		return playList;
+	}
+	
+	public void setLapsSpinnerEnabled(boolean b) {
+		lapsSpinner.setEnabled(b);
+	}
+	
+	public void setItemBoxEnabled(boolean b) {
+		itemBoxButton.setEnabled(b);
+	}
+	
+	public boolean getItemBoxActivated() {
+		return itemBoxActivated;
+	}
+	
+	public void setItemBoxActivated(boolean b) {
+		itemBoxActivated = b;;
+	}
 }

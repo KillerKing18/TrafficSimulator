@@ -1,4 +1,11 @@
-package view;
+package racingview;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+
+import javax.swing.ImageIcon;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 public class SelectedCharactersTable extends GenericRacingTable {
 
@@ -14,7 +21,7 @@ public class SelectedCharactersTable extends GenericRacingTable {
 		private static final long serialVersionUID = 1L;
 		
 		public MySelectedCharactersTableModel() {
-			header = new String[]{ "Name", "Speed", "Luck" };
+			header = new String[]{ "Name", "Speed", "Luck", "Icon" };
 		}
 		
 		@Override
@@ -32,14 +39,25 @@ public class SelectedCharactersTable extends GenericRacingTable {
 			case 1:
 				 v = _characterChooserPanel.getSpeedMap().get(_imagesPanel.getSelectedCharacters().get(rowIndex)).toString();
 				 break;
-			case 2:
+			case 2:				
 				v = _characterChooserPanel.getLuckMap().get(_imagesPanel.getSelectedCharacters().get(rowIndex)).toString();
 				 break;
+			case 3:
+				ImageIcon icon = new ImageIcon(getClass().getResource("/images/" + _imagesPanel.getSelectedCharacters().get(rowIndex) + ".png"));
+				icon.setImage(icon.getImage().getScaledInstance(42, 42, 1));
+				return icon;
 			default:
 				break;
 			}
 			return v;
 		}
+		
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		@Override
+		public Class getColumnClass(int column)
+        {
+			return getValueAt(0, column).getClass();
+        }
 	}
 	
 	public SelectedCharactersTable() {
@@ -48,6 +66,12 @@ public class SelectedCharactersTable extends GenericRacingTable {
 	
 	protected void initGUI() {
 		tableModel = new MySelectedCharactersTableModel();
-		super.initGUI();
+		this.setLayout(new BorderLayout());
+		JTable t = new JTable(tableModel);
+		t.setShowGrid(false);
+		JScrollPane jscroll = new JScrollPane(t);
+		jscroll.getViewport().setBackground(Color.WHITE);
+		this.add(jscroll, BorderLayout.CENTER);
+		t.setRowHeight(42);
 	}
 }

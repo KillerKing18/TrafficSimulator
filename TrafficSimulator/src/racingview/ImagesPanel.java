@@ -1,4 +1,4 @@
-package view;
+package racingview;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -15,6 +15,7 @@ import model.NewJunctionEvent;
 import model.NewKartEvent;
 import model.NewRoadEvent;
 import model.TrafficSimulator;
+import music.Music;
 
 public class ImagesPanel extends JPanel implements ActionListener {
 
@@ -26,6 +27,7 @@ public class ImagesPanel extends JPanel implements ActionListener {
 	private TrafficSimulator _model;
 	private RacingPanel _racingPanel;
 	private CharacterChooserPanel _characterChooserPanel;
+	private CupChooserPanel _cupChooserPanel;
 	private String[] _itinerary;
 	private String[] _junctions;
 	private ArrayList<String> _idsList;
@@ -33,12 +35,14 @@ public class ImagesPanel extends JPanel implements ActionListener {
 	private String path;
 	
 	
-	public ImagesPanel(RacingPanel racingPanel, String path, TrafficSimulator model, CharacterChooserPanel characterChooserPanel) {
+	public ImagesPanel(RacingPanel racingPanel, String path, TrafficSimulator model, CharacterChooserPanel characterChooserPanel, CupChooserPanel cupChooserPanel) {
+		_cupChooserPanel = cupChooserPanel;
 		_racingPanel = racingPanel;
 		this.path = path;
 		_junctions = new String[0];
 		_itinerary = new String[0];
 		_idsList = new ArrayList<String>();
+		_idsList.add("mario");
 		_model = model;
 		_characterChooserPanel = characterChooserPanel;
 			
@@ -58,6 +62,7 @@ public class ImagesPanel extends JPanel implements ActionListener {
 	
 	public void reset() {
 		_idsList = new ArrayList<String>();
+		_idsList.add("mario");
 		_junctions = new String[0];
 		_itinerary = new String[0];
 	}
@@ -66,11 +71,20 @@ public class ImagesPanel extends JPanel implements ActionListener {
 		return path;
 	}
 	
-	public boolean checkIn() {
-		if(_itinerary.length != 0)
-		{
+	public boolean checkIn(int laps) {
+		if(_idsList.size() < 2) {
+			ImageIcon icon = new ImageIcon(getClass().getResource("/images/mariosad.png"));
+			Music music = new Music("src/music/mammamia.wav");
+			music.play();
+			JOptionPane.showMessageDialog(this, "You must choose at least 2 pilots in order to start the race!", "Mamma Mia", JOptionPane.WARNING_MESSAGE, icon);
+			music.stop();
+			music = null;
+			return false;
+		}
+		else {
 			try {
 				int nextJunction = 0;
+				_cupChooserPanel.setSelectedCup(laps);
 				for(int i = 0; i < _junctions.length; i++)
 					_model.addEvent(new NewJunctionEvent(0, _junctions[i]));
 				for(int i = 0; i < _junctions.length; i++) {
@@ -83,10 +97,6 @@ public class ImagesPanel extends JPanel implements ActionListener {
 			catch (Exception exc) {
 			}
 			return true;
-		}
-		else {
-			JOptionPane.showMessageDialog(this, "You must choose a Cup to race in", "Error", JOptionPane.WARNING_MESSAGE);
-			return false;
 		}
 	}
 	

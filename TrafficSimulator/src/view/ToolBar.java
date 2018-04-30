@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -35,10 +34,6 @@ public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 	protected JSpinner stepsSpinner;
 	protected JLabel timeLabel;
 	protected JTextField timeTextField;
-	protected JButton playMusicButton;
-	protected JButton stopMusicButton;
-	protected JButton randomMusicButton;
-	protected JComboBox<String> playList;
 	protected JButton generateReportsButton;
 	protected JButton clearReportsAreaButton;
 	protected JButton saveReportsButton;
@@ -150,15 +145,13 @@ public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 		button.setActionCommand(actionCommand);
 		button.setToolTipText(toolTip);
 		button.addActionListener(actionListener);
-		button.setIcon(new ImageIcon(this.getClass().getResource(path)));
+		ImageIcon icon = new ImageIcon(this.getClass().getResource(path));
+		icon.setImage(icon.getImage().getScaledInstance(32, 32, 1));
+		button.setIcon(icon);
 	}
 	
 	public int getTime(){
 		return (Integer)stepsSpinner.getValue();
-	}
-	
-	public JComboBox<String> getComboBox() {
-		return playList;
 	}
 
 	@Override

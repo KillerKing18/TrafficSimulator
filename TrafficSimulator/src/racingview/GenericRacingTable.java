@@ -1,9 +1,7 @@
-package view;
+package racingview;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.util.List;
-import java.util.Map;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -24,6 +22,8 @@ public abstract class GenericRacingTable extends JPanel implements RacingSimulat
 	protected CupChooserPanel _cupChooserPanel;
 	protected CharacterChooserPanel _characterChooserPanel;
 	protected ImagesPanel _imagesPanel;
+	protected JPanel _selectedCupImage;
+	protected JPanel _selectedCupPanel;
 	
 	abstract class MyGenericRacingTableModel extends AbstractTableModel {
 		/**
@@ -72,7 +72,9 @@ public abstract class GenericRacingTable extends JPanel implements RacingSimulat
 	}
 
 	@Override
-	public void registered(CharacterChooserPanel characterChooserPanel, ImagesPanel imagesPanel, CupChooserPanel cupChooserPanel) {
+	public void registered(CharacterChooserPanel characterChooserPanel, ImagesPanel imagesPanel, CupChooserPanel cupChooserPanel, JPanel selectedCupImage, JPanel selectedCupPanel) {
+		_selectedCupPanel = selectedCupPanel;
+		_selectedCupImage = selectedCupImage;
 		_characterChooserPanel = characterChooserPanel;
 		_imagesPanel = imagesPanel;
 		_cupChooserPanel = cupChooserPanel;

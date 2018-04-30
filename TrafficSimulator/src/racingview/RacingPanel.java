@@ -1,4 +1,4 @@
-package view;
+package racingview;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,14 +14,18 @@ import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import control.Controller;
+import model.Kart;
 import model.Observable;
 import model.RacingSimulatorObserver;
 import model.TrafficSimulator;
+import model.Vehicle;
 import music.Music;
+import view.MainPanel;
 
 public class RacingPanel extends MainPanel implements Observable<RacingSimulatorObserver>{
 
@@ -66,7 +70,10 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 	private ImagesPanel _imagesPanel;
 	private CupChooserPanel _circuitChooserPanel;
 	private SelectedCharactersTable _selectedCharactersTable;
+	private JPanel _selectedCupPanel;
 	private SelectedCupTable _selectedCupTable;
+	private JPanel _selectedCupImage;
+	private ClassificationTable _classificationTable;
 
 	public RacingPanel(TrafficSimulator model, String inFile, Controller control, int steps) throws IOException {
 		super(model, inFile, control, steps);
@@ -91,7 +98,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 		ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/welcome.gif"));
 		
 		//Music
-		_music = new Music("src/music/" + "start_simulator.wav");
+		_music = new Music("src/music/start_simulator.wav");
 		_music.play();
 		JOptionPane.showMessageDialog(this, "Welcome to the simulator!\nWe hope you have much fun!", "Welcome", JOptionPane.INFORMATION_MESSAGE, icon);
 		_music.stop();
@@ -133,7 +140,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 	
 		_topPanel.add(_characterChooserPanel);
 		_topPanel.add(_imagesPanel);
-		_topPanel.add(_circuitChooserPanel);		
+		_topPanel.add(_circuitChooserPanel);	
 	}
 	
 	protected void createCharacterChooserPanel() {
@@ -144,12 +151,19 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 	}
 	
 	protected void createImagesPanel() {
-		_imagesPanel = new ImagesPanel(this, "/images/mariokart.png", _model, _characterChooserPanel);
+		_imagesPanel = new ImagesPanel(this, "/images/mariokart.png", _model, _characterChooserPanel, _circuitChooserPanel);
+		_imagesPanel.setLayout(new BoxLayout(_imagesPanel, BoxLayout.X_AXIS));
 		_imagesPanel.setMinimumSize(new Dimension(400, 150));
 		_imagesPanel.setPreferredSize(new Dimension(400, 150));
 		_imagesPanel.setMaximumSize(new Dimension(400, 150));
 		_characterChooserPanel.setImagesPanel(_imagesPanel);
 		_circuitChooserPanel.setImagesPanel(_imagesPanel);
+	}
+	
+	protected void createClassificationTable() {
+		_classificationTable = new ClassificationTable();
+		_model.addObserver(_classificationTable);
+		_classificationTable.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Clasification: "));
 	}
 	
 	protected void createCircuitChooserPanel() {
@@ -163,24 +177,53 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 	protected void createDownLeftPanel() {
 		_downLeftPanel = new JPanel();
 		_downLeftPanel.setLayout(new BoxLayout(_downLeftPanel, BoxLayout.Y_AXIS));
+		_downLeftPanel.setMinimumSize(new Dimension(440, 850));
+		_downLeftPanel.setPreferredSize(new Dimension(440, 850));
+		_downLeftPanel.setMaximumSize(new Dimension(440, 850));
 		
 		createSelectedCharactersTable();
-		_downLeftPanel.add(_selectedCharactersTable);
+		createSelectedCupPanel();
 		
+		_downLeftPanel.add(_selectedCharactersTable);
+		_downLeftPanel.add(_selectedCupPanel);
+	}
+	
+	protected void createSelectedCupPanel(){
+		_selectedCupPanel = new JPanel();
+		_selectedCupPanel.setMinimumSize(new Dimension(420, 380));
+		_selectedCupPanel.setPreferredSize(new Dimension(420, 380));
+		_selectedCupPanel.setMaximumSize(new Dimension(420, 380));
+		_selectedCupPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Cup: " + _circuitChooserPanel.getSelectedCup()));
+		
+		createSelectedCupImage();
 		createSelectedCupTable();
-		_downLeftPanel.add(_selectedCupTable);
+		
+		_selectedCupPanel.add(_selectedCupImage);
+		_selectedCupPanel.add(_selectedCupTable);
+	}
+	
+	protected void createSelectedCupImage() {
+		_selectedCupImage = new JPanel();
+		ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/" + _circuitChooserPanel.getSelectedCup() + "trophy" + ".jpg"));
+		icon.setImage(icon.getImage().getScaledInstance(390, 230, 1));
+		_selectedCupImage.add(new JLabel(icon));
 	}
 	
 	protected void createSelectedCharactersTable() {
 		_selectedCharactersTable = new SelectedCharactersTable();
 		addObserver(_selectedCharactersTable);
 		_selectedCharactersTable.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Pilots"));
+		_selectedCharactersTable.setMinimumSize(new Dimension(420, 385));
+		_selectedCharactersTable.setPreferredSize(new Dimension(420, 385));
+		_selectedCharactersTable.setMaximumSize(new Dimension(420, 385));
 	}
 	
 	protected void createSelectedCupTable() {
-		_selectedCupTable = new SelectedCupTable();
+		_selectedCupTable = new SelectedCupTable(_selectedCupImage);
 		addObserver(_selectedCupTable);
-		_selectedCupTable.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Cup: "));
+		_selectedCupTable.setMinimumSize(new Dimension(410, 100));
+		_selectedCupTable.setPreferredSize(new Dimension(410, 100));
+		_selectedCupTable.setMaximumSize(new Dimension(410, 100));
 	}
 	
 	@Override
@@ -199,18 +242,46 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 	public void actionPerformed(ActionEvent e) {
 		String str = e.getActionCommand();
 		switch (str){
+		case "ITEM BOX":
+			ImageIcon itemboxicon = new ImageIcon(this.getClass().getResource("/icons/itembox.png"));
+			itemboxicon.setImage(itemboxicon.getImage().getScaledInstance(150, 150, 1));
+			String activated = !((RacingToolBar) _toolBar).getItemBoxActivated() ? "enabled!\n(Each pilot will get one"
+					+ " when he/she starts a new lap)" : "disabled!";				
+			JOptionPane.showMessageDialog(this, "Item Boxes are now " + activated, "Item Box", JOptionPane.INFORMATION_MESSAGE, itemboxicon);
+			((RacingToolBar) _toolBar).setItemBoxActivated(!((RacingToolBar) _toolBar).getItemBoxActivated());
+			for(Vehicle v : _model.getRoadMap().getVehicles())
+				((Kart)v).changeItemBox();
+			break;
 		case "RESET":
+			((RacingToolBar) _toolBar).setLapsSpinnerEnabled(true);
+			((RacingToolBar) _toolBar).setItemBoxEnabled(false);
+			((RacingToolBar) _toolBar).setItemBoxActivated(true);
 			notifyReset();
 			_control.reset();
 			_imagesPanel.reset();
 			_circuitChooserPanel.reset();
 			_selectedCupTable.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Cup: "));
+			_downLeftPanel.removeAll();
+			createSelectedCharactersTable();
+			createSelectedCupPanel();
+			_downLeftPanel.add(_selectedCharactersTable);
+			_downLeftPanel.add(_selectedCupPanel);
+			_downLeftPanel.repaint();
+			_downLeftPanel.updateUI();
 			break;
 		case "RUN":
 			boolean begin = true;
-			if(_model.getTime() == 0)
-				begin = _imagesPanel.checkIn();
+			if(_model.getTime() == 0) {
+				begin = _imagesPanel.checkIn(((RacingToolBar) _toolBar).getLaps());
+			}
 			if(begin) {
+				((RacingToolBar) _toolBar).setItemBoxEnabled(true);
+				((RacingToolBar) _toolBar).setLapsSpinnerEnabled(false);
+				_downLeftPanel.removeAll();
+				createClassificationTable();
+				_downLeftPanel.add(_classificationTable);
+				_downLeftPanel.repaint();
+				_downLeftPanel.updateUI();
 				try {
 					if(_model.getTime() == 0) {
 						if(playingMusic)
@@ -264,7 +335,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 			int selected = rnd.nextInt(mario_songs.length);
 			_music = null;
 			_music = new Music("src/music/" + mario_songs[selected]);
-			_toolBar.getComboBox().setSelectedIndex(selected);
+			((RacingToolBar)_toolBar).getComboBox().setSelectedIndex(selected);
 			_music.loop();
 			playingMusic = true;
 			break;
@@ -301,7 +372,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 	}
 	
 	private void notifyRegistered(RacingSimulatorObserver obs) {
-		obs.registered(_characterChooserPanel, _imagesPanel, _circuitChooserPanel);
+		obs.registered(_characterChooserPanel, _imagesPanel, _circuitChooserPanel, _selectedCupImage, _selectedCupPanel);
 	}
 	
 	public void notifyCupSelected() {
