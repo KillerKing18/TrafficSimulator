@@ -1,11 +1,6 @@
 package racingview;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-
 import javax.swing.ImageIcon;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 
 import model.Kart;
 import view.GenericTable;
@@ -24,7 +19,7 @@ public class ClassificationTable extends GenericTable {
 		private static final long serialVersionUID = 1L;
 		
 		public MyClassificationTableModel() {
-			header = new String[]{ "#", "Name", "Speed", "Lap", "Icon" };
+			header = new String[]{ "#", "Name", "Speed", "Lap", "Icon"};
 		}
 		
 		@Override
@@ -46,7 +41,7 @@ public class ClassificationTable extends GenericTable {
 				 v = "" + map.getVehicles().get(rowIndex).getSpeed();
 				 break;
 			case 3:
-				v = "" + ((Kart) map.getVehicles().get(rowIndex)).getLap();
+				 v = "" + ((Kart) map.getVehicles().get(rowIndex)).getLap();
 				 break;
 			case 4:
 				 ImageIcon icon = new ImageIcon(getClass().getResource("/images/" + map.getVehicles().get(rowIndex).getId() + ".png"));
@@ -58,26 +53,18 @@ public class ClassificationTable extends GenericTable {
 			return v;
 		}
 		
-		@SuppressWarnings({ "unchecked", "rawtypes" })
+		@SuppressWarnings({ "rawtypes" })
 		@Override
 		public Class getColumnClass(int column)
         {
 			return getValueAt(0, column).getClass();
         }
 	}
-	
-	public ClassificationTable() {
-		initGUI();
-	}
-	
+
+	@Override
 	protected void initGUI() {
 		tableModel = new MyClassificationTableModel();
-		this.setLayout(new BorderLayout());
-		JTable t = new JTable(tableModel);
-		t.setShowGrid(false);
-		JScrollPane jscroll = new JScrollPane(t);
-		jscroll.getViewport().setBackground(Color.WHITE);
-		this.add(jscroll, BorderLayout.CENTER);
-		t.setRowHeight(90);
+		super.initGUI();
+		table.setRowHeight(90);
 	}
 }

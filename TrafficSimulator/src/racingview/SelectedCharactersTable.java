@@ -1,11 +1,6 @@
 package racingview;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-
 import javax.swing.ImageIcon;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 
 public class SelectedCharactersTable extends GenericRacingTable {
 
@@ -26,7 +21,7 @@ public class SelectedCharactersTable extends GenericRacingTable {
 		
 		@Override
 		public int getRowCount() {
-			return _imagesPanel.getSelectedCharacters().size();
+			return _characterChooserPanel.getSelectedCharacters().size();
 		}
 		
 		@Override
@@ -34,16 +29,16 @@ public class SelectedCharactersTable extends GenericRacingTable {
 			String v = null;
 			switch (columnIndex) {
 			case 0:
-				 v = _imagesPanel.getSelectedCharacters().get(rowIndex);
+				 v = _characterChooserPanel.getSelectedCharacters().get(rowIndex);
 				 break;
 			case 1:
-				 v = _characterChooserPanel.getSpeedMap().get(_imagesPanel.getSelectedCharacters().get(rowIndex)).toString();
+				 v = _characterChooserPanel.getSpeedMap().get(_characterChooserPanel.getSelectedCharacters().get(rowIndex)).toString();
 				 break;
 			case 2:				
-				v = _characterChooserPanel.getLuckMap().get(_imagesPanel.getSelectedCharacters().get(rowIndex)).toString();
+				v = _characterChooserPanel.getLuckMap().get(_characterChooserPanel.getSelectedCharacters().get(rowIndex)).toString();
 				 break;
 			case 3:
-				ImageIcon icon = new ImageIcon(getClass().getResource("/images/" + _imagesPanel.getSelectedCharacters().get(rowIndex) + ".png"));
+				ImageIcon icon = new ImageIcon(getClass().getResource("/images/" + _characterChooserPanel.getSelectedCharacters().get(rowIndex) + ".png"));
 				icon.setImage(icon.getImage().getScaledInstance(42, 42, 1));
 				return icon;
 			default:
@@ -51,27 +46,12 @@ public class SelectedCharactersTable extends GenericRacingTable {
 			}
 			return v;
 		}
-		
-		@SuppressWarnings({ "unchecked", "rawtypes" })
-		@Override
-		public Class getColumnClass(int column)
-        {
-			return getValueAt(0, column).getClass();
-        }
 	}
-	
-	public SelectedCharactersTable() {
-		initGUI();
-	}
-	
+
+	@Override
 	protected void initGUI() {
 		tableModel = new MySelectedCharactersTableModel();
-		this.setLayout(new BorderLayout());
-		JTable t = new JTable(tableModel);
-		t.setShowGrid(false);
-		JScrollPane jscroll = new JScrollPane(t);
-		jscroll.getViewport().setBackground(Color.WHITE);
-		this.add(jscroll, BorderLayout.CENTER);
-		t.setRowHeight(42);
+		super.initGUI();
+		_table.setRowHeight(42);
 	}
 }

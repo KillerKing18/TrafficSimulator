@@ -41,10 +41,7 @@ public class JunctionsTable extends GenericTable{
 		}
 	}
 	
-	public JunctionsTable() {
-		initGUI();
-	}
-	
+	@Override
 	protected void initGUI() {
 		tableModel = new MyJunctionsTableModel();
 		super.initGUI();

@@ -15,12 +15,16 @@ public abstract class ChooserPanel extends JPanel {
 	
 	protected ImagesPanel _imagesPanel;
 	protected String[] _items;
+	protected RacingPanel _racingPanel;
 
-	public ChooserPanel(String[] items) {
+	public ChooserPanel(String[] items, RacingPanel racingPanel, ImagesPanel imagesPanel) {
 		_items = items;
+		_racingPanel = racingPanel;
+		_imagesPanel = imagesPanel;
+		initGUI();
 	}
 	
-	public void initGUI() {
+	protected void initGUI() {
 		this.setLayout(new GridLayout(2, 4));
 
 		for(String str : _items) {

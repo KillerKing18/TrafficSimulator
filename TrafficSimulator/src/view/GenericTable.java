@@ -3,10 +3,14 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.List;
+
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+
 import model.Event;
 import model.RoadMap;
 import model.SimulatorError;
@@ -22,6 +26,7 @@ public abstract class GenericTable extends JPanel implements TrafficSimulatorObs
 	protected MyGenericTableModel tableModel;
 	protected RoadMap map;
 	protected List<Event> events;
+	protected JTable table;
 	
 	public abstract class MyGenericTableModel extends AbstractTableModel {
 		/**
@@ -54,15 +59,29 @@ public abstract class GenericTable extends JPanel implements TrafficSimulatorObs
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			return null;
 		}
+		
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		@Override
+		public Class getColumnClass(int column)
+        {
+			return getValueAt(0, column).getClass();
+        }
+	}
+	
+	public GenericTable() {
+		initGUI();
 	}
 	
 	protected void initGUI() {
 		this.setLayout(new BorderLayout());
-		JTable t = new JTable(tableModel);  //t registra tableModel como un listener
-		t.setShowGrid(false);
-		JScrollPane jscroll = new JScrollPane(t);
+		table = new JTable(tableModel);  //t registra tableModel como un listener
+		table.setShowGrid(false);
+		JScrollPane jscroll = new JScrollPane(table);
 		jscroll.getViewport().setBackground(Color.WHITE);
 		this.add(jscroll, BorderLayout.CENTER);
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+		table.setDefaultRenderer(String.class, centerRenderer);
 	}
 
 	@Override

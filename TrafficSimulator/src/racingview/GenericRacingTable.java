@@ -3,10 +3,14 @@ package racingview;
 import java.awt.BorderLayout;
 import java.awt.Color;
 
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import model.RacingSimulatorObserver;
 
@@ -21,9 +25,10 @@ public abstract class GenericRacingTable extends JPanel implements RacingSimulat
 	protected MyGenericRacingTableModel tableModel;
 	protected CupChooserPanel _cupChooserPanel;
 	protected CharacterChooserPanel _characterChooserPanel;
-	protected ImagesPanel _imagesPanel;
 	protected JPanel _selectedCupImage;
 	protected JPanel _selectedCupPanel;
+	
+	protected JTable _table;
 	
 	abstract class MyGenericRacingTableModel extends AbstractTableModel {
 		/**
@@ -56,19 +61,13 @@ public abstract class GenericRacingTable extends JPanel implements RacingSimulat
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			return null;
 		}
-	}
-	
-	public GenericRacingTable() {
-		initGUI();
-	}
-	
-	protected void initGUI() {
-		this.setLayout(new BorderLayout());
-		JTable t = new JTable(tableModel);  //t registra tableModel como un listener
-		t.setShowGrid(false);
-		JScrollPane jscroll = new JScrollPane(t);
-		jscroll.getViewport().setBackground(Color.WHITE);
-		this.add(jscroll, BorderLayout.CENTER);
+		
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		@Override
+		public Class getColumnClass(int column)
+        {
+			return getValueAt(0, column).getClass();
+        }
 	}
 
 	@Override
@@ -76,7 +75,6 @@ public abstract class GenericRacingTable extends JPanel implements RacingSimulat
 		_selectedCupPanel = selectedCupPanel;
 		_selectedCupImage = selectedCupImage;
 		_characterChooserPanel = characterChooserPanel;
-		_imagesPanel = imagesPanel;
 		_cupChooserPanel = cupChooserPanel;
 		tableModel.refresh();
 	}
@@ -84,6 +82,13 @@ public abstract class GenericRacingTable extends JPanel implements RacingSimulat
 	@Override
 	public void cupSelected() {
 		tableModel.refresh();
+		_selectedCupImage.removeAll();
+		ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/" + _cupChooserPanel.getSelectedCup() + "trophy" + ".jpg"));
+		icon.setImage(icon.getImage().getScaledInstance(390, 230, 1));
+		_selectedCupImage.add(new JLabel(icon));
+		_selectedCupImage.updateUI();
+		_selectedCupPanel.setBorder(BorderFactory.createTitledBorder
+				(BorderFactory.createLineBorder(Color.BLACK),  _cupChooserPanel.getSelectedCup() + " Cup"));
 	}
 
 	@Override
@@ -94,5 +99,21 @@ public abstract class GenericRacingTable extends JPanel implements RacingSimulat
 	@Override
 	public void reset() {
 		tableModel.refresh();
+	}
+	
+	public GenericRacingTable() {
+		initGUI();
+	}
+	
+	protected void initGUI() {
+		this.setLayout(new BorderLayout());
+		_table = new JTable(tableModel);
+		_table.setShowGrid(false);
+		JScrollPane jscroll = new JScrollPane(_table);
+		jscroll.getViewport().setBackground(Color.WHITE);
+		this.add(jscroll, BorderLayout.CENTER);
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+		_table.setDefaultRenderer(String.class, centerRenderer);
 	}
 }

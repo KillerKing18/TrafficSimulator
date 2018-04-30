@@ -59,11 +59,8 @@ public class VehiclesTable extends GenericTable {
 			return v;
 		}
 	}
-	
-	public VehiclesTable() {
-		initGUI();
-	}
-	
+
+	@Override
 	protected void initGUI() {
 		tableModel = new MyVehiclesTableModel();
 		super.initGUI();

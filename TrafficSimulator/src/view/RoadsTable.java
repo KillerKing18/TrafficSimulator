@@ -51,10 +51,7 @@ public class RoadsTable extends GenericTable {
 		}
 	}
 	
-	public RoadsTable() {
-		initGUI();
-	}
-	
+	@Override
 	protected void initGUI() {
 		tableModel = new MyRoadsTableModel();
 		super.initGUI();

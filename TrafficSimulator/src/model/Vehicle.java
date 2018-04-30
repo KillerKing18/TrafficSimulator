@@ -22,7 +22,7 @@ public class Vehicle extends SimulatedObject {
 	protected boolean _atJunction;
 	protected boolean _arrived;
 	protected int _itineraryIndex;
-	protected int _positionIndex;
+	protected int _positionIndex; // Represents the vehicle position on its road
 	
 	public Vehicle(String id, int maxSpeed, List<Junction> itinerary) {
 		super(id);
@@ -46,7 +46,11 @@ public class Vehicle extends SimulatedObject {
 		return _positionIndex;
 	}
 	
-	public void decreasePositionIndex() {
+	public void decreasePositionIndex() { // Higher number -> worse position
+		 _positionIndex++;
+	}
+	
+	public void increasePositionIndex() { // Lower number -> better position
 		 _positionIndex--;
 	}
 	

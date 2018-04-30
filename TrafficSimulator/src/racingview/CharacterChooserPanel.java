@@ -6,7 +6,9 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.ImageIcon;
@@ -27,16 +29,31 @@ public class CharacterChooserPanel extends ChooserPanel {
 	
 	private Map<String, Integer> _speedMap;
 	private Map<String, Integer> _luckMap;
+	private ArrayList<String> _idsList;
 
-	public CharacterChooserPanel(String[] items) {
-		super(items);
+	public CharacterChooserPanel(String[] items, RacingPanel racingPanel, ImagesPanel imagesPanel) {
+		super(items, racingPanel, imagesPanel);
 		_speedMap = new HashMap<String, Integer>();
 		_luckMap = new HashMap<String, Integer>();
+		_idsList = new ArrayList<String>();
+		_idsList.add("mario");
 		
 		for(int i = 0; i < id.length; i++) {
 			_speedMap.put(id[i], speeds[i]);
 			_luckMap.put(id[i], luck[i]);
 		}
+	}
+	
+	public void reset() {
+		_idsList = new ArrayList<String>();
+		_idsList.add("mario");
+	}
+	
+	private void addKart(String id) {
+		if(!_idsList.contains(id))
+			_idsList.add(id);
+		else
+			_idsList.remove(id);
 	}
 	
 	public Map<String, Integer> getSpeedMap() {
@@ -45,6 +62,10 @@ public class CharacterChooserPanel extends ChooserPanel {
 	
 	public Map<String, Integer> getLuckMap() {
 		return _luckMap;
+	}
+	
+	public List<String> getSelectedCharacters() {
+		return _idsList;
 	}
 
 	@Override
@@ -55,7 +76,8 @@ public class CharacterChooserPanel extends ChooserPanel {
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
-				_imagesPanel.addKart(button.getActionCommand());
+				addKart(button.getActionCommand());
+				_racingPanel.notifyCharacterAdded();
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {

@@ -142,14 +142,16 @@ public class GraphComponent extends JComponent {
 			// draw dots as circles. Dots at the same location are drawn with circles of
 			// different diameter.
 			int lastLocation = -1;
+			int lastDiam = _dotRadius;
 			int diam = _dotRadius;
 			for (Vehicle v : r.getVehicles()) {
 				if (lastLocation != v.getLocation()) {
 					lastLocation = v.getLocation();
 					diam = _dotRadius;
-				} else {
-					diam -= _dotRadius / 2;
-				}
+				} 
+				else
+					diam = (int) (lastDiam * 0.75);
+				lastDiam = diam;
 				Color dotColor = Math.random() > 0.5 ? Color.MAGENTA : Color.ORANGE;
 				drawCircleOnALine(g, p1.cX, p1.cY, p2.cX, p2.cY, r.getLength(), v.getLocation(), diam, dotColor,
 						v.getId());

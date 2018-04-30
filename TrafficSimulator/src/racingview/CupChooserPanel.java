@@ -31,23 +31,26 @@ public class CupChooserPanel extends ChooserPanel {
 	
 	private Map<String, String[]> _cupsMap;
 	
-	private String[] circuits;
+	private String[] _cups;
 	
 	private String _selectedCup;
+	
+	private String[] _selectedCupItinerary;
 
-	public CupChooserPanel(String[] items) {
-		super(items);
-		circuits = items;
+	public CupChooserPanel(String[] items, RacingPanel racingPanel, ImagesPanel imagesPanel) {
+		super(items, racingPanel, imagesPanel);
+		_cups = items;
+		_selectedCupItinerary = new String[0];
 		_selectedCup = "Mushroom";
 		_cupsMap = new HashMap<String, String[]>();
-		_cupsMap.put(circuits[0], _junctions[0]);
-		_cupsMap.put(circuits[1], _junctions[1]);
-		_cupsMap.put(circuits[2], _junctions[2]);
-		_cupsMap.put(circuits[3], _junctions[3]);
-		_cupsMap.put(circuits[4], _junctions[4]);
-		_cupsMap.put(circuits[5], _junctions[5]);
-		_cupsMap.put(circuits[6], _junctions[6]);
-		_cupsMap.put(circuits[7], _junctions[7]);
+		_cupsMap.put(_cups[0], _junctions[0]);
+		_cupsMap.put(_cups[1], _junctions[1]);
+		_cupsMap.put(_cups[2], _junctions[2]);
+		_cupsMap.put(_cups[3], _junctions[3]);
+		_cupsMap.put(_cups[4], _junctions[4]);
+		_cupsMap.put(_cups[5], _junctions[5]);
+		_cupsMap.put(_cups[6], _junctions[6]);
+		_cupsMap.put(_cups[7], _junctions[7]);
 	}
 	
 	public Map<String, String[]> getCupsMap(){
@@ -59,12 +62,18 @@ public class CupChooserPanel extends ChooserPanel {
 	}
 	
 	public void setSelectedCup(int laps) {
-		String[] junctions = _cupsMap.get(_selectedCup);
-		String[] itinerary = new String[(junctions.length * laps) + 1];
-		for(int i = 0; i < (junctions.length * laps) + 1; i++)
-			itinerary[i] = junctions[i % junctions.length];
-		_imagesPanel.setItinerary(itinerary);
-		_imagesPanel.setJunctions(junctions);
+		String[] selectedCupJunctions = _cupsMap.get(_selectedCup);
+		_selectedCupItinerary = new String[(selectedCupJunctions.length * laps) + 1];
+		for(int i = 0; i < (selectedCupJunctions.length * laps) + 1; i++)
+			_selectedCupItinerary[i] = selectedCupJunctions[i % selectedCupJunctions.length];
+	}
+	
+	public String[] getSelectedCupJunctions() {
+		return _cupsMap.get(_selectedCup);
+	}
+	
+	public String[] getSelectedCupItinerary() {
+		return _selectedCupItinerary;
 	}
 
 	@Override
@@ -72,17 +81,14 @@ public class CupChooserPanel extends ChooserPanel {
 		button.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
 				_selectedCup = path;
+				_racingPanel.notifyCupSelected();
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -126,5 +132,6 @@ public class CupChooserPanel extends ChooserPanel {
 	
 	public void reset() {
 		_selectedCup = "Mushroom";
+		_selectedCupItinerary = new String[0];
 	}
 }

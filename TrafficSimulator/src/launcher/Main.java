@@ -33,6 +33,7 @@ import control.NewRoadEventBuilder;
 import control.NewRoundRobinJunctionEventBuilder;
 import control.NewVehicleEventBuilder;
 import ini.Ini;
+import model.RacingSimulator;
 import model.SimulatorError;
 import model.TrafficSimulator;
 import racingview.RacingPanel;
@@ -240,22 +241,33 @@ public class Main {
 		InputStream is = null;
 		if (_inFile != null)
 			is = new FileInputStream(new File(_inFile));
-		TrafficSimulator sim = new TrafficSimulator();
+		TrafficSimulator sim = new TrafficSimulator();	
 		Controller control = new Controller(sim, _timeLimit, is);
 		control.setEventBuilders(_events);
 		SwingUtilities.invokeAndWait(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					switch(_mode) {
-					case GUI:
-						new MainPanel(sim, _inFile, control, _timeLimit);	
-						break;
-					case RACING:
-						new RacingPanel(sim, _inFile, control, _timeLimit);
-					default:
-						break;
-					}	
+					new MainPanel(sim, _inFile, control, _timeLimit);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	private static void startRACINGMode() throws IOException, InvocationTargetException, InterruptedException{
+		InputStream is = null;
+		if (_inFile != null)
+			is = new FileInputStream(new File(_inFile));
+		TrafficSimulator sim = new RacingSimulator();
+		Controller control = new Controller(sim, _timeLimit, is);
+		control.setEventBuilders(_events);
+		SwingUtilities.invokeAndWait(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					new RacingPanel(sim, _inFile, control, _timeLimit);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -267,8 +279,10 @@ public class Main {
 		parseArgs(args);
 		if (_mode == ExecutionMode.BATCH)
 			startBatchMode();
-		else if (_mode == ExecutionMode.GUI || _mode == ExecutionMode.RACING)
+		else if (_mode == ExecutionMode.GUI)
 			startGUIMode();
+		else if (_mode == ExecutionMode.RACING)
+			startRACINGMode();
 		else
 			throw new SimulatorError("Unknown mode.");
 	}
@@ -285,9 +299,9 @@ public class Main {
 		
 		
 		test("resources/ini1.ini", "resources/output.ini.out", "resources/ini1.ini.eout", 10);
-		test("resources/err");
-		test("resources/advanced10");
-		*/
+		test("resources/err");*/
+		test("resources/advanced");
+		
 		start(args);
 	}
 

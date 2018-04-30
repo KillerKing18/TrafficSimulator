@@ -10,16 +10,13 @@ import exceptions.*;
 
 public class TrafficSimulator implements Observable<TrafficSimulatorObserver> {
 	
-	private List<TrafficSimulatorObserver> _observers;
-	private RoadMap _map;
-	private ArrayList<Event> _events;
-	private int _time;
-	private OutputStream _outStream;
+	protected List<TrafficSimulatorObserver> _observers;
+	protected RoadMap _map;
+	protected ArrayList<Event> _events;
+	protected int _time;
+	protected OutputStream _outStream;
 	protected Comparator<Event> _eventsComparator;
-	protected Comparator<Vehicle> _kartsComparator;
 	protected int _numEvents;
-
-	private int arrivedVehicles;
 	
 	public TrafficSimulator() {
 		_outStream = null;
@@ -41,53 +38,19 @@ public class TrafficSimulator implements Observable<TrafficSimulatorObserver> {
 				}
 			}
 		};
-		_kartsComparator = new Comparator<Vehicle>() {
-			public int compare(Vehicle v1, Vehicle  v2) {
-				if (v1.getItineraryIndex() > v2.getItineraryIndex())
-					return -1;
-				else if (v1.getItineraryIndex() < v2.getItineraryIndex())
-					return 1;
-				else {
-					if (v1.getAtJunction() && !v2.getAtJunction())
-						return 1;
-					else if (!v1.getAtJunction() && v2.getAtJunction())
-						return -1;
-					else {
-						if(v1.getLocation() > v2.getLocation())
-							return -1;
-						else if (v1.getLocation() < v2.getLocation())
-							return 1;
-						else {
-							if(v1.getPositionIndex() < v2.getPositionIndex())
-								return -1;
-							else
-								return 1;
-						}
-					}
-				}
-			}
-		};
 	}
 	
 	public void run(int ticks) throws IOException, SimulatorError {
 		int limit = _time + ticks - 1;
 		while(_time <= limit) {
-			arrivedVehicles = 0;
 			while (!_events.isEmpty() && _events.get(0).getScheduledTime() == _time) {
 				_events.get(0).execute(_map, _time);
 				_events.remove(0);
 			}
 			for(Road r: _map.getRoads())
 				r.advance();
-			for(Junction j: _map.getJunctions()) {
+			for(Junction j: _map.getJunctions())
 				j.advance();
-				arrivedVehicles += j.getArrivedVehicles();
-			}
-			// TODO solo para RACING
-			_map.getVehicles().sort(_kartsComparator);
-			for(int i = 0; i < _map.getVehicles().size(); i++)
-				((Kart) _map.getVehicles().get(i)).setRacePosition(i + 1);
-			// TODO solo para RACING
 			_time++;
 			notifyAdvanced();
 			if(_outStream != null)
@@ -129,33 +92,32 @@ public class TrafficSimulator implements Observable<TrafficSimulatorObserver> {
 		_events.clear();
 		_map.clear();
 		notifyReset();
-		arrivedVehicles = 0;
 	}
 	
 	public void setOutputStream(OutputStream outStream) {
 		_outStream = outStream;
 	}
 	
-	private void notifyAdvanced() {
+	protected void notifyAdvanced() {
 		for(TrafficSimulatorObserver observer : _observers)
 			observer.advanced(_time, _map, _events);
 	}
 	
-	private void notifyRegistered(TrafficSimulatorObserver obs) {
+	protected void notifyRegistered(TrafficSimulatorObserver obs) {
 		obs.registered(_time, _map, _events);
 	}
 	
-	private void notifyError(SimulatorError err) {
+	protected void notifyError(SimulatorError err) {
 		for(TrafficSimulatorObserver observer : _observers)
 			observer.simulatorError(_time, _map, _events, err);
 	}
 
-	private void notifyEventAdded() {
+	protected void notifyEventAdded() {
 		for(TrafficSimulatorObserver observer : _observers)
 			observer.eventAdded(_time, _map, _events);
 	}
 	
-	private void notifyReset() {
+	protected void notifyReset() {
 		for(TrafficSimulatorObserver observer : _observers)
 			observer.reset(_time, _map, _events);
 	}
@@ -170,10 +132,6 @@ public class TrafficSimulator implements Observable<TrafficSimulatorObserver> {
 	public void removeObserver(TrafficSimulatorObserver obs) {
 		if(obs != null && _observers.contains(obs))
 			_observers.remove(obs);
-	}
-	
-	public int getArrivedVehicles() {
-		return arrivedVehicles;
 	}
 	
 	public int getTotalVehicles() {

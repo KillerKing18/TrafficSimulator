@@ -32,7 +32,6 @@ public class Road extends SimulatedObject{
 		_vehicles = new ArrayList<Vehicle>();
 		_numVehicles = 0;
 		_comparator = new Comparator<Vehicle>() {
-
 			public int compare(Vehicle v1, Vehicle  v2) {
 					if(v1.getLocation() > v2.getLocation())
 						return -1;
@@ -77,23 +76,24 @@ public class Road extends SimulatedObject{
 			v = _vehicles.get(i);
 			if(!v.getAtJunction()) {
 				int currentSize = _vehicles.size();
-				if(v._faultyTime > 0){
+				if(v._faultyTime > 0)
 					nextObstacles++;
-				}
 				if(i - 1 >= 0 && v.getLocation() < _vehicles.get(i - 1).getLocation()) {
 					obstacles = obstacles + nextObstacles;
 					nextObstacles = 0;
 				}
 				v.setSpeed(speed / reduceSpeedFactor(obstacles));
 				v.advance();
-				for(int j = i - 1; (j >= 0) && (_vehicles.get(j).getLocation() < v.getLocation()); j--)
+				for(int j = i - 1; (j >= 0) && (_vehicles.get(j).getLocation() < v.getLocation()); j--) {
 					_vehicles.get(j).decreasePositionIndex();
+					v.increasePositionIndex();
+				}
+				_vehicles.sort(_comparator);
 				int newCurrentSize = _vehicles.size();
 				if(newCurrentSize < currentSize)
 					i--;
 			}
 		}
-		_vehicles.sort(_comparator);
 	}
 	
 	void enter(Vehicle v) throws SimulatorError {
@@ -111,9 +111,8 @@ public class Road extends SimulatedObject{
 		if(_vehicles.contains(v)) {
 			_vehicles.remove(v);
 			_numVehicles--;
-			for(Vehicle veh : _vehicles) {
-				veh.decreasePositionIndex();
-			}
+			for(Vehicle veh : _vehicles)
+				veh.increasePositionIndex();
 			_vehicles.sort(_comparator);
 		}
 		else

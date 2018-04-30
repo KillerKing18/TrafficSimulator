@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import control.Controller;
 import model.Kart;
 import model.Observable;
+import model.RacingSimulator;
 import model.RacingSimulatorObserver;
 import model.TrafficSimulator;
 import model.Vehicle;
@@ -132,11 +133,9 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 		_topPanel.setMaximumSize(new Dimension(1000, 150));
 		_topPanel.setLayout(new BoxLayout(_topPanel, BoxLayout.X_AXIS));
 		
+		createImagesPanel();
 		createCharacterChooserPanel();
 		createCircuitChooserPanel();
-		createImagesPanel();
-		_characterChooserPanel.initGUI();
-		_circuitChooserPanel.initGUI();
 	
 		_topPanel.add(_characterChooserPanel);
 		_topPanel.add(_imagesPanel);
@@ -144,20 +143,18 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 	}
 	
 	protected void createCharacterChooserPanel() {
-		_characterChooserPanel = new CharacterChooserPanel(mario_characters);
+		_characterChooserPanel = new CharacterChooserPanel(mario_characters, this, _imagesPanel);
 		_characterChooserPanel.setMinimumSize(new Dimension(300, 150));
 		_characterChooserPanel.setPreferredSize(new Dimension(300, 150));
 		_characterChooserPanel.setMaximumSize(new Dimension(300, 150));
 	}
 	
 	protected void createImagesPanel() {
-		_imagesPanel = new ImagesPanel(this, "/images/mariokart.png", _model, _characterChooserPanel, _circuitChooserPanel);
+		_imagesPanel = new ImagesPanel("/images/mariokart.png", _model);
 		_imagesPanel.setLayout(new BoxLayout(_imagesPanel, BoxLayout.X_AXIS));
 		_imagesPanel.setMinimumSize(new Dimension(400, 150));
 		_imagesPanel.setPreferredSize(new Dimension(400, 150));
 		_imagesPanel.setMaximumSize(new Dimension(400, 150));
-		_characterChooserPanel.setImagesPanel(_imagesPanel);
-		_circuitChooserPanel.setImagesPanel(_imagesPanel);
 	}
 	
 	protected void createClassificationTable() {
@@ -167,7 +164,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 	}
 	
 	protected void createCircuitChooserPanel() {
-		_circuitChooserPanel = new CupChooserPanel(mario_circuits);
+		_circuitChooserPanel = new CupChooserPanel(mario_circuits, this, _imagesPanel);
 		_circuitChooserPanel.setMinimumSize(new Dimension(300, 150));
 		_circuitChooserPanel.setPreferredSize(new Dimension(300, 150));
 		_circuitChooserPanel.setMaximumSize(new Dimension(300, 150));
@@ -181,8 +178,8 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 		_downLeftPanel.setPreferredSize(new Dimension(440, 850));
 		_downLeftPanel.setMaximumSize(new Dimension(440, 850));
 		
-		createSelectedCharactersTable();
 		createSelectedCupPanel();
+		createSelectedCharactersTable();
 		
 		_downLeftPanel.add(_selectedCharactersTable);
 		_downLeftPanel.add(_selectedCupPanel);
@@ -193,7 +190,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 		_selectedCupPanel.setMinimumSize(new Dimension(420, 380));
 		_selectedCupPanel.setPreferredSize(new Dimension(420, 380));
 		_selectedCupPanel.setMaximumSize(new Dimension(420, 380));
-		_selectedCupPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Cup: " + _circuitChooserPanel.getSelectedCup()));
+		_selectedCupPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), _circuitChooserPanel.getSelectedCup() + " Cup"));
 		
 		createSelectedCupImage();
 		createSelectedCupTable();
@@ -219,7 +216,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 	}
 	
 	protected void createSelectedCupTable() {
-		_selectedCupTable = new SelectedCupTable(_selectedCupImage);
+		_selectedCupTable = new SelectedCupTable();
 		addObserver(_selectedCupTable);
 		_selectedCupTable.setMinimumSize(new Dimension(410, 100));
 		_selectedCupTable.setPreferredSize(new Dimension(410, 100));
@@ -258,9 +255,8 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 			((RacingToolBar) _toolBar).setItemBoxActivated(true);
 			notifyReset();
 			_control.reset();
-			_imagesPanel.reset();
+			_characterChooserPanel.reset();
 			_circuitChooserPanel.reset();
-			_selectedCupTable.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Cup: "));
 			_downLeftPanel.removeAll();
 			createSelectedCharactersTable();
 			createSelectedCupPanel();
@@ -272,7 +268,10 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 		case "RUN":
 			boolean begin = true;
 			if(_model.getTime() == 0) {
-				begin = _imagesPanel.checkIn(((RacingToolBar) _toolBar).getLaps());
+				_circuitChooserPanel.setSelectedCup(((RacingToolBar) _toolBar).getLaps());
+				begin = _imagesPanel.checkIn(_circuitChooserPanel.getSelectedCupJunctions(), 
+						_circuitChooserPanel.getSelectedCupItinerary(), _characterChooserPanel.getSpeedMap(), 
+						_characterChooserPanel.getLuckMap(), _characterChooserPanel.getSelectedCharacters());
 			}
 			if(begin) {
 				((RacingToolBar) _toolBar).setItemBoxEnabled(true);
@@ -298,7 +297,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 							_music.loop();
 					}
 					_control.run(_toolBar.getTime());
-					if(_model.getTotalVehicles() == _model.getArrivedVehicles()) {
+					if(_model.getTotalVehicles() == ((RacingSimulator)_model).getArrivedVehicles()) {
 						if(playingMusic)
 							_music.stop();
 						Music temp = _music;
