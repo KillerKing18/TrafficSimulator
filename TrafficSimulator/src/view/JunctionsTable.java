@@ -25,17 +25,17 @@ public class JunctionsTable extends GenericTable{
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			String v = null;
 			switch ( columnIndex ) {
-			case 0:
-				 v = map.getJunctions().get(rowIndex).getId();
-				 break;
-			case 1:
-				v = map.getJunctions().get(rowIndex).getGreens();
-				 break;
-			case 2:
-				v = map.getJunctions().get(rowIndex).getReds();
-				 break;
-			default:
-				break;
+				case 0:
+					 v = map.getJunctions().get(rowIndex).getId();
+					 break;
+				case 1:
+					v = map.getJunctions().get(rowIndex).getGreens();
+					 break;
+				case 2:
+					v = map.getJunctions().get(rowIndex).getReds();
+					 break;
+				default:
+					break;
 			}
 			return v;
 		}

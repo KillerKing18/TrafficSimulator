@@ -26,14 +26,14 @@ public class SelectedCupTable extends GenericRacingTable {
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			String v = null;
 			switch (columnIndex) {
-			case 0:
-				 v = "#" + (rowIndex + 1);
-				 break;
-			case 1:
-				 v = _cupChooserPanel.getCupsMap().get(_cupChooserPanel.getSelectedCup())[rowIndex];
-				 break;
-			default:
-				break;
+				case 0:
+					 v = "#" + (rowIndex + 1);
+					 break;
+				case 1:
+					 v = _cupChooserPanel.getCupsMap().get(_cupChooserPanel.getSelectedCup())[rowIndex];
+					 break;
+				default:
+					break;
 			}
 			return v;
 		}

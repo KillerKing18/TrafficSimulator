@@ -26,22 +26,22 @@ public class EventsQueueTable extends GenericTable {
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			String v = null;
 			switch (columnIndex) {
-			case 0:
-				v = "" + events.get(rowIndex).getPositionIndex();
-				break;
-			case 1:
-				v = "" + events.get(rowIndex).getScheduledTime();
-				break;
-			case 2:
-				v = events.get(rowIndex).toString();
-				break;
-			default:
-				break;
+				case 0:
+					v = "" + events.get(rowIndex).getPositionIndex();
+					break;
+				case 1:
+					v = "" + events.get(rowIndex).getScheduledTime();
+					break;
+				case 2:
+					v = events.get(rowIndex).toString();
+					break;
+				default:
+					break;
 			}
 			return v;
 		}
 		
-		void refresh() {
+		public void refresh() {
 			fireTableStructureChanged();
 		}
 	}

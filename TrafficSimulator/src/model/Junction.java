@@ -110,19 +110,19 @@ public class Junction extends SimulatedObject{
 		else {
 			for(IncomingRoad r : _roads) {
 				switch(restriction) {
-				case 0:	// All incoming roads
-					queue += r.toString() + ",";
-					break;
-				case 1:	// Only green incoming roads
-					if(r.hasGreenLight())
+					case 0:	// All incoming roads
 						queue += r.toString() + ",";
-					break;
-				case -1:// Only red incoming roads
-					if(!r.hasGreenLight())
-						queue += r.toString() + ",";
-					break;
-				default:
-					break;
+						break;
+					case 1:	// Only green incoming roads
+						if(r.hasGreenLight())
+							queue += r.toString() + ",";
+						break;
+					case -1:// Only red incoming roads
+						if(!r.hasGreenLight())
+							queue += r.toString() + ",";
+						break;
+					default:
+						break;
 				}	
 			}
 			if(queue.length() != 0)

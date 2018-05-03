@@ -122,31 +122,33 @@ public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String str = e.getActionCommand();
-		switch (str){
-		case "LOAD":
-			loadFile();
-			break;
-		case "SAVE":
-			try {
-				saveFile();
-			} catch (FileNotFoundException e2) {
-				e2.printStackTrace();
-			}
-			break;
-		case "CHECK IN":
-			_control.setInputStream(new ByteArrayInputStream(this.getText().getBytes()));
-			try {
-				_control.loadEvents();
-				_stateBarPanel.setMessage("Events loaded into the simulator!");
-			} catch (SimulatorError e1) {
-				JOptionPane.showMessageDialog(this, "Error loading events", "Error", JOptionPane.ERROR_MESSAGE);
-				e1.printStackTrace();
-			}
-			break;
-		case "CLEAR":
-			clear();
-			_stateBarPanel.setMessage("Events editor cleared");
-			break;
+		switch (str) {
+			case "LOAD":
+				loadFile();
+				break;
+			case "SAVE":
+				try {
+					saveFile();
+				} catch (FileNotFoundException e2) {
+					e2.printStackTrace();
+				}
+				break;
+			case "CHECK IN":
+				_control.setInputStream(new ByteArrayInputStream(this.getText().getBytes()));
+				try {
+					_control.loadEvents();
+					_stateBarPanel.setMessage("Events loaded into the simulator!");
+				} catch (SimulatorError e1) {
+					JOptionPane.showMessageDialog(this, "Error loading events", "Error", JOptionPane.ERROR_MESSAGE);
+					e1.printStackTrace();
+				}
+				break;
+			case "CLEAR":
+				clear();
+				_stateBarPanel.setMessage("Events editor cleared");
+				break;
+			default:
+				break;
 		}
 	}
 

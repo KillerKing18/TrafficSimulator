@@ -26,26 +26,26 @@ public class RoadsTable extends GenericTable {
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			String v = null;
 			switch ( columnIndex ) {
-			case 0:
-				 v = map.getRoads().get(rowIndex).getId();
-				 break;
-			case 1:
-				 v = map.getRoads().get(rowIndex).getSource().getId();
-				 break;
-			case 2:
-				 v = map.getRoads().get(rowIndex).getDestination().getId();
-				 break;
-			case 3:
-				 v = "" + map.getRoads().get(rowIndex).getLength();
-				 break;
-			case 4:
-				 v = "" + map.getRoads().get(rowIndex).getMaxSpeed();
-				 break;
-			case 5:
-				 v = "" + map.getRoads().get(rowIndex).getVehiclesString();
-				 break;
-			default:
-				break;
+				case 0:
+					 v = map.getRoads().get(rowIndex).getId();
+					 break;
+				case 1:
+					 v = map.getRoads().get(rowIndex).getSource().getId();
+					 break;
+				case 2:
+					 v = map.getRoads().get(rowIndex).getDestination().getId();
+					 break;
+				case 3:
+					 v = "" + map.getRoads().get(rowIndex).getLength();
+					 break;
+				case 4:
+					 v = "" + map.getRoads().get(rowIndex).getMaxSpeed();
+					 break;
+				case 5:
+					 v = "" + map.getRoads().get(rowIndex).getVehiclesString();
+					 break;
+				default:
+					break;
 			}
 			return v;
 		}

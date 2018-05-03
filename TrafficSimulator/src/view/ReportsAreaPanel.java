@@ -71,27 +71,27 @@ public class ReportsAreaPanel extends TextAreaPanel implements TrafficSimulatorO
 	public void actionPerformed(ActionEvent e) {
 		String str = e.getActionCommand();
 		switch(str){
-		case "GENERATE":
-			_dialog.setData(_map.getVehicles(), _map.getRoads(), _map.getJunctions());
-			int status = _dialog.open();
-			if (status != 0) {
-				insert(_map.generateSelectedReports(_time, _dialog.getSelectedVehicles(), _dialog.getSelectedRoads(), _dialog.getSelectedJunctions()));
-				_stateBarPanel.setMessage("Reports generated");
-			}
-			break;
-		case "CLEAR":
-			clear();
-			_stateBarPanel.setMessage("Reports area cleared");
-			break;
-		case "SAVE":
-			try {
-				saveFile();
-			} catch (FileNotFoundException e2) {
-				e2.printStackTrace();
-			}
-			break;
-		default:
-			break;
+			case "GENERATE":
+				_dialog.setData(_map.getVehicles(), _map.getRoads(), _map.getJunctions());
+				int status = _dialog.open();
+				if (status != 0) {
+					insert(_map.generateSelectedReports(_time, _dialog.getSelectedVehicles(), _dialog.getSelectedRoads(), _dialog.getSelectedJunctions()));
+					_stateBarPanel.setMessage("Reports generated");
+				}
+				break;
+			case "CLEAR":
+				clear();
+				_stateBarPanel.setMessage("Reports area cleared");
+				break;
+			case "SAVE":
+				try {
+					saveFile();
+				} catch (FileNotFoundException e2) {
+					e2.printStackTrace();
+				}
+				break;
+			default:
+				break;
 		}
 		
 	}

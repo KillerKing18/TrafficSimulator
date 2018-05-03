@@ -185,7 +185,6 @@ public class Main {
 	 * @throws IOException
 	 * @throws SimulatorError
 	 */
-	@SuppressWarnings("unused")
 	private static void test(String path) throws IOException, SimulatorError {
 
 		File dir = new File(path);

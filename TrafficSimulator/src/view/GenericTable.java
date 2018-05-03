@@ -46,7 +46,7 @@ public abstract class GenericTable extends JPanel implements TrafficSimulatorObs
 			return header[columnIndex];
 		}
 		
-		void refresh() {
+		public void refresh() {
 			fireTableStructureChanged();
 		}
 
@@ -74,7 +74,7 @@ public abstract class GenericTable extends JPanel implements TrafficSimulatorObs
 	
 	protected void initGUI() {
 		this.setLayout(new BorderLayout());
-		table = new JTable(tableModel);  //t registra tableModel como un listener
+		table = new JTable(tableModel);
 		table.setShowGrid(false);
 		JScrollPane jscroll = new JScrollPane(table);
 		jscroll.getViewport().setBackground(Color.WHITE);

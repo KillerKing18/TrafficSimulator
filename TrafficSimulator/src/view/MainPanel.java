@@ -229,33 +229,33 @@ public class MainPanel extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String str = e.getActionCommand();
 		switch (str){
-		case "RESET":
-			_control.reset();
-			_eventsEditor.clear();
-			_eventsEditor.setBorder(BorderFactory.createTitledBorder
-					(BorderFactory.createLineBorder(Color.BLACK), "Events: "));
-			_reportsArea.clear();
-			break;
-		case "RUN":
-			try {
-				_control.run(_toolBar.getTime());
-				_stateBar.setMessage(_toolBar.getTime() + " steps advanced!");
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-			break;
-		case "QUIT":
-			System.exit(0);
-			break;
-		case "REDIRECT":
-			JCheckBoxMenuItem redirect = (JCheckBoxMenuItem)e.getSource();
-			if(redirect.isSelected())
-				_model.setOutputStream(_outputStream);
-			else
-				_model.setOutputStream(null);
-			break;
-		default:
-			break;
+			case "RESET":
+				_control.reset();
+				_eventsEditor.clear();
+				_eventsEditor.setBorder(BorderFactory.createTitledBorder
+						(BorderFactory.createLineBorder(Color.BLACK), "Events: "));
+				_reportsArea.clear();
+				break;
+			case "RUN":
+				try {
+					_control.run(_toolBar.getTime());
+					_stateBar.setMessage(_toolBar.getTime() + " steps advanced!");
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				break;
+			case "QUIT":
+				System.exit(0);
+				break;
+			case "REDIRECT":
+				JCheckBoxMenuItem redirect = (JCheckBoxMenuItem)e.getSource();
+				if(redirect.isSelected())
+					_model.setOutputStream(_outputStream);
+				else
+					_model.setOutputStream(null);
+				break;
+			default:
+				break;
 		}
 	}
 }

@@ -31,24 +31,24 @@ public class ClassificationTable extends GenericTable {
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			String v = null;
 			switch (columnIndex) {
-			case 0:
-				 v = "" + (rowIndex + 1);
-				 break;
-			case 1:
-				 v = map.getVehicles().get(rowIndex).getId();
-				 break;
-			case 2:
-				 v = "" + map.getVehicles().get(rowIndex).getSpeed();
-				 break;
-			case 3:
-				 v = "" + ((Kart) map.getVehicles().get(rowIndex)).getLap();
-				 break;
-			case 4:
-				 ImageIcon icon = new ImageIcon(getClass().getResource("/images/" + map.getVehicles().get(rowIndex).getId() + ".png"));
-				 icon.setImage(icon.getImage().getScaledInstance(90, 90, 1));
-				 return icon;
-			default:
-				break;
+				case 0:
+					 v = "" + (rowIndex + 1);
+					 break;
+				case 1:
+					 v = map.getVehicles().get(rowIndex).getId();
+					 break;
+				case 2:
+					 v = "" + map.getVehicles().get(rowIndex).getSpeed();
+					 break;
+				case 3:
+					 v = "" + ((Kart) map.getVehicles().get(rowIndex)).getLap();
+					 break;
+				case 4:
+					 ImageIcon icon = new ImageIcon(getClass().getResource("/images/" + map.getVehicles().get(rowIndex).getId() + ".png"));
+					 icon.setImage(icon.getImage().getScaledInstance(90, 90, 1));
+					 return icon;
+				default:
+					break;
 			}
 			return v;
 		}

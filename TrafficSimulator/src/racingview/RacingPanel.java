@@ -239,122 +239,122 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 	public void actionPerformed(ActionEvent e) {
 		String str = e.getActionCommand();
 		switch (str){
-		case "ITEM BOX":
-			ImageIcon itemboxicon = new ImageIcon(this.getClass().getResource("/icons/itembox.png"));
-			itemboxicon.setImage(itemboxicon.getImage().getScaledInstance(150, 150, 1));
-			String activated = !((RacingToolBar) _toolBar).getItemBoxActivated() ? "enabled!\n(Each pilot will get one"
-					+ " when he/she starts a new lap)" : "disabled!";				
-			JOptionPane.showMessageDialog(this, "Item Boxes are now " + activated, "Item Box", JOptionPane.INFORMATION_MESSAGE, itemboxicon);
-			((RacingToolBar) _toolBar).setItemBoxActivated(!((RacingToolBar) _toolBar).getItemBoxActivated());
-			for(Vehicle v : _model.getRoadMap().getVehicles())
-				((Kart)v).changeItemBox();
-			break;
-		case "RESET":
-			((RacingToolBar) _toolBar).setLapsSpinnerEnabled(true);
-			((RacingToolBar) _toolBar).setItemBoxEnabled(false);
-			((RacingToolBar) _toolBar).setItemBoxActivated(true);
-			notifyReset();
-			_control.reset();
-			_characterChooserPanel.reset();
-			_circuitChooserPanel.reset();
-			_downLeftPanel.removeAll();
-			createSelectedCharactersTable();
-			createSelectedCupPanel();
-			_downLeftPanel.add(_selectedCharactersTable);
-			_downLeftPanel.add(_selectedCupPanel);
-			_downLeftPanel.repaint();
-			_downLeftPanel.updateUI();
-			break;
-		case "RUN":
-			boolean begin = true;
-			if(_model.getTime() == 0) {
-				_circuitChooserPanel.setSelectedCup(((RacingToolBar) _toolBar).getLaps());
-				begin = _imagesPanel.checkIn(_circuitChooserPanel.getSelectedCupJunctions(), 
-						_circuitChooserPanel.getSelectedCupItinerary(), _characterChooserPanel.getSpeedMap(), 
-						_characterChooserPanel.getLuckMap(), _characterChooserPanel.getSelectedCharacters());
-			}
-			if(begin) {
-				((RacingToolBar) _toolBar).setItemBoxEnabled(true);
-				((RacingToolBar) _toolBar).setLapsSpinnerEnabled(false);
+			case "ITEM BOX":
+				ImageIcon itemboxicon = new ImageIcon(this.getClass().getResource("/icons/itembox.png"));
+				itemboxicon.setImage(itemboxicon.getImage().getScaledInstance(150, 150, 1));
+				String activated = !((RacingToolBar) _toolBar).getItemBoxActivated() ? "enabled!\n(Each pilot will get one"
+						+ " when he/she starts a new lap)" : "disabled!";				
+				JOptionPane.showMessageDialog(this, "Item Boxes are now " + activated, "Item Box", JOptionPane.INFORMATION_MESSAGE, itemboxicon);
+				((RacingToolBar) _toolBar).setItemBoxActivated(!((RacingToolBar) _toolBar).getItemBoxActivated());
+				for(Vehicle v : _model.getRoadMap().getVehicles())
+					((Kart)v).changeItemBox();
+				break;
+			case "RESET":
+				((RacingToolBar) _toolBar).setLapsSpinnerEnabled(true);
+				((RacingToolBar) _toolBar).setItemBoxEnabled(false);
+				((RacingToolBar) _toolBar).setItemBoxActivated(true);
+				notifyReset();
+				_control.reset();
+				_characterChooserPanel.reset();
+				_circuitChooserPanel.reset();
 				_downLeftPanel.removeAll();
-				createClassificationTable();
-				_downLeftPanel.add(_classificationTable);
+				createSelectedCharactersTable();
+				createSelectedCupPanel();
+				_downLeftPanel.add(_selectedCharactersTable);
+				_downLeftPanel.add(_selectedCupPanel);
 				_downLeftPanel.repaint();
 				_downLeftPanel.updateUI();
-				try {
-					if(_model.getTime() == 0) {
-						if(playingMusic)
-							_music.stop();
-						Music temp = _music;
-						_music = new Music("src/music/start_race.wav");
-						_music.play();
-						ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/lakitu.gif"));
-						JOptionPane.showMessageDialog(this, "READY\n\nSET\n\nGO!", "The race is starting!", JOptionPane.INFORMATION_MESSAGE, icon);
-						_music.stop();
-						_music = null;
-						_music = temp;
-						if(playingMusic)
-							_music.loop();
-					}
-					_control.run(_toolBar.getTime());
-					if(_model.getTotalVehicles() == ((RacingSimulator)_model).getArrivedVehicles()) {
-						if(playingMusic)
-							_music.stop();
-						Music temp = _music;
-						_music = new Music("src/music/CourseClear.wav");
-						_music.play();
-						ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/finish.gif"));
-						JOptionPane.showMessageDialog(this, "The race has finished!", "CONGRATULATIONS", JOptionPane.INFORMATION_MESSAGE, icon);
-						_music.stop();
-						_music = null;
-						_music = temp;
-						if(playingMusic)
-							_music.loop();
-					}
-					
-				} catch (Exception e1) {
-					e1.printStackTrace();
+				break;
+			case "RUN":
+				boolean begin = true;
+				if(_model.getTime() == 0) {
+					_circuitChooserPanel.setSelectedCup(((RacingToolBar) _toolBar).getLaps());
+					begin = _imagesPanel.checkIn(_circuitChooserPanel.getSelectedCupJunctions(), 
+							_circuitChooserPanel.getSelectedCupItinerary(), _characterChooserPanel.getSpeedMap(), 
+							_characterChooserPanel.getLuckMap(), _characterChooserPanel.getSelectedCharacters());
 				}
-			}
-			break;
-		case "QUIT":
-			System.exit(0);
-			break;
-		case "PLAY":
-			_music.loop();
-			playingMusic = true;
-			break;
-		case "STOP":
-			_music.stop();
-			playingMusic = false;
-			break;
-		case "RANDOM":
-			_music.stop();
-			Random rnd = new Random();
-			int selected = rnd.nextInt(mario_songs.length);
-			_music = null;
-			_music = new Music("src/music/" + mario_songs[selected]);
-			((RacingToolBar)_toolBar).getComboBox().setSelectedIndex(selected);
-			_music.loop();
-			playingMusic = true;
-			break;
-		case "PLAYLIST":
-			@SuppressWarnings("unchecked") JComboBox<String> comboBox = (JComboBox<String>)e.getSource();
-			_music.stop();
-			_music = null;
-			_music = new Music("src/music/" + (String)comboBox.getSelectedItem() + ".wav");
-			_music.loop();
-			playingMusic = true;
-			break;
-		case "REDIRECT":
-			JCheckBoxMenuItem redirect = (JCheckBoxMenuItem)e.getSource();
-			if(redirect.isSelected())
-				_model.setOutputStream(_outputStream);
-			else
-				_model.setOutputStream(null);
-			break;
-		default:
-			break;
+				if(begin) {
+					((RacingToolBar) _toolBar).setItemBoxEnabled(true);
+					((RacingToolBar) _toolBar).setLapsSpinnerEnabled(false);
+					_downLeftPanel.removeAll();
+					createClassificationTable();
+					_downLeftPanel.add(_classificationTable);
+					_downLeftPanel.repaint();
+					_downLeftPanel.updateUI();
+					try {
+						if(_model.getTime() == 0) {
+							if(playingMusic)
+								_music.stop();
+							Music temp = _music;
+							_music = new Music("src/music/start_race.wav");
+							_music.play();
+							ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/lakitu.gif"));
+							JOptionPane.showMessageDialog(this, "READY\n\nSET\n\nGO!", "The race is starting!", JOptionPane.INFORMATION_MESSAGE, icon);
+							_music.stop();
+							_music = null;
+							_music = temp;
+							if(playingMusic)
+								_music.loop();
+						}
+						_control.run(_toolBar.getTime());
+						if(_model.getTotalVehicles() == ((RacingSimulator)_model).getArrivedVehicles()) {
+							if(playingMusic)
+								_music.stop();
+							Music temp = _music;
+							_music = new Music("src/music/CourseClear.wav");
+							_music.play();
+							ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/finish.gif"));
+							JOptionPane.showMessageDialog(this, "The race has finished!", "CONGRATULATIONS", JOptionPane.INFORMATION_MESSAGE, icon);
+							_music.stop();
+							_music = null;
+							_music = temp;
+							if(playingMusic)
+								_music.loop();
+						}
+						
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+				break;
+			case "QUIT":
+				System.exit(0);
+				break;
+			case "PLAY":
+				_music.loop();
+				playingMusic = true;
+				break;
+			case "STOP":
+				_music.stop();
+				playingMusic = false;
+				break;
+			case "RANDOM":
+				_music.stop();
+				Random rnd = new Random();
+				int selected = rnd.nextInt(mario_songs.length);
+				_music = null;
+				_music = new Music("src/music/" + mario_songs[selected]);
+				((RacingToolBar)_toolBar).getComboBox().setSelectedIndex(selected);
+				_music.loop();
+				playingMusic = true;
+				break;
+			case "PLAYLIST":
+				@SuppressWarnings("unchecked") JComboBox<String> comboBox = (JComboBox<String>)e.getSource();
+				_music.stop();
+				_music = null;
+				_music = new Music("src/music/" + (String)comboBox.getSelectedItem() + ".wav");
+				_music.loop();
+				playingMusic = true;
+				break;
+			case "REDIRECT":
+				JCheckBoxMenuItem redirect = (JCheckBoxMenuItem)e.getSource();
+				if(redirect.isSelected())
+					_model.setOutputStream(_outputStream);
+				else
+					_model.setOutputStream(null);
+				break;
+			default:
+				break;
 		}
 	}
 
