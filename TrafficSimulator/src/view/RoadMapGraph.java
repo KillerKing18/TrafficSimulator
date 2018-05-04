@@ -39,6 +39,7 @@ public class RoadMapGraph extends JPanel implements TrafficSimulatorObserver {
 		initGUI();
 	}
 	
+	@SuppressWarnings("deprecation")
 	protected void initGUI() {
 		this.setLayout(new BorderLayout());	
 		_graph = new GraphComponent();
@@ -46,13 +47,10 @@ public class RoadMapGraph extends JPanel implements TrafficSimulatorObserver {
 		this.add(_graph, BorderLayout.CENTER);
 		
 		_graphPopupMenu = new JPopupMenu();
-
-		subMenu = new JMenu("Filter");
-				
+		subMenu = new JMenu("Filter");			
 		_graphPopupMenu.add(subMenu);
-		
 
-		// connect the popup menu to the text area _editor
+		// connect the popup menu to the graph
 		this.addMouseListener(new MouseListener() {
 
 			@Override
@@ -83,6 +81,7 @@ public class RoadMapGraph extends JPanel implements TrafficSimulatorObserver {
 			public void mouseClicked(MouseEvent e) {
 			}
 		});
+		_graphPopupMenu.disable();
 	}
 
 	@Override
@@ -94,8 +93,14 @@ public class RoadMapGraph extends JPanel implements TrafficSimulatorObserver {
 	public void simulatorError(int time, RoadMap map, List<Event> events, SimulatorError e) {
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void advanced(int time, RoadMap map, List<Event> events) {
+		if(_map.getJunctions().isEmpty())
+			_graphPopupMenu.disable();
+		else
+			_graphPopupMenu.enable();
+		
 		subMenu.removeAll();
 		JMenuItem menuItemAll = new JMenuItem("All");
 		menuItemAll.addActionListener(new ActionListener(){
@@ -132,6 +137,7 @@ public class RoadMapGraph extends JPanel implements TrafficSimulatorObserver {
 	public void eventAdded(int time, RoadMap map, List<Event> events) {
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void reset(int time, RoadMap map, List<Event> events) {
 		_graph.reset();
@@ -139,6 +145,7 @@ public class RoadMapGraph extends JPanel implements TrafficSimulatorObserver {
 		filteredJunction = null;
 		subMenu.removeAll();
 		generateGraph();
+		_graphPopupMenu.disable();
 	}
 	
 	protected void generateGraph(Junction j) {

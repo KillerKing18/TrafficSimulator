@@ -3,10 +3,13 @@ package racingview;
 import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.net.URL;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 
 import graphlayout.RacingGraphComponent;
+import model.Event;
+import model.RoadMap;
 import view.RoadMapGraph;
 
 public class RacingRoadMapGraph extends RoadMapGraph {
@@ -38,4 +41,16 @@ public class RacingRoadMapGraph extends RoadMapGraph {
 	public void setEmpezado(boolean b) {
 		_graph.setEmpezado(b);
 	}
+	
+	@Override
+ 	public void advanced(int time, RoadMap map, List<Event> events) {
+		_graph.setAvanzado(true);
+		generateGraph();
+	}
+	
+	@Override
+ 	public void reset(int time, RoadMap map, List<Event> events) {
+ 		_graph.reset();
+ 		generateGraph();
+ 	}
 }

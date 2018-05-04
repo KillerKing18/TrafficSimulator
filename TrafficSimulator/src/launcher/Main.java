@@ -185,6 +185,7 @@ public class Main {
 	 * @throws IOException
 	 * @throws SimulatorError
 	 */
+	@SuppressWarnings("unused")
 	private static void test(String path) throws IOException, SimulatorError {
 
 		File dir = new File(path);
@@ -298,8 +299,8 @@ public class Main {
 		
 		
 		test("resources/ini1.ini", "resources/output.ini.out", "resources/ini1.ini.eout", 10);
-		test("resources/err");*/
-		test("resources/advanced");
+		test("resources/err");
+		test("resources/advanced");*/
 		
 		start(args);
 	}
