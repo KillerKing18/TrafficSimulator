@@ -42,6 +42,14 @@ public class Junction extends SimulatedObject{
 		return _outgoingRoads.get(nextJunction);
 	}
 	
+	public Map<Junction, Road> getIncomingRoadsMap(){
+		return _incomingRoadsJunction;
+	}
+	
+	public Map<Junction, Road> getOutgoingRoadsMap(){
+		return _outgoingRoads;
+	}
+	
 	void addIncommingRoad(Road road) {
 		IncomingRoad entrante = createIncomingRoadQueue(road);
 		_roads.add(entrante);
