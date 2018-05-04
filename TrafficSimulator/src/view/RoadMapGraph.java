@@ -107,6 +107,7 @@ public class RoadMapGraph extends JPanel implements TrafficSimulatorObserver {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				all = true;
+				_graph.setFocus(false);
 				generateGraph();
 			}
 		});
@@ -121,7 +122,9 @@ public class RoadMapGraph extends JPanel implements TrafficSimulatorObserver {
 				public void actionPerformed(ActionEvent e) {
 					all = false;
 					filteredJunction = j;
-					generateGraph(j);
+					_graph.setFocus(true);
+					_graph.setFocusedJunction(filteredJunction);
+					generateGraph(filteredJunction);
 				}
 			});
 			subMenu.add(menuItem);
@@ -168,13 +171,11 @@ public class RoadMapGraph extends JPanel implements TrafficSimulatorObserver {
 	protected void generateGraph() {
 		Graph g = new Graph();
 		
-		for(Junction j : _map.getJunctions()) {
+		for(Junction j : _map.getJunctions())
 			g.addNode(j);
-		}
 		
-		for (Road r : _map.getRoads()) {
+		for (Road r : _map.getRoads())
 			g.addEdge(r);
-		}
 		
 		_graph.setGraph(g);
 	}

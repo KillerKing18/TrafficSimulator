@@ -20,6 +20,8 @@ public class GraphComponent extends JComponent {
 	
 	protected boolean empezado;
 	protected boolean avanzado;
+	protected boolean focus;
+	protected Junction focusedJunction;
 
 	private static final long serialVersionUID = 1L;
 
@@ -77,6 +79,7 @@ public class GraphComponent extends JComponent {
 		setPreferredSize(new Dimension(500, 500));
 		_lastWidth = -1;
 		_lastHeight = -1;
+		focus = false;
 	}
 	
 	public void setAvanzado(boolean b) {
@@ -174,20 +177,22 @@ public class GraphComponent extends JComponent {
 		int xc = _lastWidth / 2 - 10;
 		int yc = _lastHeight / 2 - 10;
 
-		double slice = 2 * Math.PI / _graph.getNodes().size();
+		double slice = focus ? 2 * Math.PI / (_graph.getNodes().size() - 1) : 2 * Math.PI / _graph.getNodes().size();
 		int i = 0;
 		for (Junction j : _graph.getNodes()) {
-
-			double angle = slice * i;
-			int cX = (int) (xc + r * Math.cos(angle));
-			int cY = (int) (yc + r * Math.sin(angle));
-			int tX = (int) (xc + tr * Math.cos(angle));
-			int tY = (int) (yc + tr * Math.sin(angle));
-
-			_nodesPisitions.put(j.getId(), new Point(cX, cY, tX, tY));
-			i++;
+			if(j != focusedJunction || !focus) {
+				double angle = slice * i;
+				int cX = (int) (xc + r * Math.cos(angle));
+				int cY = (int) (yc + r * Math.sin(angle));
+				int tX = (int) (xc + tr * Math.cos(angle));
+				int tY = (int) (yc + tr * Math.sin(angle));
+	
+				_nodesPisitions.put(j.getId(), new Point(cX, cY, tX, tY));
+				i++;
+			}
 		}
-
+		if(focus)
+			_nodesPisitions.put(focusedJunction.getId(), new Point(xc, yc, xc, yc - _nodeRadius - 10));
 	}
 
 	/**
@@ -261,12 +266,21 @@ public class GraphComponent extends JComponent {
 		calculateNodeCoordinates();
 		refresh();
 	}
+	
+	public void setFocus(boolean b) {
+		focus = b;
+	}
+	
+	public void setFocusedJunction(Junction j) {
+		focusedJunction = j;
+	}
 
 	public void refresh() {
 		repaint();
 	}
 	
 	public void reset() {
+		focus = false;
 	}
 	
 	public void setEmpezado(boolean b) {
