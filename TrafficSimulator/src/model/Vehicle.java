@@ -179,8 +179,9 @@ public class Vehicle extends SimulatedObject {
 	public String getItineraryString(){
 		String itinerary = "[";
 		for(Junction j : _itinerary){
-			itinerary += j.getId() + ",";
+			itinerary += j.getId() + ", ";
 		}
+		itinerary = itinerary.substring(0, itinerary.length() - 2);
 		itinerary += "]";
 		return itinerary;
 	}

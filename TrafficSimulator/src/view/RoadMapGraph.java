@@ -166,8 +166,7 @@ public class RoadMapGraph extends JPanel implements TrafficSimulatorObserver {
 		
 		_graph.setGraph(g);
 	}
-	
-	
+
 	protected void generateGraph() {
 		Graph g = new Graph();
 		
@@ -179,6 +178,4 @@ public class RoadMapGraph extends JPanel implements TrafficSimulatorObserver {
 		
 		_graph.setGraph(g);
 	}
-
-	
 }

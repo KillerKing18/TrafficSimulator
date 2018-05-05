@@ -32,26 +32,6 @@ public abstract class Event {
 		return _time;
 	}
 	
-	/*
-	public int compareTo(Event e) {
-		//Comparator already used
-	}
-	*/
-	
-	/*
-	protected Junction checkIfJunctionExists(RoadMap map, String str) throws UnexistingObjectException{
-		return map.getJunction(str);
-	}
-	
-	protected Vehicle checkIfVehicleExists(RoadMap map, String str) throws UnexistingObjectException{
-		return map.getVehicle(str);
-	}
-	
-	protected Road checkIfRoadExists(RoadMap map, String str) throws UnexistingObjectException{
-		return map.getRoad(str);
-	}
-	*/
-	
 	protected static List<Junction> parseListOfJunctions(RoadMap map, String[] itinerary) throws SimulatorError{
 		try{
 			List<Junction> junctions = new ArrayList<Junction>();

@@ -71,7 +71,7 @@ public class TrafficSimulator implements Observable<TrafficSimulatorObserver> {
 			else {
 				int newIndex = 0;
 				for(; newIndex < _events.size() && _events.get(newIndex).getScheduledTime() <= e.getScheduledTime(); newIndex++) {}
-				e.setPosition(newIndex + 1);
+					e.setPosition(newIndex + 1);
 				for(; newIndex < _events.size(); newIndex++)
 					_events.get(newIndex).increaseIndexPosition();
 			}

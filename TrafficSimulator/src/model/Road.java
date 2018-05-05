@@ -137,10 +137,10 @@ public class Road extends SimulatedObject{
 	public String getVehiclesString(){
 		String vehicles = "[";
 		for(Vehicle v : _vehicles){
-			vehicles += v.getId() + ",";
+			vehicles += v.getId() + ", ";
 		}
 		if(!_vehicles.isEmpty())
-			vehicles = vehicles.substring(0, vehicles.length() - 1);
+			vehicles = vehicles.substring(0, vehicles.length() - 2);
 		vehicles += "]";
 		return vehicles;
 	}
