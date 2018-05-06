@@ -63,7 +63,7 @@ public class Controller {
 		_sim.run(ticks);
 	}
 	
-	public void loadEvents() throws SimulatorError{
+	public void loadEvents() throws SimulatorError {
 		Ini ini;
 		boolean parsed = false;
 		try {
@@ -87,8 +87,7 @@ public class Controller {
 					throw new SimulatorError("Unknown event: " + sec.getTag());
 			}
 			catch(SimulatorError e) {
-				
-				System.err.println(e.getMessage());
+				throw e;
 			}
 		}
 	}

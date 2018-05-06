@@ -40,25 +40,31 @@ public class TrafficSimulator implements Observable<TrafficSimulatorObserver> {
 		};
 	}
 	
-	public void run(int ticks) throws IOException, SimulatorError {
-		int limit = _time + ticks - 1;
-		while(_time <= limit) {
-			while (!_events.isEmpty() && _events.get(0).getScheduledTime() == _time) {
-				_events.get(0).execute(_map, _time);
-				_events.remove(0);
+	public void run(int ticks) throws SimulatorError, IOException {
+		try {
+			int limit = _time + ticks - 1;
+			while(_time <= limit) {
+				while (!_events.isEmpty() && _events.get(0).getScheduledTime() == _time) {
+					_events.get(0).execute(_map, _time);
+					_events.remove(0);
+				}
+				for(Road r: _map.getRoads())
+					r.advance();
+				for(Junction j: _map.getJunctions())
+					j.advance();
+				_time++;
+				notifyAdvanced();
+				if(_outStream != null)
+					_outStream.write(_map.generateReport(_time).getBytes());
 			}
-			for(Road r: _map.getRoads())
-				r.advance();
-			for(Junction j: _map.getJunctions())
-				j.advance();
-			_time++;
-			notifyAdvanced();
-			if(_outStream != null)
-				_outStream.write(_map.generateReport(_time).getBytes());
+		}
+		catch(SimulatorError e) {
+			notifyError(e);
+			throw e;
 		}
 	}
 
-	public void addEvent(Event e) throws SimulatorError{
+	public void addEvent(Event e) throws SimulatorError {
 		if(e != null) {
 			if(e.getScheduledTime() < _time) {
 				SimulatorError err = new OutOfTimeException("An event was tried to be introduced after its time of execution.");

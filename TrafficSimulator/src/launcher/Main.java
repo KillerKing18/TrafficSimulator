@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import org.apache.commons.cli.CommandLine;
@@ -174,7 +175,6 @@ public class Main {
 			}
 			assert (_timeLimit < 0);
 		} catch (Exception e) {
-			
 			throw new ParseException("Invalid value for time limit: " + t);
 		}
 	}
@@ -252,7 +252,6 @@ public class Main {
 				try {
 					new MainPanel(sim, _inFile, control, _timeLimit);
 				} catch (IOException e) {
-					
 					e.printStackTrace();
 				}
 			}
@@ -272,7 +271,6 @@ public class Main {
 				try {
 					new RacingPanel(sim, _inFile, control, _timeLimit);
 				} catch (IOException e) {
-					
 					e.printStackTrace();
 				}
 			}
@@ -283,8 +281,12 @@ public class Main {
 		parseArgs(args);
 		if (_mode == ExecutionMode.BATCH)
 			startBatchMode();
-		else if (_mode == ExecutionMode.GUI)
-			startGUIMode();
+		else if (_mode == ExecutionMode.GUI) {
+			if(JOptionPane.showConfirmDialog(null, "Do you want to play the racing mode?") == 0)
+				startRACINGMode();
+			else
+				startGUIMode();
+		}
 		else if (_mode == ExecutionMode.RACING)
 			startRACINGMode();
 		else

@@ -130,8 +130,7 @@ public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
 				try {
 					saveFile();
 				} catch (FileNotFoundException e2) {
-					
-					e2.printStackTrace();
+					JOptionPane.showMessageDialog(this, "File not found", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				break;
 			case "CHECK IN":
@@ -140,9 +139,7 @@ public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
 					_control.loadEvents();
 					_stateBarPanel.setMessage("Events loaded into the simulator!");
 				} catch (SimulatorError e1) {
-					
-					JOptionPane.showMessageDialog(this, "Error loading events", "Error", JOptionPane.ERROR_MESSAGE);
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(this, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				break;
 			case "CLEAR":
@@ -163,9 +160,7 @@ public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
 				_stateBarPanel.setMessage("File '" + _inFile.getName() + "' loaded");
 			}
 			catch (IOException e) {
-				
 				JOptionPane.showMessageDialog(this, "Problems loading file", "Error", JOptionPane.ERROR_MESSAGE);
-				e.printStackTrace();
 			}
 		}
 	}

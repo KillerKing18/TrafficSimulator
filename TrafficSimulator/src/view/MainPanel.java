@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import javax.swing.*;
-
 import model.TrafficSimulator;
 import control.Controller;
 
@@ -70,11 +69,7 @@ public class MainPanel extends JFrame implements ActionListener {
 			public void write(int b) throws IOException {
 			}
 		};
-		try{
-			initGUI();
-		} catch (IOException e) {
-			
-		}
+		initGUI();
 		this.setMinimumSize(new Dimension(1000, 1000));
 		this.setPreferredSize(new Dimension(1000, 1000));
 		this.setMaximumSize(new Dimension(1000, 1000));
@@ -242,8 +237,7 @@ public class MainPanel extends JFrame implements ActionListener {
 					_control.run(_toolBar.getTime());
 					_stateBar.setMessage(_toolBar.getTime() + " steps advanced!");
 				} catch (Exception e1) {
-					
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(this, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				break;
 			case "QUIT":

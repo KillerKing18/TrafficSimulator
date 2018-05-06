@@ -30,6 +30,7 @@ public class RoadMapGraph extends JPanel implements TrafficSimulatorObserver {
 	
 	protected GraphComponent _graph;
 	protected RoadMap _map;
+	
 	protected boolean all;
 	protected Junction filteredJunction;
 	protected JPopupMenu _graphPopupMenu;

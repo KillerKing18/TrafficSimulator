@@ -64,14 +64,13 @@ public class RacingGraphComponent extends GraphComponent implements Runnable {
 	@Override
 	public void run() {
 		while(true){
-				ciclo();
-	        	repaint();
-		        try {
-		        	Thread.sleep(DELAY);
-		        }catch(InterruptedException err){
-		        	
-		            System.out.println(err);
-		        }
+			ciclo();
+	    	repaint();
+	        try {
+	        	Thread.sleep(DELAY);
+	        }catch(InterruptedException err){
+	            System.out.println(err);
+	        }
 	    }
 	}
 	
@@ -79,7 +78,6 @@ public class RacingGraphComponent extends GraphComponent implements Runnable {
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
-			
 			e.printStackTrace();
 		}
 		 	for (String key : _x.keySet()) {

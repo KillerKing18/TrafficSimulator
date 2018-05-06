@@ -26,6 +26,7 @@ import model.Kart;
 import model.Observable;
 import model.RacingSimulator;
 import model.RacingSimulatorObserver;
+import model.SimulatorError;
 import model.TrafficSimulator;
 import model.Vehicle;
 import music.Music;
@@ -416,9 +417,13 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 				boolean begin = true;
 				if(_model.getTime() == 0) {
 					_circuitChooserPanel.setSelectedCup(((RacingToolBar) _toolBar).getLaps());
-					begin = _imagesPanel.checkIn(_circuitChooserPanel.getSelectedCupJunctions(), 
-							_circuitChooserPanel.getSelectedCupItinerary(), _characterChooserPanel.getSpeedMap(), 
-							_characterChooserPanel.getLuckMap(), _characterChooserPanel.getSelectedCharacters());
+					try {
+						begin = _imagesPanel.checkIn(_circuitChooserPanel.getSelectedCupJunctions(), 
+								_circuitChooserPanel.getSelectedCupItinerary(), _characterChooserPanel.getSpeedMap(), 
+								_characterChooserPanel.getLuckMap(), _characterChooserPanel.getSelectedCharacters());
+					} catch (SimulatorError e1) {
+						JOptionPane.showMessageDialog(this, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					}
 				}
 				if(begin) {
 					try {
@@ -430,7 +435,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 							((RacingToolBar) _toolBar).raceFinished();
 						}
 					} catch (Exception e1) {
-						e1.printStackTrace();
+						JOptionPane.showMessageDialog(this, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 				break;

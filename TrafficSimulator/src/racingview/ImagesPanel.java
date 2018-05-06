@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import model.NewJunctionEvent;
 import model.NewKartEvent;
 import model.NewRoadEvent;
+import model.SimulatorError;
 import model.TrafficSimulator;
 import music.Music;
 
@@ -46,7 +47,7 @@ public class ImagesPanel extends JPanel implements ActionListener {
 		return path;
 	}
 	
-	public boolean checkIn(String[] selectedCupJunctions, String[] selectedCupItinerary, Map<String, Integer> speedMap, Map<String, Integer> luckMap, List<String> IDs) {
+	public boolean checkIn(String[] selectedCupJunctions, String[] selectedCupItinerary, Map<String, Integer> speedMap, Map<String, Integer> luckMap, List<String> IDs) throws SimulatorError {
 		if(IDs.size() < 2) {
 			ImageIcon icon = new ImageIcon(getClass().getResource("/images/mariosad.png"));
 			Music music = new Music("src/music/mammamia.wav");
@@ -57,20 +58,15 @@ public class ImagesPanel extends JPanel implements ActionListener {
 			return false;
 		}
 		else {
-			try {
-				int nextJunction = 0;
-				for(int i = 0; i < selectedCupJunctions.length; i++)
-					_model.addEvent(new NewJunctionEvent(0, selectedCupJunctions[i]));
-				for(int i = 0; i < selectedCupJunctions.length; i++) {
-					nextJunction = i == selectedCupJunctions.length - 1 ? 0 : nextJunction + 1;
-					_model.addEvent(new NewRoadEvent(0, "r" + (i + 1), selectedCupJunctions[i], selectedCupJunctions[nextJunction], 200, 50));
-				}
-				for(String id : IDs)
-					_model.addEvent(new NewKartEvent(0, id, speedMap.get(id), selectedCupItinerary, luckMap.get(id)));
+			int nextJunction = 0;
+			for(int i = 0; i < selectedCupJunctions.length; i++)
+				_model.addEvent(new NewJunctionEvent(0, selectedCupJunctions[i]));
+			for(int i = 0; i < selectedCupJunctions.length; i++) {
+				nextJunction = i == selectedCupJunctions.length - 1 ? 0 : nextJunction + 1;
+				_model.addEvent(new NewRoadEvent(0, "r" + (i + 1), selectedCupJunctions[i], selectedCupJunctions[nextJunction], 200, 50));
 			}
-			catch (Exception exc) {
-				
-			}
+			for(String id : IDs)
+				_model.addEvent(new NewKartEvent(0, id, speedMap.get(id), selectedCupItinerary, luckMap.get(id)));
 			return true;
 		}
 	}

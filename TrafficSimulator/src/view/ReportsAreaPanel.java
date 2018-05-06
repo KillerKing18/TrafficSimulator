@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import model.Event;
@@ -86,9 +87,8 @@ public class ReportsAreaPanel extends TextAreaPanel implements TrafficSimulatorO
 			case "SAVE":
 				try {
 					saveFile();
-				} catch (FileNotFoundException e2) {
-					
-					e2.printStackTrace();
+				} catch (FileNotFoundException e1) {
+					JOptionPane.showMessageDialog(this, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				break;
 			default:
