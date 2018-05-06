@@ -87,6 +87,7 @@ public class ReportsAreaPanel extends TextAreaPanel implements TrafficSimulatorO
 				try {
 					saveFile();
 				} catch (FileNotFoundException e2) {
+					
 					e2.printStackTrace();
 				}
 				break;

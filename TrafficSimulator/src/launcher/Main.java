@@ -110,6 +110,7 @@ public class Main {
 			}
 
 		} catch (ParseException e) {
+			
 			// new Piece(...) might throw GameError exception
 			System.err.println(e.getLocalizedMessage());
 			System.exit(1);
@@ -173,6 +174,7 @@ public class Main {
 			}
 			assert (_timeLimit < 0);
 		} catch (Exception e) {
+			
 			throw new ParseException("Invalid value for time limit: " + t);
 		}
 	}
@@ -250,6 +252,7 @@ public class Main {
 				try {
 					new MainPanel(sim, _inFile, control, _timeLimit);
 				} catch (IOException e) {
+					
 					e.printStackTrace();
 				}
 			}
@@ -269,6 +272,7 @@ public class Main {
 				try {
 					new RacingPanel(sim, _inFile, control, _timeLimit);
 				} catch (IOException e) {
+					
 					e.printStackTrace();
 				}
 			}

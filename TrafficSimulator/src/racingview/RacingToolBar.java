@@ -31,22 +31,27 @@ public class RacingToolBar extends ToolBar {
 	protected JLabel lapsLabel;
 	protected JSpinner lapsSpinner;
 	
-	private static String[] _songs = {"BowserCastleMarioKart",
-			"Kirby",
-			"MooMooFarmMarioKart",
-			"MountWarioMarioKart",
-			"SuperMarioWorldAthletic",
-			"SweetSweetCanyonMarioKart",
-			"ToadHarborMarioKart",
-			"WarioGoldMineMarioKart",
-			"YoshiCircuitMarioKart"};
+	private String[] _songs;
 
 	public RacingToolBar(MainPanel mainPanel, ActionListener imagesPanel, ReportsAreaPanel reportsArea, int steps) {
 		super(mainPanel, imagesPanel, reportsArea, steps);
 	}
 	
+	public void raceFinished() {
+		runButton.setEnabled(false);
+		stepsSpinner.setEnabled(false);
+		itemBoxButton.setEnabled(false);
+	}
+	
+	public void reset() {
+		runButton.setEnabled(true);
+		stepsSpinner.setEnabled(true);
+	}
+	
 	@Override
 	protected void initGUI() {
+		_songs = ((RacingPanel)_mainPanel).getSelectedSongs();
+		
 		// Simulator
 		runButton = new JButton();
 		createGenericButton(runButton, "RUN", _mainPanel, "/icons/play.png", "Run");
@@ -83,7 +88,7 @@ public class RacingToolBar extends ToolBar {
 		
 		playList = new JComboBox<String>(_songs);
 		playList.setToolTipText("Select a song");
-		playList.setSelectedIndex(2);
+		playList.setSelectedIndex(0);
 		playList.setActionCommand("PLAYLIST");
 		playList.addActionListener(_mainPanel);
 		playList.setMinimumSize(new Dimension(170, 50));

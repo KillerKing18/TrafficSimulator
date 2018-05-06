@@ -73,6 +73,7 @@ public class MainPanel extends JFrame implements ActionListener {
 		try{
 			initGUI();
 		} catch (IOException e) {
+			
 		}
 		this.setMinimumSize(new Dimension(1000, 1000));
 		this.setPreferredSize(new Dimension(1000, 1000));
@@ -241,6 +242,7 @@ public class MainPanel extends JFrame implements ActionListener {
 					_control.run(_toolBar.getTime());
 					_stateBar.setMessage(_toolBar.getTime() + " steps advanced!");
 				} catch (Exception e1) {
+					
 					e1.printStackTrace();
 				}
 				break;

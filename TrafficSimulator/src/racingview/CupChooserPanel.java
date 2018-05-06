@@ -20,37 +20,23 @@ public class CupChooserPanel extends ChooserPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static String[][] _junctions = {{"Mario Kart Stadium", "Water Park", "Sweet Sweet Canyon", "Thwomp Ruins"}, // Mushroom cup
-			{"Mario Circuit", "Toad Harbor", "Twisted Mansion", "Shy Guy Falls"}, // Flower cup
-			{"Sunshine Airport", "Dolphin Shoals", "Electrodrome", "Mount Wario"}, // Star cup
-			{"Cloudtop Cruise", "Bone-Dry Dunes", "Bowser's Castle", "Rainbow Road"}, // Special cup
-			{"Moo Moo Meadows", "Mario Circuit", "Cheep Cheep Beach", "Toad's Turnpike"}, // Shell cup
-			{"Dry Dry Desert", "Donut Plains 3", "Royal Raceway", "DK Jungle"}, // Banana cup
-			{"Wario Stadium", "Sherbet Land", "Music Park", "Yoshi Valley"}, // Leaf cup
-			{"Tick-Tock Clock", "Piranha Plant Slide", "Grumble Volcano", "Rainbow Road"}}; // Lightning cup
-	
 	private Map<String, String[]> _cupsMap;
-	
-	private String[] _cups;
-	
 	private String _selectedCup;
-	
 	private String[] _selectedCupItinerary;
 
-	public CupChooserPanel(String[] items, RacingPanel racingPanel, ImagesPanel imagesPanel) {
+	public CupChooserPanel(String[] items, RacingPanel racingPanel, ImagesPanel imagesPanel, String[][] junctions) {
 		super(items, racingPanel, imagesPanel);
-		_cups = items;
 		_selectedCupItinerary = new String[0];
-		_selectedCup = "Mushroom";
+		_selectedCup = _items[0];
 		_cupsMap = new HashMap<String, String[]>();
-		_cupsMap.put(_cups[0], _junctions[0]);
-		_cupsMap.put(_cups[1], _junctions[1]);
-		_cupsMap.put(_cups[2], _junctions[2]);
-		_cupsMap.put(_cups[3], _junctions[3]);
-		_cupsMap.put(_cups[4], _junctions[4]);
-		_cupsMap.put(_cups[5], _junctions[5]);
-		_cupsMap.put(_cups[6], _junctions[6]);
-		_cupsMap.put(_cups[7], _junctions[7]);
+		_cupsMap.put(_items[0], junctions[0]);
+		_cupsMap.put(_items[1], junctions[1]);
+		_cupsMap.put(_items[2], junctions[2]);
+		_cupsMap.put(_items[3], junctions[3]);
+		_cupsMap.put(_items[4], junctions[4]);
+		_cupsMap.put(_items[5], junctions[5]);
+		_cupsMap.put(_items[6], junctions[6]);
+		_cupsMap.put(_items[7], junctions[7]);
 	}
 	
 	public Map<String, String[]> getCupsMap(){

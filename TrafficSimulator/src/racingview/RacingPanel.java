@@ -2,7 +2,9 @@ package racingview;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +13,7 @@ import java.util.Random;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -35,26 +38,59 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static String[] mario_songs = {"BowserCastleMarioKart.wav",
-			"Kirby.wav",
-			"MooMooFarmMarioKart.wav",
-			"MountWarioMarioKart.wav",
-			"SuperMarioWorldAthletic.wav",
-			"SweetSweetCanyonMarioKart.wav",
-			"ToadHarborMarioKart.wav",
-			"WarioGoldMineMarioKart.wav",
-			"YoshiCircuitMarioKart.wav"};
+	public enum Universe{
+		STARWARS("starwars"), MARIOKART("mariokart");
+		
+		String str;
+		
+		private Universe(String str) {
+			this.str = str;
+		}
+		
+		public String toString() {
+			return str;
+		}
+		
+	}
 	
-	private static String[] mario_characters = {"mario",
-			"bowser",
-			"donkey",
-			"luigi",
-			"peach",
-			"koopa",
-			"yoshi",
-			"toad"};
+	private static Universe universe = Universe.MARIOKART;
 	
-	private static String[] mario_circuits = {"Mushroom",
+	private static final Integer[] starwars_speeds = {35, 25, 50, 45, 35, 20, 10, 15};
+	private static final Integer[] starwars_lucks = {80, 50, 50, 20, 60, 80, 100, 35};
+	private static final String[] starwars_ids = {"yoda", "vader", "solo", "boba", "luke", "leia", "r2d2", "chewbacca"};
+	private static final String[] starwars_songs = {"Cantina",
+			"ThroneRoom",
+			"ImperialMarch"};
+	private static final String[][] starwars_junctions = {{"Coruscant", "Hoth", "Kamino", "Mustafar"}, // Mushroom cup
+			{"Naboo", "Tatooine", "Yavin", "Endor"}, // Flower cup
+			{"Death Star", "Starkiller", "Cantina", "Jabba's Palace"}, // Star cup
+			{"Galactic Senate", "Emperor's Lair", "Alderaan", "Bespin"}, // Special cup
+			{"Corellia", "Crait", "Jakku", "Geonosis"}, // Shell cup
+			{"Polis Massa", "Dagobah", "Ahch-To", "Kashyyyk"}, // Banana cup
+			{"Canto Bight", "Scarif", "Yavin 4", "Takodana"}, // Leaf cup
+			{"Lah'mu", "Utapau", "Felucia", "Cato Neimoidia"}}; // Lightning cup
+	private static final Integer[] mario_speeds = {35, 35, 10, 40, 15, 25, 40, 30};
+	private static final Integer[] mario_lucks = {75, 70, 90, 50, 40, 90, 30, 60};
+	private static final String[] mario_ids = {"mario", "luigi", "bowser", "peach", "donkey", "toad", "yoshi", "koopa"};
+	private static final String[][] mario_junctions = {{"Mario Kart Stadium", "Water Park", "Sweet Sweet Canyon", "Thwomp Ruins"}, // Mushroom cup
+			{"Mario Circuit", "Toad Harbor", "Twisted Mansion", "Shy Guy Falls"}, // Flower cup
+			{"Sunshine Airport", "Dolphin Shoals", "Electrodrome", "Mount Wario"}, // Star cup
+			{"Cloudtop Cruise", "Bone-Dry Dunes", "Bowser's Castle", "Rainbow Road"}, // Special cup
+			{"Moo Moo Meadows", "Mario Circuit", "Cheep Cheep Beach", "Toad's Turnpike"}, // Shell cup
+			{"Dry Dry Desert", "Donut Plains 3", "Royal Raceway", "DK Jungle"}, // Banana cup
+			{"Wario Stadium", "Sherbet Land", "Music Park", "Yoshi Valley"}, // Leaf cup
+			{"Tick-Tock Clock", "Piranha Plant Slide", "Grumble Volcano", "Rainbow Road"}}; // Lightning cup
+	private static final String[] mario_songs = {"MooMooFarm",
+			"Kirby",
+			"BowserCastle",
+			"MountWario",
+			"SuperMarioWorldAthletic",
+			"SweetSweetCanyon",
+			"ToadHarbor",
+			"WarioGoldMine",
+			"YoshiCircuit"};
+	
+	private static String[] circuits = {"Mushroom",
 			"Flower",
 			"Star",
 			"Special",
@@ -62,6 +98,12 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 			"Banana",
 			"Leaf",
 			"Lightning"};
+	
+	private String[] ids;
+	private Integer[] speeds;
+	private Integer[] lucks;
+	private String[] songs;
+	private String[][] junctions;
 	
 	private List<RacingSimulatorObserver> _observers;
 	
@@ -85,8 +127,83 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 		this.setResizable(false);
 	}
 	
+	public String[] getSelectedSongs() {
+		return songs;
+	}
+	
+	@SuppressWarnings("static-access")
+	private void selectUniverse() {
+		_music = new Music("src/music/start_simulator.wav");
+		_music.play();
+		
+		JOptionPane option = new JOptionPane();
+		
+		JPanel select = new JPanel();
+		
+		JButton buttonMK = new JButton();
+		createSelectUniverseButton(buttonMK, "mariokart", Universe.MARIOKART, "Mario Kart");
+	
+		JButton buttonSW = new JButton();
+		createSelectUniverseButton(buttonSW, "starwars", Universe.STARWARS, "Star Wars");
+		buttonSW.setToolTipText("Star Wars");
+		
+		select.setLayout(new GridLayout(2, 2));
+		ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/welcome.gif"));
+		icon.setImage(icon.getImage().getScaledInstance(300, 150, 1));
+		JLabel hello = new JLabel("Select the universe you want to race in...");
+		hello.setHorizontalAlignment(JLabel.CENTER);
+		select.add(new JLabel(icon));
+		select.add(hello);
+		select.add(buttonMK);
+		select.add(buttonSW);
+		select.setVisible(true);
+		select.setMinimumSize(new Dimension(600, 300));
+		select.setPreferredSize(new Dimension(600, 300));
+		select.setMaximumSize(new Dimension(600, 300));
+		
+		option.showMessageDialog(this, select, "Welcome!", JOptionPane.NO_OPTION);
+		_music.stop();
+		_music = null;
+	}
+	
+	private void createSelectUniverseButton(JButton button, String path, Universe universe, String toolTip) {
+		ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/" + path + ".png"));
+		icon.setImage(icon.getImage().getScaledInstance(300, 150, 1));
+		button.setIcon(icon);
+		button.setToolTipText(toolTip);
+		button.setPreferredSize(new Dimension(300, 150));
+		button.setMaximumSize(new Dimension(300, 150));
+		button.setMinimumSize(new Dimension(300, 150));
+		button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				RacingPanel.universe = universe;
+			}
+		});
+	}
+	
 	@Override
 	protected void initGUI() throws IOException {
+		selectUniverse();
+		switch(universe) {
+		case STARWARS:
+			ids = starwars_ids;
+			speeds = starwars_speeds;
+			lucks = starwars_lucks;
+			songs = starwars_songs;
+			junctions = starwars_junctions;
+			break;
+		case MARIOKART:
+			ids = mario_ids;
+			speeds = mario_speeds;
+			lucks = mario_lucks;
+			songs = mario_songs;
+			junctions = mario_junctions;
+			break;
+		default:
+			break;
+		}
+		_music = new Music("src/music/" + songs[0] + ".wav");
 		_observers = new ArrayList<>();
 		
 		this.setTitle("Racing Simulator");
@@ -96,15 +213,6 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 		
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/welcome.gif"));
-		
-		//Music
-		_music = new Music("src/music/start_simulator.wav");
-		_music.play();
-		JOptionPane.showMessageDialog(this, "Welcome to the simulator!\nWe hope you have much fun!", "Welcome", JOptionPane.INFORMATION_MESSAGE, icon);
-		_music.stop();
-		_music = null;
-		_music = new Music("src/music/" + mario_songs[2]);
 	}
 
 	@Override
@@ -142,29 +250,29 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 		_topPanel.add(_circuitChooserPanel);	
 	}
 	
-	protected void createCharacterChooserPanel() {
-		_characterChooserPanel = new CharacterChooserPanel(mario_characters, this, _imagesPanel);
+	private void createCharacterChooserPanel() {
+		_characterChooserPanel = new CharacterChooserPanel(ids, this, _imagesPanel, speeds, lucks);
 		_characterChooserPanel.setMinimumSize(new Dimension(300, 150));
 		_characterChooserPanel.setPreferredSize(new Dimension(300, 150));
 		_characterChooserPanel.setMaximumSize(new Dimension(300, 150));
 	}
 	
-	protected void createImagesPanel() {
-		_imagesPanel = new ImagesPanel("/images/mariokart.png", _model);
+	private void createImagesPanel() {
+		_imagesPanel = new ImagesPanel("/images/" + universe.toString() + ".png", _model);
 		_imagesPanel.setLayout(new BoxLayout(_imagesPanel, BoxLayout.X_AXIS));
 		_imagesPanel.setMinimumSize(new Dimension(400, 150));
 		_imagesPanel.setPreferredSize(new Dimension(400, 150));
 		_imagesPanel.setMaximumSize(new Dimension(400, 150));
 	}
 	
-	protected void createClassificationTable() {
+	private void createClassificationTable() {
 		_classificationTable = new ClassificationTable();
 		_model.addObserver(_classificationTable);
 		_classificationTable.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Clasification: "));
 	}
 	
-	protected void createCircuitChooserPanel() {
-		_circuitChooserPanel = new CupChooserPanel(mario_circuits, this, _imagesPanel);
+	private void createCircuitChooserPanel() {
+		_circuitChooserPanel = new CupChooserPanel(circuits, this, _imagesPanel, junctions);
 		_circuitChooserPanel.setMinimumSize(new Dimension(300, 150));
 		_circuitChooserPanel.setPreferredSize(new Dimension(300, 150));
 		_circuitChooserPanel.setMaximumSize(new Dimension(300, 150));
@@ -185,7 +293,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 		_downLeftPanel.add(_selectedCupPanel);
 	}
 	
-	protected void createSelectedCupPanel(){
+	private void createSelectedCupPanel(){
 		_selectedCupPanel = new JPanel();
 		_selectedCupPanel.setMinimumSize(new Dimension(420, 380));
 		_selectedCupPanel.setPreferredSize(new Dimension(420, 380));
@@ -199,14 +307,14 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 		_selectedCupPanel.add(_selectedCupTable);
 	}
 	
-	protected void createSelectedCupImage() {
+	private void createSelectedCupImage() {
 		_selectedCupImage = new JPanel();
 		ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/" + _circuitChooserPanel.getSelectedCup() + "trophy" + ".jpg"));
 		icon.setImage(icon.getImage().getScaledInstance(390, 230, 1));
 		_selectedCupImage.add(new JLabel(icon));
 	}
 	
-	protected void createSelectedCharactersTable() {
+	private void createSelectedCharactersTable() {
 		_selectedCharactersTable = new SelectedCharactersTable();
 		addObserver(_selectedCharactersTable);
 		_selectedCharactersTable.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Pilots"));
@@ -215,7 +323,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 		_selectedCharactersTable.setMaximumSize(new Dimension(420, 385));
 	}
 	
-	protected void createSelectedCupTable() {
+	private void createSelectedCupTable() {
 		_selectedCupTable = new SelectedCupTable();
 		addObserver(_selectedCupTable);
 		_selectedCupTable.setMinimumSize(new Dimension(410, 100));
@@ -233,6 +341,44 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 	protected void createRoadMapGraph() {
 		_roadmapGraph = new RacingRoadMapGraph();
 		_model.addObserver(_roadmapGraph);
+	}
+	
+	private void raceFinished() {
+		if(playingMusic)
+			_music.stop();
+		Music temp = _music;
+		_music = new Music("src/music/CourseClear.wav");
+		_music.play();
+		ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/finish.gif"));
+		JOptionPane.showMessageDialog(this, "The race has finished!", "CONGRATULATIONS", JOptionPane.INFORMATION_MESSAGE, icon);
+		_music.stop();
+		_music = null;
+		_music = temp;
+		if(playingMusic)
+			_music.loop();
+	}
+	
+	private void raceStarted() {
+		((RacingToolBar) _toolBar).setItemBoxEnabled(true);
+		((RacingToolBar) _toolBar).setLapsSpinnerEnabled(false);
+		_downLeftPanel.removeAll();
+		createClassificationTable();
+		_downLeftPanel.add(_classificationTable);
+		_downLeftPanel.repaint();
+		_downLeftPanel.updateUI();
+		
+		if(playingMusic)
+			_music.stop();
+		Music temp = _music;
+		_music = new Music("src/music/start_race.wav");
+		_music.play();
+		ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/lakitu.gif"));
+		JOptionPane.showMessageDialog(this, "READY\n\nSET\n\nGO!", "The race is starting!", JOptionPane.INFORMATION_MESSAGE, icon);
+		_music.stop();
+		_music = null;
+		_music = temp;
+		if(playingMusic)
+			_music.loop();
 	}
 	
 	@Override
@@ -253,6 +399,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 				((RacingToolBar) _toolBar).setLapsSpinnerEnabled(true);
 				((RacingToolBar) _toolBar).setItemBoxEnabled(false);
 				((RacingToolBar) _toolBar).setItemBoxActivated(true);
+				((RacingToolBar) _toolBar).reset();
 				notifyReset();
 				_control.reset();
 				_characterChooserPanel.reset();
@@ -274,44 +421,14 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 							_characterChooserPanel.getLuckMap(), _characterChooserPanel.getSelectedCharacters());
 				}
 				if(begin) {
-					((RacingToolBar) _toolBar).setItemBoxEnabled(true);
-					((RacingToolBar) _toolBar).setLapsSpinnerEnabled(false);
-					_downLeftPanel.removeAll();
-					createClassificationTable();
-					_downLeftPanel.add(_classificationTable);
-					_downLeftPanel.repaint();
-					_downLeftPanel.updateUI();
 					try {
-						if(_model.getTime() == 0) {
-							if(playingMusic)
-								_music.stop();
-							Music temp = _music;
-							_music = new Music("src/music/start_race.wav");
-							_music.play();
-							ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/lakitu.gif"));
-							JOptionPane.showMessageDialog(this, "READY\n\nSET\n\nGO!", "The race is starting!", JOptionPane.INFORMATION_MESSAGE, icon);
-							_music.stop();
-							_music = null;
-							_music = temp;
-							if(playingMusic)
-								_music.loop();
-						}
+						if(_model.getTime() == 0)
+							raceStarted();
 						_control.run(_toolBar.getTime());
 						if(_model.getTotalVehicles() == ((RacingSimulator)_model).getArrivedVehicles()) {
-							if(playingMusic)
-								_music.stop();
-							Music temp = _music;
-							_music = new Music("src/music/CourseClear.wav");
-							_music.play();
-							ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/finish.gif"));
-							JOptionPane.showMessageDialog(this, "The race has finished!", "CONGRATULATIONS", JOptionPane.INFORMATION_MESSAGE, icon);
-							_music.stop();
-							_music = null;
-							_music = temp;
-							if(playingMusic)
-								_music.loop();
+							raceFinished();
+							((RacingToolBar) _toolBar).raceFinished();
 						}
-						
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
@@ -331,9 +448,9 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 			case "RANDOM":
 				_music.stop();
 				Random rnd = new Random();
-				int selected = rnd.nextInt(mario_songs.length);
+				int selected = rnd.nextInt(songs.length);
 				_music = null;
-				_music = new Music("src/music/" + mario_songs[selected]);
+				_music = new Music("src/music/" + songs[selected] + ".wav");
 				((RacingToolBar)_toolBar).getComboBox().setSelectedIndex(selected);
 				_music.loop();
 				playingMusic = true;

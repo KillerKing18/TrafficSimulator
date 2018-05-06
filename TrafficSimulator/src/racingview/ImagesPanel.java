@@ -69,6 +69,7 @@ public class ImagesPanel extends JPanel implements ActionListener {
 					_model.addEvent(new NewKartEvent(0, id, speedMap.get(id), selectedCupItinerary, luckMap.get(id)));
 			}
 			catch (Exception exc) {
+				
 			}
 			return true;
 		}

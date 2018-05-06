@@ -87,6 +87,7 @@ public class Controller {
 					throw new SimulatorError("Unknown event: " + sec.getTag());
 			}
 			catch(SimulatorError e) {
+				
 				System.err.println(e.getMessage());
 			}
 		}

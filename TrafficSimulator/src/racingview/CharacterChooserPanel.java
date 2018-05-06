@@ -16,6 +16,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import music.Music;
+
 public class CharacterChooserPanel extends ChooserPanel {
 
 	/**
@@ -23,35 +25,32 @@ public class CharacterChooserPanel extends ChooserPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static final Integer[] speeds = {35, 35, 10, 40, 15, 25, 40, 30};
-	private static final Integer[] luck = {75, 70, 90, 50, 40, 90, 30, 60};
-	private static final String[] id = {"mario", "luigi", "bowser", "peach", "donkey", "toad", "yoshi", "koopa"};
-	
 	private Map<String, Integer> _speedMap;
 	private Map<String, Integer> _luckMap;
 	private ArrayList<String> _idsList;
 
-	public CharacterChooserPanel(String[] items, RacingPanel racingPanel, ImagesPanel imagesPanel) {
+	public CharacterChooserPanel(String[] items, RacingPanel racingPanel, ImagesPanel imagesPanel, Integer[] speeds, Integer[] luck) {
 		super(items, racingPanel, imagesPanel);
 		_speedMap = new HashMap<String, Integer>();
 		_luckMap = new HashMap<String, Integer>();
 		_idsList = new ArrayList<String>();
-		_idsList.add("mario");
 		
-		for(int i = 0; i < id.length; i++) {
-			_speedMap.put(id[i], speeds[i]);
-			_luckMap.put(id[i], luck[i]);
+		for(int i = 0; i < _items.length; i++) {
+			_speedMap.put(_items[i], speeds[i]);
+			_luckMap.put(_items[i], luck[i]);
 		}
 	}
 	
 	public void reset() {
 		_idsList = new ArrayList<String>();
-		_idsList.add("mario");
 	}
 	
 	private void addKart(String id) {
-		if(!_idsList.contains(id))
+		if(!_idsList.contains(id)) {
 			_idsList.add(id);
+			Music music = new Music("src/music/" + id +  "_voice.wav");
+			music.play();
+		}
 		else
 			_idsList.remove(id);
 	}
