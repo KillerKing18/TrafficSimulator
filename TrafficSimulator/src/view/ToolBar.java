@@ -29,7 +29,10 @@ public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 	protected JButton clearEventsButton;
 	protected JButton checkInEventsButton;
 	protected JButton runButton;
+	protected JButton pauseButton;
 	protected JButton resetButton;
+	protected JLabel delayLabel;
+	protected JSpinner delaySpinner;
 	protected JLabel stepsLabel;
 	protected JSpinner stepsSpinner;
 	protected JLabel timeLabel;
@@ -53,6 +56,21 @@ public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 		_steps = steps;
 		initGUI();
 	}
+	
+	public void able(boolean b) {
+		loadEventsButton.setEnabled(b);
+		saveEventsButton.setEnabled(b);
+		clearEventsButton.setEnabled(b);
+		checkInEventsButton.setEnabled(b);
+		runButton.setEnabled(b);
+		resetButton.setEnabled(b);
+		delaySpinner.setEnabled(b);
+		stepsSpinner.setEnabled(b);
+		generateReportsButton.setEnabled(b);
+		clearReportsAreaButton.setEnabled(b);
+		saveReportsButton.setEnabled(b);
+		quitButton.setEnabled(b);
+	}
 
 	protected void initGUI() {
 		// Events
@@ -71,9 +89,19 @@ public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 		// Simulator
 		runButton = new JButton();
 		createGenericButton(runButton, "RUN", _mainPanel, "/icons/play.png", "Run");
+		
+		pauseButton = new JButton();
+		createGenericButton(pauseButton, "PAUSE", _mainPanel, "/icons/pause.png", "Pause");
 			
 		resetButton = new JButton();
 		createGenericButton(resetButton, "RESET", _mainPanel, "/icons/reset.png", "Reset");
+		
+		delayLabel = new JLabel("Delay: ");
+		
+		delaySpinner = new JSpinner(new SpinnerNumberModel(0, 0, null, 1));
+		delaySpinner.setMinimumSize(new Dimension(50, 50));
+		delaySpinner.setPreferredSize(new Dimension(50, 50));
+		delaySpinner.setMaximumSize(new Dimension(50, 50));
 			
 		stepsLabel = new JLabel("Steps: ");
 		
@@ -107,7 +135,7 @@ public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 		quitButton = new JButton();
 		createGenericButton(quitButton, "QUIT", _mainPanel, "/icons/exit.png", "Exit");
 		
-		authors = new JLabel("Developed by Álvaro López & Carlos Bilbao");
+		authors = new JLabel("Álvaro & Carlos ");
 		
 		addComponents();
 		
@@ -123,9 +151,15 @@ public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 		this.addSeparator();
 		this.add(checkInEventsButton);
 		this.add(runButton);
+		this.add(pauseButton);
 		this.add(resetButton);
+		this.addSeparator();
+		this.add(delayLabel);
+		this.add(delaySpinner);
+		this.addSeparator();
 		this.add(stepsLabel);
 		this.add(stepsSpinner);
+		this.addSeparator();
 		this.add(timeLabel);
 		this.add(timeTextField);
 		this.addSeparator();
@@ -134,7 +168,6 @@ public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 		this.add(saveReportsButton);
 		this.addSeparator();
 		this.add(quitButton);
-		this.addSeparator();
 		this.addSeparator();
 		this.addSeparator();
 		this.addSeparator();
@@ -152,6 +185,10 @@ public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 	
 	public int getTime(){
 		return (Integer)stepsSpinner.getValue();
+	}
+	
+	public int getDelay(){
+		return (Integer)delaySpinner.getValue();
 	}
 
 	@Override

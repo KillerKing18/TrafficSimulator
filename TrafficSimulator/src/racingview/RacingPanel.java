@@ -31,6 +31,7 @@ import model.TrafficSimulator;
 import model.Vehicle;
 import music.Music;
 import view.MainPanel;
+import view.RunThread;
 
 public class RacingPanel extends MainPanel implements Observable<RacingSimulatorObserver>{
 
@@ -428,8 +429,12 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 				if(begin) {
 					try {
 						if(_model.getTime() == 0)
-							raceStarted();
-						_control.run(_toolBar.getTime());
+							raceStarted();					
+						if(thread == null) {
+							thread = new RunThread(_control, _toolBar);
+							thread.start();
+							thread = null;
+						}
 						if(_model.getTotalVehicles() == ((RacingSimulator)_model).getArrivedVehicles()) {
 							raceFinished();
 							((RacingToolBar) _toolBar).raceFinished();

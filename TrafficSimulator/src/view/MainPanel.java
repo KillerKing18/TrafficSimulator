@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import javax.swing.*;
+
 import model.TrafficSimulator;
 import control.Controller;
 
@@ -18,6 +19,8 @@ public class MainPanel extends JFrame implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	protected RunThread thread;
 	
 	protected TrafficSimulator _model;
 	protected Controller _control;
@@ -55,6 +58,7 @@ public class MainPanel extends JFrame implements ActionListener {
 	
 	public MainPanel(TrafficSimulator model, String inFile, Controller control, int steps) throws IOException {
 		super("Traffic Simulator");
+		thread = null;
 		_steps = steps;
 		_control = control;
 		_model = model;
@@ -227,17 +231,25 @@ public class MainPanel extends JFrame implements ActionListener {
 		switch (str){
 			case "RESET":
 				_control.reset();
-				_eventsEditor.clear();
-				_eventsEditor.setBorder(BorderFactory.createTitledBorder
-						(BorderFactory.createLineBorder(Color.BLACK), "Events: "));
 				_reportsArea.clear();
 				break;
 			case "RUN":
 				try {
-					_control.run(_toolBar.getTime());
+					if(thread == null) {
+						thread = new RunThread(_control, _toolBar);
+						thread.start();
+						//thread.join();
+						//thread = null;
+					}
 					_stateBar.setMessage(_toolBar.getTime() + " steps advanced!");
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(this, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				break;
+			case "PAUSE":
+				if(thread != null) {
+					thread.interrupt();
+					thread = null;
 				}
 				break;
 			case "QUIT":

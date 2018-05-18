@@ -48,6 +48,19 @@ public class RacingToolBar extends ToolBar {
 		stepsSpinner.setEnabled(true);
 	}
 	
+	public void able(boolean b) {
+		playMusicButton.setEnabled(b);
+		stopMusicButton.setEnabled(b);
+		randomMusicButton.setEnabled(b);
+		itemBoxButton.setEnabled(b);
+		runButton.setEnabled(b);
+		resetButton.setEnabled(b);
+		stepsSpinner.setEnabled(b);
+		lapsSpinner.setEnabled(b);
+		playList.setEnabled(b);
+		quitButton.setEnabled(b);
+	}
+	
 	@Override
 	protected void initGUI() {
 		_songs = ((RacingPanel)_mainPanel).getSelectedSongs();
@@ -101,6 +114,14 @@ public class RacingToolBar extends ToolBar {
 		itemBoxButton.setEnabled(false);
 		itemBoxActivated = true;
 		
+		// Delay		
+		delayLabel = new JLabel("Delay: ");
+		
+		delaySpinner = new JSpinner(new SpinnerNumberModel(0, 0, null, 1));
+		delaySpinner.setMinimumSize(new Dimension(50, 50));
+		delaySpinner.setPreferredSize(new Dimension(50, 50));
+		delaySpinner.setMaximumSize(new Dimension(50, 50));
+		
 		//Laps
 		lapsLabel = new JLabel("Laps: ");
 		
@@ -112,8 +133,6 @@ public class RacingToolBar extends ToolBar {
 		// Exit
 		quitButton = new JButton();
 		createGenericButton(quitButton, "QUIT", _mainPanel, "/icons/exit.png", "Exit");
-		
-		authors = new JLabel("Álvaro López García");
 		
 		addComponents();
 		
@@ -130,8 +149,11 @@ public class RacingToolBar extends ToolBar {
 	protected void addComponents() {
 		this.add(runButton);
 		this.add(resetButton);
-		this.add(stepsLabel);
 		this.addSeparator();
+		this.add(delayLabel);
+		this.add(delaySpinner);
+		this.addSeparator();
+		this.add(stepsLabel);
 		this.add(stepsSpinner);
 		this.add(timeLabel);
 		this.add(timeTextField);
@@ -146,8 +168,6 @@ public class RacingToolBar extends ToolBar {
 		this.addSeparator();
 		this.add(lapsLabel);
 		this.add(lapsSpinner);
-		this.addSeparator();
-		this.add(authors);
 		this.addSeparator();
 		this.add(quitButton);
 	}
