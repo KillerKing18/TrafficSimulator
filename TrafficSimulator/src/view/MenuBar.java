@@ -22,6 +22,10 @@ public class MenuBar extends JMenuBar {
 	private EventsEditorPanel _eventsEditorPanel;
 	private ReportsAreaPanel _reportsAreaPanel;
 	
+	private JMenu file;
+	private JMenu reports;
+	private JMenu simulator;
+	
 	public MenuBar(MainPanel mainPanel, EventsEditorPanel eventsEditorPanel, ReportsAreaPanel reportsAreaPanel, ToolBar toolBar, Controller control){
 		super();
 		_mainPanel = mainPanel;
@@ -36,8 +40,14 @@ public class MenuBar extends JMenuBar {
 		this.add(createReportsMenu());
 	}
 	
+	public void able(boolean b) {
+		file.setEnabled(b);
+		reports.setEnabled(b);
+		simulator.setEnabled(b);
+	}
+	
 	public JMenu createFileMenu() {
-		JMenu file = new JMenu("File");
+		file = new JMenu("File");
 		file.setMnemonic(KeyEvent.VK_F);
 
 		file.add(createJMenuItem("Load Events", "LOAD", _eventsEditorPanel, KeyEvent.VK_L));
@@ -61,7 +71,7 @@ public class MenuBar extends JMenuBar {
 	}
 	
 	private JMenu createReportsMenu() {
-		JMenu reports = new JMenu("Reports");
+		reports = new JMenu("Reports");
 		reports.setMnemonic(KeyEvent.VK_R);
 		
 		reports.add(createJMenuItem("Generate", "GENERATE", _reportsAreaPanel));
@@ -78,7 +88,7 @@ public class MenuBar extends JMenuBar {
 	}
 
 	public JMenu createSimulatorMenu() {
-		JMenu simulator = new JMenu("Simulator");
+		simulator = new JMenu("Simulator");
 		simulator.setMnemonic(KeyEvent.VK_S);
 		
 		simulator.add(createJMenuItem("Run", "RUN", _mainPanel));

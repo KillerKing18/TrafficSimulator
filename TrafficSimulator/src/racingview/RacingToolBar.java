@@ -68,6 +68,9 @@ public class RacingToolBar extends ToolBar {
 		// Simulator
 		runButton = new JButton();
 		createGenericButton(runButton, "RUN", _mainPanel, "/icons/play.png", "Run");
+		
+		pauseButton = new JButton();
+		createGenericButton(pauseButton, "PAUSE", _mainPanel, "/icons/pause.png", "Pause");
 			
 		resetButton = new JButton();
 		createGenericButton(resetButton, "RESET", _mainPanel, "/icons/reset.png", "Reset");
@@ -148,11 +151,10 @@ public class RacingToolBar extends ToolBar {
 	@Override
 	protected void addComponents() {
 		this.add(runButton);
+		this.add(pauseButton);
 		this.add(resetButton);
-		this.addSeparator();
 		this.add(delayLabel);
 		this.add(delaySpinner);
-		this.addSeparator();
 		this.add(stepsLabel);
 		this.add(stepsSpinner);
 		this.add(timeLabel);

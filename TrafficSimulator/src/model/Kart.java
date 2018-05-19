@@ -34,6 +34,7 @@ public class Kart extends Vehicle {
 
 	void advance() throws UnexistingObjectException {
 		if(_itinerary.get(_itineraryIndex) == _itinerary.get(0) && !_atJunction && _itineraryIndex != 0 && _newLap) {
+			_newLap = false;
 			_lap++;
 			if(_racePosition == 1) {
 				ImageIcon flagicon = new ImageIcon(this.getClass().getResource("/images/newlap.png"));
@@ -44,7 +45,6 @@ public class Kart extends Vehicle {
 				music.stop();
 				music = null;
 			}
-			_newLap = false;
 			if(_itembox) {
 				if (_random.nextInt(101) < _luck) {
 					_currentSpeed = _currentSpeed * 2;

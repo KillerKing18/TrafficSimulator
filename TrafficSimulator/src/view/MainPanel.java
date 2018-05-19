@@ -235,11 +235,9 @@ public class MainPanel extends JFrame implements ActionListener {
 				break;
 			case "RUN":
 				try {
-					if(thread == null) {
-						thread = new RunThread(_control, _toolBar);
+					if(thread == null || !thread.isAlive()) {
+						thread = new RunThread(_control, _toolBar, _menuBar);
 						thread.start();
-						//thread.join();
-						//thread = null;
 					}
 					_stateBar.setMessage(_toolBar.getTime() + " steps advanced!");
 				} catch (Exception e1) {
@@ -247,7 +245,7 @@ public class MainPanel extends JFrame implements ActionListener {
 				}
 				break;
 			case "PAUSE":
-				if(thread != null) {
+				if(thread != null && !thread.isInterrupted()) {
 					thread.interrupt();
 					thread = null;
 				}

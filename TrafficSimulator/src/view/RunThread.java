@@ -9,18 +9,22 @@ import model.SimulatorError;
 
 public class RunThread extends Thread {
 	
-	private Controller _control;
-	private ToolBar _toolBar;
+	protected Controller _control;
+	protected ToolBar _toolBar;
+	protected MenuBar _menuBar;
 	
-	public RunThread(Controller control, ToolBar toolBar) {
+	public RunThread(Controller control, ToolBar toolBar, MenuBar menuBar) {
 		_control = control;
 		_toolBar = toolBar;
+		_menuBar = menuBar;
 	}
 	
 	@Override
 	public void run() {
+		boolean interrupted = false;
 		_toolBar.able(false);
-		for (int i = 0; i < _toolBar.getTime(); i++) {
+		_menuBar.able(false);
+		for (int i = 0; !interrupted && i < _toolBar.getTime(); i++) {
 			// Runs inside of the Swing UI thread
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
@@ -32,8 +36,10 @@ public class RunThread extends Thread {
 			try {
 				Thread.sleep(_toolBar.getDelay() * 1000);
 			} catch (InterruptedException e) {
+				interrupted = true;
 			}
 		}
 		_toolBar.able(true);
+		_menuBar.able(true);
 	}
 }

@@ -31,7 +31,6 @@ import model.TrafficSimulator;
 import model.Vehicle;
 import music.Music;
 import view.MainPanel;
-import view.RunThread;
 
 public class RacingPanel extends MainPanel implements Observable<RacingSimulatorObserver>{
 
@@ -345,7 +344,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 		_model.addObserver(_roadmapGraph);
 	}
 	
-	private void raceFinished() {
+	public void raceFinished() {
 		if(playingMusic)
 			_music.stop();
 		Music temp = _music;
@@ -430,18 +429,19 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 					try {
 						if(_model.getTime() == 0)
 							raceStarted();					
-						if(thread == null) {
-							thread = new RunThread(_control, _toolBar);
+						if(thread == null || !thread.isAlive()) {
+							thread = new RacingRunThread(_control, _toolBar, null, (RacingSimulator)_model, this);
 							thread.start();
-							thread = null;
-						}
-						if(_model.getTotalVehicles() == ((RacingSimulator)_model).getArrivedVehicles()) {
-							raceFinished();
-							((RacingToolBar) _toolBar).raceFinished();
 						}
 					} catch (Exception e1) {
 						JOptionPane.showMessageDialog(this, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					}
+				}
+				break;
+			case "PAUSE":
+				if(thread != null && !thread.isInterrupted()) {
+					thread.interrupt();
+					thread = null;
 				}
 				break;
 			case "QUIT":
