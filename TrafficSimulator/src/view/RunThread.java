@@ -21,10 +21,9 @@ public class RunThread extends Thread {
 	
 	@Override
 	public void run() {
-		boolean interrupted = false;
 		_toolBar.able(false);
 		_menuBar.able(false);
-		for (int i = 0; !interrupted && i < _toolBar.getTime(); i++) {
+		for (int i = 0; i < _toolBar.getTime(); i++) {
 			// Runs inside of the Swing UI thread
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
@@ -36,7 +35,7 @@ public class RunThread extends Thread {
 			try {
 				Thread.sleep(_toolBar.getDelay() * 1000);
 			} catch (InterruptedException e) {
-				interrupted = true;
+				break;
 			}
 		}
 		_toolBar.able(true);
