@@ -45,7 +45,6 @@ public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
 		_fc = new JFileChooser();
 		_fc.setCurrentDirectory(new File("."));
 		_fc.setMultiSelectionEnabled(false);
-		_fc.setFileFilter(new FileNameExtensionFilter("Archivos INI", "ini"));
 		_inFile = inFile;
 		if(_inFile != null)
 			setText(readFile());	
@@ -152,6 +151,7 @@ public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
 	}
 
 	private void loadFile() {
+		_fc.setFileFilter(new FileNameExtensionFilter("Archivos INI", "ini"));
 		int returnVal = this._fc.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			_inFile = this._fc.getSelectedFile();
@@ -188,6 +188,7 @@ public class EventsEditorPanel extends TextAreaPanel implements ActionListener{
 	}
 
 	private void saveFile() throws FileNotFoundException {
+		_fc.setFileFilter(new FileNameExtensionFilter("Archivos OUT", "out"));
 		int returnVal = _fc.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = _fc.getSelectedFile();
