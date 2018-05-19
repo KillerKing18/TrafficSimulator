@@ -55,6 +55,7 @@ public class RacingToolBar extends ToolBar {
 		itemBoxButton.setEnabled(b);
 		runButton.setEnabled(b);
 		resetButton.setEnabled(b);
+		delaySpinner.setEnabled(b);
 		stepsSpinner.setEnabled(b);
 		lapsSpinner.setEnabled(b);
 		playList.setEnabled(b);

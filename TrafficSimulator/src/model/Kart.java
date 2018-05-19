@@ -31,6 +31,10 @@ public class Kart extends Vehicle {
 	public int getLap() {
 		return _lap;
 	}
+	
+	public void lapMessage(ImageIcon flagicon) {
+		JOptionPane.showMessageDialog(null, "LAP " + _lap, "New Lap", JOptionPane.INFORMATION_MESSAGE, flagicon);
+	}
 
 	void advance() throws UnexistingObjectException {
 		if(_itinerary.get(_itineraryIndex) == _itinerary.get(0) && !_atJunction && _itineraryIndex != 0 && _newLap) {
@@ -41,7 +45,7 @@ public class Kart extends Vehicle {
 				flagicon.setImage(flagicon.getImage().getScaledInstance(300, 200, 1));
 				Music music = new Music("src/music/lap.wav");
 				music.play();
-				JOptionPane.showMessageDialog(null, "LAP " + _lap, "New Lap", JOptionPane.INFORMATION_MESSAGE, flagicon);
+				lapMessage(flagicon);
 				music.stop();
 				music = null;
 			}
