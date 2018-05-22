@@ -82,7 +82,7 @@ public class RoadMapGraph extends JPanel implements TrafficSimulatorObserver {
 			public void mouseClicked(MouseEvent e) {
 			}
 		});
-		_graphPopupMenu.disable();
+		_graphPopupMenu.setEnabled(false);
 	}
 
 	@Override
@@ -98,9 +98,9 @@ public class RoadMapGraph extends JPanel implements TrafficSimulatorObserver {
 	@Override
 	public void advanced(int time, RoadMap map, List<Event> events) {
 		if(_map.getJunctions().isEmpty())
-			_graphPopupMenu.disable();
+			_graphPopupMenu.setEnabled(false);
 		else
-			_graphPopupMenu.enable();
+			_graphPopupMenu.setEnabled(true);
 		
 		subMenu.removeAll();
 		JMenuItem menuItemAll = new JMenuItem("All");

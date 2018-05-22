@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.swing.SwingUtilities;
+
 import exceptions.*;
 
 public class TrafficSimulator implements Observable<TrafficSimulatorObserver> {
@@ -105,27 +107,52 @@ public class TrafficSimulator implements Observable<TrafficSimulatorObserver> {
 	}
 	
 	protected void notifyAdvanced() {
-		for(TrafficSimulatorObserver observer : _observers)
-			observer.advanced(_time, _map, _events);
+		SwingUtilities.invokeLater(new Runnable(){
+			@Override
+			public void run() {
+				for(TrafficSimulatorObserver observer : _observers)
+					observer.advanced(_time, _map, _events);
+			}
+		});
 	}
 	
 	protected void notifyRegistered(TrafficSimulatorObserver obs) {
-		obs.registered(_time, _map, _events);
+		SwingUtilities.invokeLater(new Runnable(){
+			@Override
+			public void run() {
+				obs.registered(_time, _map, _events);
+			}
+		});
 	}
 	
 	protected void notifyError(SimulatorError err) {
-		for(TrafficSimulatorObserver observer : _observers)
-			observer.simulatorError(_time, _map, _events, err);
+		SwingUtilities.invokeLater(new Runnable(){
+			@Override
+			public void run() {
+				for(TrafficSimulatorObserver observer : _observers)
+					observer.simulatorError(_time, _map, _events, err);
+			}
+		});
 	}
 
 	protected void notifyEventAdded() {
-		for(TrafficSimulatorObserver observer : _observers)
-			observer.eventAdded(_time, _map, _events);
+		SwingUtilities.invokeLater(new Runnable(){
+			@Override
+			public void run() {
+				for(TrafficSimulatorObserver observer : _observers)
+					observer.eventAdded(_time, _map, _events);
+			}
+		});
 	}
 	
 	protected void notifyReset() {
-		for(TrafficSimulatorObserver observer : _observers)
-			observer.reset(_time, _map, _events);
+		SwingUtilities.invokeLater(new Runnable(){
+			@Override
+			public void run() {
+				for(TrafficSimulatorObserver observer : _observers)
+					observer.reset(_time, _map, _events);
+			}
+		});
 	}
 
 	public void addObserver(TrafficSimulatorObserver obs) {

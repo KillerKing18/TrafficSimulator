@@ -7,6 +7,7 @@ public class VehiclesTable extends GenericTable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@SuppressWarnings("unchecked")
 	class MyVehiclesTableModel extends MyGenericTableModel {
 		/**
 		 * 

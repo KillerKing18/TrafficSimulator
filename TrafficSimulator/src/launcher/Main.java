@@ -10,7 +10,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import org.apache.commons.cli.CommandLine;
@@ -282,10 +281,7 @@ public class Main {
 		if (_mode == ExecutionMode.BATCH)
 			startBatchMode();
 		else if (_mode == ExecutionMode.GUI) {
-			if(JOptionPane.showConfirmDialog(null, "Do you want to play the racing mode?") == 0)
-				startRACINGMode();
-			else
-				startGUIMode();
+			startGUIMode();
 		}
 		else if (_mode == ExecutionMode.RACING)
 			startRACINGMode();

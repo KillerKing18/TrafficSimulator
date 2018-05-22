@@ -7,6 +7,7 @@ public class RoadsTable extends GenericTable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@SuppressWarnings("unchecked")
 	class MyRoadsTableModel extends MyGenericTableModel {
 		/**
 		 * 

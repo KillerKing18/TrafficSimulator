@@ -2,6 +2,7 @@ package view;
 
 import java.io.IOException;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import control.Controller;
@@ -21,24 +22,29 @@ public class RunThread extends Thread {
 	
 	@Override
 	public void run() {
-		_toolBar.able(false);
-		_menuBar.able(false);
-		for (int i = 0; i < _toolBar.getTime(); i++) {
-			// Runs inside of the Swing UI thread
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					try {
-					_control.run(1);
-					} catch (IOException | SimulatorError e) {}
-				}
-			});
+		SwingUtilities.invokeLater(new Runnable(){
+			@Override
+			public void run() {
+				_toolBar.able(false);
+				_menuBar.able(false);				
+			}
+		});
+		for (int i = 0; i < _toolBar.getTime() && !Thread.currentThread().isInterrupted(); i++) {
 			try {
+				_control.run(1);
 				Thread.sleep(_toolBar.getDelay() * 1000);
+			} catch (IOException | SimulatorError e1) {
+				JOptionPane.showMessageDialog(null, "Error running the simulator", "Error", JOptionPane.ERROR_MESSAGE);
 			} catch (InterruptedException e) {
-				break;
+				Thread.currentThread().interrupt();
 			}
 		}
-		_toolBar.able(true);
-		_menuBar.able(true);
+		SwingUtilities.invokeLater(new Runnable(){
+			@Override
+			public void run() {
+				_toolBar.able(true);
+				_menuBar.able(true);				
+			}
+		});
 	}
 }
