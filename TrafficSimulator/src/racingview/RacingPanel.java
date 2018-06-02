@@ -119,8 +119,8 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 	private JPanel _selectedCupImage;
 	private ClassificationTable _classificationTable;
 
-	public RacingPanel(TrafficSimulator model, String inFile, Controller control, int steps) throws IOException {
-		super(model, inFile, control, steps);
+	public RacingPanel(String inFile, Controller control, int steps) throws IOException {
+		super(inFile, control, steps);
 		playingMusic = false;
 		this.setMinimumSize(new Dimension(1000, 1000));
 		this.setPreferredSize(new Dimension(1000, 1000));
@@ -259,7 +259,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 	}
 	
 	private void createImagesPanel() {
-		_imagesPanel = new ImagesPanel("/images/" + universe.toString() + ".png", _model);
+		_imagesPanel = new ImagesPanel("/images/" + universe.toString() + ".png", _control);
 		_imagesPanel.setLayout(new BoxLayout(_imagesPanel, BoxLayout.X_AXIS));
 		_imagesPanel.setMinimumSize(new Dimension(400, 150));
 		_imagesPanel.setPreferredSize(new Dimension(400, 150));
@@ -268,7 +268,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 	
 	private void createClassificationTable() {
 		_classificationTable = new ClassificationTable();
-		_model.addObserver(_classificationTable);
+		_control.addObserver(_classificationTable);
 		_classificationTable.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Clasification: "));
 	}
 	
@@ -335,13 +335,13 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 	@Override
 	protected void createToolBar() {
 		_toolBar = new RacingToolBar(this, _imagesPanel, _reportsArea, _steps);
-		_model.addObserver(_toolBar);
+		_control.addObserver(_toolBar);
 	}
 	
 	@Override
 	protected void createRoadMapGraph() {
 		_roadmapGraph = new RacingRoadMapGraph();
-		_model.addObserver(_roadmapGraph);
+		_control.addObserver(_roadmapGraph);
 	}
 	
 	public void raceFinished() {
@@ -393,7 +393,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 						+ " when he/she starts a new lap)" : "disabled!";				
 				JOptionPane.showMessageDialog(this, "Item Boxes are now " + activated, "Item Box", JOptionPane.INFORMATION_MESSAGE, itemboxicon);
 				((RacingToolBar) _toolBar).setItemBoxActivated(!((RacingToolBar) _toolBar).getItemBoxActivated());
-				for(Vehicle v : _model.getRoadMap().getVehicles())
+				for(Vehicle v : _control.getRoadMap().getVehicles())
 					((Kart)v).changeItemBox();
 				break;
 			case "RESET":
@@ -415,7 +415,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 				break;
 			case "RUN":
 				boolean begin = true;
-				if(_model.getTime() == 0) {
+				if(_control.getTime() == 0) {
 					_circuitChooserPanel.setSelectedCup(((RacingToolBar) _toolBar).getLaps());
 					try {
 						begin = _imagesPanel.checkIn(_circuitChooserPanel.getSelectedCupJunctions(), 
@@ -427,10 +427,10 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 				}
 				if(begin) {
 					try {
-						if(_model.getTime() == 0)
+						if(_control.getTime() == 0)
 							raceStarted();					
 						if(thread == null || !thread.isAlive()) {
-							thread = new RacingRunThread(_control, _toolBar, null, (RacingSimulator)_model, this);
+							thread = new RacingRunThread(_control, _toolBar, null, (RacingSimulator)_control, this);
 							thread.start();
 						}
 					} catch (Exception e1) {
@@ -476,9 +476,9 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 			case "REDIRECT":
 				JCheckBoxMenuItem redirect = (JCheckBoxMenuItem)e.getSource();
 				if(redirect.isSelected())
-					_model.setOutputStream(_outputStream);
+					_control.setOutputStream(_outputStream);
 				else
-					_model.setOutputStream(null);
+					_control.setOutputStream(null);
 				break;
 			default:
 				break;

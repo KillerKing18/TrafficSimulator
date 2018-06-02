@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import javax.swing.*;
 
-import model.TrafficSimulator;
 import control.Controller;
 
 public class MainPanel extends JFrame implements ActionListener {
@@ -22,12 +21,10 @@ public class MainPanel extends JFrame implements ActionListener {
 	
 	protected RunThread thread;
 	
-	protected TrafficSimulator _model;
 	protected Controller _control;
 	protected File _inFile;
 	protected OutputStream _outputStream;
 	protected int _steps;
-	
 	
 	protected JPanel _mainPanel;
 	protected MenuBar _menuBar;
@@ -56,12 +53,11 @@ public class MainPanel extends JFrame implements ActionListener {
 	protected JPanel _downRightPanel;
 	protected RoadMapGraph _roadmapGraph;
 	
-	public MainPanel(TrafficSimulator model, String inFile, Controller control, int steps) throws IOException {
+	public MainPanel(String inFile, Controller control, int steps) throws IOException {
 		super("Traffic Simulator");
 		thread = null;
 		_steps = steps;
 		_control = control;
-		_model = model;
 		_inFile = inFile == null ? null : new File(inFile);
 		_outputStream = new OutputStream() {
 			@Override
@@ -122,12 +118,12 @@ public class MainPanel extends JFrame implements ActionListener {
 	
 	private void createStateBar() {
 		_stateBar = new StateBarPanel();
-		_model.addObserver(_stateBar);
+		_control.addObserver(_stateBar);
 	}
 	
 	protected void createToolBar() {
 		_toolBar = new ToolBar(this, _eventsEditor, _reportsArea, _steps);
-		_model.addObserver(_toolBar);
+		_control.addObserver(_toolBar);
 	}
 	
 	protected void createDownPanel() {
@@ -151,7 +147,7 @@ public class MainPanel extends JFrame implements ActionListener {
 	
 	protected void createRoadMapGraph() {
 		_roadmapGraph = new RoadMapGraph();
-		_model.addObserver(_roadmapGraph);
+		_control.addObserver(_roadmapGraph);
 	}
 	
 	protected void createDownLeftPanel() {
@@ -173,19 +169,19 @@ public class MainPanel extends JFrame implements ActionListener {
 	
 	protected void createVehiclesTable() {
 		_vehiclesTable = new VehiclesTable();
-		_model.addObserver(_vehiclesTable);
+		_control.addObserver(_vehiclesTable);
 		_vehiclesTable.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Vehicles"));
 	}
 	
 	private void createRoadsTable() {
 		_roadsTable = new RoadsTable();
-		_model.addObserver(_roadsTable);
+		_control.addObserver(_roadsTable);
 		_roadsTable.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Roads"));
 	}
 	
 	private void createJunctionsTable() {
 		_junctionsTable = new JunctionsTable();
-		_model.addObserver(_junctionsTable);
+		_control.addObserver(_junctionsTable);
 		_junctionsTable.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Junctions"));
 	}
 	
@@ -215,14 +211,14 @@ public class MainPanel extends JFrame implements ActionListener {
 	
 	private void createEventsQueue() {
 		_eventsQueue = new EventsQueueTable();
-		_model.addObserver(_eventsQueue);
+		_control.addObserver(_eventsQueue);
 		_eventsQueue.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Events Queue"));
 	}
 	
 	private void createReportsArea() {
 		_reportsArea = new ReportsAreaPanel(_stateBar, this, "Reports", false);
-		_model.addObserver(_reportsArea);
-		_model.setOutputStream(_outputStream);
+		_control.addObserver(_reportsArea);
+		_control.setOutputStream(_outputStream);
 	}
 
 	@Override
@@ -256,9 +252,9 @@ public class MainPanel extends JFrame implements ActionListener {
 			case "REDIRECT":
 				JCheckBoxMenuItem redirect = (JCheckBoxMenuItem)e.getSource();
 				if(redirect.isSelected())
-					_model.setOutputStream(_outputStream);
+					_control.setOutputStream(_outputStream);
 				else
-					_model.setOutputStream(null);
+					_control.setOutputStream(null);
 				break;
 			default:
 				break;

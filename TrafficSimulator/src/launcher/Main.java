@@ -249,7 +249,7 @@ public class Main {
 			@Override
 			public void run() {
 				try {
-					new MainPanel(sim, _inFile, control, _timeLimit);
+					new MainPanel(_inFile, control, _timeLimit);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -268,7 +268,7 @@ public class Main {
 			@Override
 			public void run() {
 				try {
-					new RacingPanel(sim, _inFile, control, _timeLimit);
+					new RacingPanel(_inFile, control, _timeLimit);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

@@ -123,8 +123,7 @@ public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 		// Reports
 		generateReportsButton = new JButton();
 		createGenericButton(generateReportsButton, "GENERATE", _reportsListener, "/icons/report.png", "Generate reports");
-		
-		
+				
 		clearReportsAreaButton = new JButton();
 		createGenericButton(clearReportsAreaButton, "CLEAR", _reportsListener, "/icons/delete_report.png", "Clear reports area");
 		
@@ -194,7 +193,6 @@ public class ToolBar extends JToolBar implements TrafficSimulatorObserver {
 	@Override
 	public void registered(int time, RoadMap map, List<Event> events) {
 		timeTextField.setText("0");
-		
 	}
 
 	@Override

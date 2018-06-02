@@ -6,8 +6,10 @@ import java.io.OutputStream;
 import ini.Ini;
 import ini.IniSection;
 import model.Event;
+import model.Observable;
 import model.SimulatorError;
 import model.TrafficSimulator;
+import model.TrafficSimulatorObserver;
 
 /**
  * This class is in charge of loading the Events and pass them to the TrafficSimulator.
@@ -16,7 +18,7 @@ import model.TrafficSimulator;
  * This class also runs the program by calling the run method of the TrafficSimulator.
  *
  */
-public class Controller {
+public class Controller implements Observable<TrafficSimulatorObserver>{
 	
 	protected TrafficSimulator _sim;
 	EventBuilder[] _eventBuilders = {};
@@ -61,6 +63,14 @@ public class Controller {
 	
 	public void run(int ticks) throws IOException, SimulatorError {
 		_sim.run(ticks);
+	}
+	
+	public void addObserver(TrafficSimulatorObserver obs) {
+		_sim.addObserver(obs);
+	}
+	
+	public void removeObserver(TrafficSimulatorObserver obs) {
+		_sim.removeObserver(obs);
 	}
 	
 	public void loadEvents() throws SimulatorError {
