@@ -35,7 +35,7 @@ public abstract class ChooserPanel extends JPanel {
 	}
 	
 	protected void createGenericButton(JButton button, String path) {
-		ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/" + path + ".png"));
+		ImageIcon icon = new ImageIcon(this.getClass().getResource("/icons/clear.png"));
 		icon.setImage(icon.getImage().getScaledInstance(75, 75, 1));
 		button.setIcon(icon);
 		button.setToolTipText(path);

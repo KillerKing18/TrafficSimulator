@@ -5,21 +5,21 @@ import java.io.IOException;
 import javax.swing.SwingUtilities;
 
 import control.Controller;
-import model.RacingSimulator;
 import model.SimulatorError;
+import racingcontrol.RacingController;
 import view.MenuBar;
 import view.RunThread;
 import view.ToolBar;
 
 public class RacingRunThread extends RunThread {
 	
-	private RacingSimulator _model;
+	private Controller _control;
 	private RacingPanel _racingPanel;
 	private boolean _interrupted;
 
-	public RacingRunThread(Controller control, ToolBar toolBar, MenuBar menuBar, RacingSimulator model, RacingPanel racingPanel) {
+	public RacingRunThread(Controller control, ToolBar toolBar, MenuBar menuBar, RacingPanel racingPanel) {
 		super(control, toolBar, menuBar);
-		_model = model;
+		_control = control;
 		_racingPanel = racingPanel;
 		_interrupted = false;
 	}
@@ -33,7 +33,7 @@ public class RacingRunThread extends RunThread {
 				public void run() {
 					try {
 					_control.run(1);
-					if(_model.getTotalVehicles() == ((RacingSimulator)_model).getArrivedVehicles()) {
+					if(((RacingController) _control).getTotalVehicles() == ((RacingController) _control).getArrivedVehicles()) {
 						_racingPanel.raceFinished();
 						((RacingToolBar)_toolBar).raceFinished();
 						_interrupted = true;

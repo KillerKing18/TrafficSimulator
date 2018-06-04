@@ -40,7 +40,6 @@ public class RoadMapGraph extends JPanel implements TrafficSimulatorObserver {
 		initGUI();
 	}
 	
-	@SuppressWarnings("deprecation")
 	protected void initGUI() {
 		this.setLayout(new BorderLayout());	
 		_graph = new GraphComponent();
@@ -94,7 +93,6 @@ public class RoadMapGraph extends JPanel implements TrafficSimulatorObserver {
 	public void simulatorError(int time, RoadMap map, List<Event> events, SimulatorError e) {
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void advanced(int time, RoadMap map, List<Event> events) {
 		if(_map.getJunctions().isEmpty())

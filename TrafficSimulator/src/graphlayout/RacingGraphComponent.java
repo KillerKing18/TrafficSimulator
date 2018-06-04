@@ -39,7 +39,7 @@ public class RacingGraphComponent extends GraphComponent implements Runnable {
 	
 	@Override
 	protected void drawVehicle(Graphics g, double x, double y, int x1, int y1, int diam, int xDir, int yDir, String txt) {
-		Image img = new ImageIcon(getClass().getResource("/images/" + txt + ".gif")).getImage();
+		Image img = new ImageIcon(getClass().getResource("/icons/clear.png")).getImage();
 		if(!empezado) {
 			_x_past.put(txt, x1 + xDir * ((int) x) - diam / 2);
 			_y_past.put(txt, y1 + yDir * ((int) y) - diam / 2);

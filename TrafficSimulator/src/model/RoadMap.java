@@ -17,10 +17,8 @@ public class RoadMap {
 	private Map<String, Road> _roadsMap;
 	private Map<String, Junction> _junctionsMap;
 	
-	private int totalVehicles;
 	
 	public RoadMap(){
-		totalVehicles = 0;
 		_junctions = new ArrayList<Junction>();
 		_roads = new ArrayList<Road>(); 
 		_vehicles = new ArrayList<Vehicle>();
@@ -71,7 +69,6 @@ public class RoadMap {
 	
 	void addVehicle(Vehicle vehicle) throws SimulatorError {
 		if(!_vehiclesMap.containsKey(vehicle.getId())) {
-			totalVehicles++;
 			_vehicles.add(vehicle);
 			_vehiclesMap.put(vehicle.getId(), vehicle);
 			vehicle.moveToNextRoad();
@@ -100,7 +97,6 @@ public class RoadMap {
 		_junctionsMap.clear();
 		_vehiclesMap.clear();
 		_roadsMap.clear();
-		totalVehicles = 0;
 	}
 	
 	public String generateReport(int time) {
@@ -123,9 +119,5 @@ public class RoadMap {
 		for(Vehicle v: vehicles)
 			report += v.generateReport(time) + "\n";
 		return report;
-	}
-	
-	public int getTotalVehicles() {
-		return totalVehicles;
 	}
 }

@@ -174,6 +174,10 @@ public class RacingToolBar extends ToolBar {
 		this.addSeparator();
 		this.add(quitButton);
 	}
+	
+	public int getCurrentTime() {
+		return Integer.parseInt(timeTextField.getText());
+	}
 
 	public JComboBox<String> getComboBox() {
 		return playList;

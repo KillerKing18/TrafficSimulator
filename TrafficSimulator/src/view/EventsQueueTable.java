@@ -7,7 +7,6 @@ public class EventsQueueTable extends GenericTable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	@SuppressWarnings("unchecked")
 	class MyEventsQueueTableModel extends MyGenericTableModel {
 		/**
 		 * 

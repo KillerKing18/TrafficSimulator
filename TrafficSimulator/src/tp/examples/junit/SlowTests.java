@@ -1,0 +1,1 @@
+package tp.examples.junit;public interface SlowTests { /* category marker */}

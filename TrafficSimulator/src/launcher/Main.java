@@ -36,6 +36,7 @@ import ini.Ini;
 import model.RacingSimulator;
 import model.SimulatorError;
 import model.TrafficSimulator;
+import racingcontrol.RacingController;
 import racingview.RacingPanel;
 import view.MainPanel;
 
@@ -262,7 +263,7 @@ public class Main {
 		if (_inFile != null)
 			is = new FileInputStream(new File(_inFile));
 		TrafficSimulator sim = new RacingSimulator();
-		Controller control = new Controller(sim, _timeLimit, is);
+		Controller control = new RacingController(sim, _timeLimit, is);
 		control.setEventBuilders(_events);
 		SwingUtilities.invokeAndWait(new Runnable() {
 			@Override
@@ -300,9 +301,10 @@ public class Main {
 	    	test("resources/examples/events/basic");
 		
 		
-		test("resources/ini1.ini", "resources/output.ini.out", "resources/ini1.ini.eout", 10);
-		test("resources/err");
-		test("resources/advanced");*/
+		test("resources/ini1.ini", "resources/output.ini.out", "resources/ini1.ini.eout", 10);*/
+		//test("resources/err");
+		//test("resources/basic");
+		//test("resources/advanced");
 		
 		start(args);
 	}

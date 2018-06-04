@@ -10,6 +10,7 @@ public class RacingSimulator extends TrafficSimulator {
 	
 	public RacingSimulator() {
 		super();
+		_map = new RacingRoadMap();
 		_kartsComparator = new Comparator<Vehicle>() {
 			public int compare(Vehicle v1, Vehicle  v2) {
 				if (v1.getItineraryIndex() > v2.getItineraryIndex())
@@ -75,5 +76,13 @@ public class RacingSimulator extends TrafficSimulator {
 	
 	public int getArrivedVehicles() {
 		return arrivedVehicles;
+	}
+	
+	public int getTotalVehicles() {
+		return ((RacingRoadMap) _map).getTotalVehicles();
+	}
+	
+	public RoadMap getRoadMap() {
+		return _map;
 	}
 }

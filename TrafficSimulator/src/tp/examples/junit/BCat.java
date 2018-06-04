@@ -1,0 +1,1 @@
+package tp.examples.junit;import org.junit.Test;import org.junit.experimental.categories.Category;@Category({ SlowTests.class, FastTests.class })public class BCat {	@Test	public void c() {	}}

@@ -38,7 +38,7 @@ public class SelectedCharactersTable extends GenericRacingTable {
 					v = _characterChooserPanel.getLuckMap().get(_characterChooserPanel.getSelectedCharacters().get(rowIndex)).toString();
 					 break;
 				case 3:
-					ImageIcon icon = new ImageIcon(getClass().getResource("/images/" + _characterChooserPanel.getSelectedCharacters().get(rowIndex) + ".png"));
+					ImageIcon icon = new ImageIcon(getClass().getResource("/icons/clear.png"));
 					icon.setImage(icon.getImage().getScaledInstance(42, 42, 1));
 					return icon;
 				default:

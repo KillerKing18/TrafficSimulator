@@ -44,7 +44,7 @@ public class ClassificationTable extends GenericTable {
 					 v = "" + ((Kart) map.getVehicles().get(rowIndex)).getLap();
 					 break;
 				case 4:
-					 ImageIcon icon = new ImageIcon(getClass().getResource("/images/" + map.getVehicles().get(rowIndex).getId() + ".png"));
+					 ImageIcon icon = new ImageIcon(getClass().getResource("/icons/clear.png"));
 					 icon.setImage(icon.getImage().getScaledInstance(90, 90, 1));
 					 return icon;
 				default:

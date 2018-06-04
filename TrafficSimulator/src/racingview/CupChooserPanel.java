@@ -83,7 +83,7 @@ public class CupChooserPanel extends ChooserPanel {
 				temp1.setPreferredSize(new Dimension(205, 150));
 				temp1.setMaximumSize(new Dimension(205, 150));
 				temp1.setMinimumSize(new Dimension(205, 150));
-				ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/" + path + "trophy" + ".jpg"));
+				ImageIcon icon = new ImageIcon(this.getClass().getResource("/icons/clear.png"));
 				icon.setImage(icon.getImage().getScaledInstance(205, 150, 1));
 				temp1.add(new JLabel(icon));
 				_imagesPanel.add(temp1);
@@ -105,7 +105,7 @@ public class CupChooserPanel extends ChooserPanel {
 			public void mouseExited(MouseEvent e) {
 				_imagesPanel.removeAll();
 				JLabel _image = new JLabel();
-				ImageIcon icon = new ImageIcon(this.getClass().getResource(_imagesPanel.getPath()));
+				ImageIcon icon = new ImageIcon(this.getClass().getResource("/icons/clear.png"));
 				icon.setImage(icon.getImage().getScaledInstance(400, 150, 1));
 				_image.setIcon(icon);
 				_imagesPanel.add(_image);

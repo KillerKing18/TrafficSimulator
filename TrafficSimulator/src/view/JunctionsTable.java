@@ -6,7 +6,6 @@ public class JunctionsTable extends GenericTable{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@SuppressWarnings("unchecked")
 	class MyJunctionsTableModel extends MyGenericTableModel {
 		/**
 		 * 

@@ -166,16 +166,4 @@ public class TrafficSimulator implements Observable<TrafficSimulatorObserver> {
 		if(obs != null && _observers.contains(obs))
 			_observers.remove(obs);
 	}
-	
-	public int getTotalVehicles() {
-		return _map.getTotalVehicles();
-	}
-	
-	public int getTime() {
-		return _time;
-	}
-	
-	public RoadMap getRoadMap() {
-		return _map;
-	}
 }

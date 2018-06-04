@@ -83,7 +83,7 @@ public abstract class GenericRacingTable extends JPanel implements RacingSimulat
 	public void cupSelected() {
 		tableModel.refresh();
 		_selectedCupImage.removeAll();
-		ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/" + _cupChooserPanel.getSelectedCup() + "trophy" + ".jpg"));
+		ImageIcon icon = new ImageIcon(this.getClass().getResource("/icons/clear.png"));
 		icon.setImage(icon.getImage().getScaledInstance(390, 230, 1));
 		_selectedCupImage.add(new JLabel(icon));
 		_selectedCupImage.updateUI();

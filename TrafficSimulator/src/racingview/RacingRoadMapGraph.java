@@ -2,10 +2,8 @@ package racingview;
 
 import java.awt.BorderLayout;
 import java.awt.Graphics;
-import java.net.URL;
 import java.util.List;
 
-import javax.swing.ImageIcon;
 
 import graphlayout.RacingGraphComponent;
 import model.Event;
@@ -32,10 +30,10 @@ public class RacingRoadMapGraph extends RoadMapGraph {
 
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		String pathBackground = "/images/background.png";  
-		URL urlBackground = this.getClass().getResource(pathBackground);  
-		ImageIcon iconBackground = new ImageIcon(urlBackground);
-		g.drawImage(iconBackground.getImage(), 0, 0, this.getWidth(), this.getHeight(), this);
+		//String pathBackground = "/images/background.png";  
+		//URL urlBackground = this.getClass().getResource(pathBackground);  
+		//ImageIcon iconBackground = new ImageIcon(urlBackground);
+		//g.drawImage(iconBackground.getImage(), 0, 0, this.getWidth(), this.getHeight(), this);
 	}
 	
 	public void setEmpezado(boolean b) {

@@ -16,8 +16,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import music.Music;
-
 public class CharacterChooserPanel extends ChooserPanel {
 
 	/**
@@ -48,8 +46,8 @@ public class CharacterChooserPanel extends ChooserPanel {
 	private void addKart(String id) {
 		if(!_idsList.contains(id)) {
 			_idsList.add(id);
-			Music music = new Music("src/music/" + id +  "_voice.wav");
-			music.play();
+			//Music music = new Music("src/music/" + id +  "_voice.wav");
+			//music.play();
 		}
 		else
 			_idsList.remove(id);
@@ -89,7 +87,7 @@ public class CharacterChooserPanel extends ChooserPanel {
 				temp1.setPreferredSize(new Dimension(200, 150));
 				temp1.setMaximumSize(new Dimension(200, 150));
 				temp1.setMinimumSize(new Dimension(200, 150));
-				ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/" + path + ".gif"));
+				ImageIcon icon = new ImageIcon(this.getClass().getResource("/icons/clear.png"));
 				icon.setImage(icon.getImage().getScaledInstance(75, 75, 1));
 				temp1.add(new JLabel(icon));
 				_imagesPanel.add(temp1);
@@ -109,7 +107,7 @@ public class CharacterChooserPanel extends ChooserPanel {
 			public void mouseExited(MouseEvent e) {
 				_imagesPanel.removeAll();
 				JLabel _image = new JLabel();
-				ImageIcon icon = new ImageIcon(this.getClass().getResource(_imagesPanel.getPath()));
+				ImageIcon icon = new ImageIcon(this.getClass().getResource("/icons/clear.png"));
 				icon.setImage(icon.getImage().getScaledInstance(400, 150, 1));
 				_image.setIcon(icon);
 				_imagesPanel.add(_image);

@@ -24,12 +24,10 @@ import javax.swing.JPanel;
 import control.Controller;
 import model.Kart;
 import model.Observable;
-import model.RacingSimulator;
 import model.RacingSimulatorObserver;
 import model.SimulatorError;
-import model.TrafficSimulator;
 import model.Vehicle;
-import music.Music;
+import racingcontrol.RacingController;
 import view.MainPanel;
 
 public class RacingPanel extends MainPanel implements Observable<RacingSimulatorObserver>{
@@ -108,8 +106,8 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 	
 	private List<RacingSimulatorObserver> _observers;
 	
-	private Music _music;
-	private boolean playingMusic;
+	//private Music _music;
+	//private boolean playingMusic;
 	private CharacterChooserPanel _characterChooserPanel;
 	private ImagesPanel _imagesPanel;
 	private CupChooserPanel _circuitChooserPanel;
@@ -121,7 +119,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 
 	public RacingPanel(String inFile, Controller control, int steps) throws IOException {
 		super(inFile, control, steps);
-		playingMusic = false;
+		//playingMusic = false;
 		this.setMinimumSize(new Dimension(1000, 1000));
 		this.setPreferredSize(new Dimension(1000, 1000));
 		this.setMaximumSize(new Dimension(1000, 1000));
@@ -134,8 +132,8 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 	
 	@SuppressWarnings("static-access")
 	private void selectUniverse() {
-		_music = new Music("src/music/start_simulator.wav");
-		_music.play();
+		//_music = new Music("src/music/start_simulator.wav");
+		//_music.play();
 		
 		JOptionPane option = new JOptionPane();
 		
@@ -149,7 +147,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 		buttonSW.setToolTipText("Star Wars");
 		
 		select.setLayout(new GridLayout(2, 2));
-		ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/welcome.gif"));
+		ImageIcon icon = new ImageIcon(this.getClass().getResource("/icons/clear.png"));
 		icon.setImage(icon.getImage().getScaledInstance(300, 150, 1));
 		JLabel hello = new JLabel("Select the universe you want to race in...");
 		hello.setHorizontalAlignment(JLabel.CENTER);
@@ -163,12 +161,12 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 		select.setMaximumSize(new Dimension(600, 300));
 		
 		option.showMessageDialog(this, select, "Welcome!", JOptionPane.NO_OPTION);
-		_music.stop();
-		_music = null;
+		//_music.stop();
+		//_music = null;
 	}
 	
 	private void createSelectUniverseButton(JButton button, String path, Universe universe, String toolTip) {
-		ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/" + path + ".png"));
+		ImageIcon icon = new ImageIcon(this.getClass().getResource("/icons/clear.png"));
 		icon.setImage(icon.getImage().getScaledInstance(300, 150, 1));
 		button.setIcon(icon);
 		button.setToolTipText(toolTip);
@@ -204,7 +202,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 		default:
 			break;
 		}
-		_music = new Music("src/music/" + songs[0] + ".wav");
+		//_music = new Music("src/music/" + songs[0] + ".wav");
 		_observers = new ArrayList<>();
 		
 		this.setTitle("Racing Simulator");
@@ -259,7 +257,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 	}
 	
 	private void createImagesPanel() {
-		_imagesPanel = new ImagesPanel("/images/" + universe.toString() + ".png", _control);
+		_imagesPanel = new ImagesPanel("/images/" + universe.toString() + ".png", (RacingController) _control);
 		_imagesPanel.setLayout(new BoxLayout(_imagesPanel, BoxLayout.X_AXIS));
 		_imagesPanel.setMinimumSize(new Dimension(400, 150));
 		_imagesPanel.setPreferredSize(new Dimension(400, 150));
@@ -310,7 +308,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 	
 	private void createSelectedCupImage() {
 		_selectedCupImage = new JPanel();
-		ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/" + _circuitChooserPanel.getSelectedCup() + "trophy" + ".jpg"));
+		ImageIcon icon = new ImageIcon(this.getClass().getResource("/icons/clear.png"));
 		icon.setImage(icon.getImage().getScaledInstance(390, 230, 1));
 		_selectedCupImage.add(new JLabel(icon));
 	}
@@ -345,18 +343,18 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 	}
 	
 	public void raceFinished() {
-		if(playingMusic)
-			_music.stop();
-		Music temp = _music;
-		_music = new Music("src/music/CourseClear.wav");
-		_music.play();
-		ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/finish.gif"));
+		//if(playingMusic)
+			//_music.stop();
+		//Music temp = _music;
+		//_music = new Music("src/music/CourseClear.wav");
+		//_music.play();
+		ImageIcon icon = new ImageIcon(this.getClass().getResource("/icons/clear.png"));
 		JOptionPane.showMessageDialog(this, "The race has finished!", "CONGRATULATIONS", JOptionPane.INFORMATION_MESSAGE, icon);
-		_music.stop();
-		_music = null;
-		_music = temp;
-		if(playingMusic)
-			_music.loop();
+		//_music.stop();
+		//_music = null;
+		//_music = temp;
+		//if(playingMusic)
+			//_music.loop();
 	}
 	
 	private void raceStarted() {
@@ -368,18 +366,18 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 		_downLeftPanel.repaint();
 		_downLeftPanel.updateUI();
 		
-		if(playingMusic)
-			_music.stop();
-		Music temp = _music;
-		_music = new Music("src/music/start_race.wav");
-		_music.play();
-		ImageIcon icon = new ImageIcon(this.getClass().getResource("/images/lakitu.gif"));
+		//if(playingMusic)
+			//_music.stop();
+		//Music temp = _music;
+		//_music = new Music("src/music/start_race.wav");
+		//_music.play();
+		ImageIcon icon = new ImageIcon(this.getClass().getResource("/icons/clear.png"));
 		JOptionPane.showMessageDialog(this, "READY\n\nSET\n\nGO!", "The race is starting!", JOptionPane.INFORMATION_MESSAGE, icon);
-		_music.stop();
-		_music = null;
-		_music = temp;
-		if(playingMusic)
-			_music.loop();
+		//_music.stop();
+		//_music = null;
+		//_music = temp;
+		//if(playingMusic)
+			//_music.loop();
 	}
 	
 	@Override
@@ -393,7 +391,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 						+ " when he/she starts a new lap)" : "disabled!";				
 				JOptionPane.showMessageDialog(this, "Item Boxes are now " + activated, "Item Box", JOptionPane.INFORMATION_MESSAGE, itemboxicon);
 				((RacingToolBar) _toolBar).setItemBoxActivated(!((RacingToolBar) _toolBar).getItemBoxActivated());
-				for(Vehicle v : _control.getRoadMap().getVehicles())
+				for(Vehicle v : ((RacingController) _control).getRoadMap().getVehicles())
 					((Kart)v).changeItemBox();
 				break;
 			case "RESET":
@@ -415,7 +413,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 				break;
 			case "RUN":
 				boolean begin = true;
-				if(_control.getTime() == 0) {
+				if(((RacingToolBar) _toolBar).getCurrentTime() == 0) {
 					_circuitChooserPanel.setSelectedCup(((RacingToolBar) _toolBar).getLaps());
 					try {
 						begin = _imagesPanel.checkIn(_circuitChooserPanel.getSelectedCupJunctions(), 
@@ -427,10 +425,10 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 				}
 				if(begin) {
 					try {
-						if(_control.getTime() == 0)
+						if(((RacingToolBar) _toolBar).getCurrentTime() == 0)
 							raceStarted();					
 						if(thread == null || !thread.isAlive()) {
-							thread = new RacingRunThread(_control, _toolBar, null, (RacingSimulator)_control, this);
+							thread = new RacingRunThread(_control, _toolBar, null, this);
 							thread.start();
 						}
 					} catch (Exception e1) {
@@ -448,30 +446,30 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 				System.exit(0);
 				break;
 			case "PLAY":
-				_music.loop();
-				playingMusic = true;
+				//_music.loop();
+				//playingMusic = true;
 				break;
 			case "STOP":
-				_music.stop();
-				playingMusic = false;
+				//_music.stop();
+				//playingMusic = false;
 				break;
 			case "RANDOM":
-				_music.stop();
+				//_music.stop();
 				Random rnd = new Random();
 				int selected = rnd.nextInt(songs.length);
-				_music = null;
-				_music = new Music("src/music/" + songs[selected] + ".wav");
+				//_music = null;
+				//_music = new Music("src/music/" + songs[selected] + ".wav");
 				((RacingToolBar)_toolBar).getComboBox().setSelectedIndex(selected);
-				_music.loop();
-				playingMusic = true;
+				//_music.loop();
+				//playingMusic = true;
 				break;
 			case "PLAYLIST":
-				@SuppressWarnings("unchecked") JComboBox<String> comboBox = (JComboBox<String>)e.getSource();
-				_music.stop();
-				_music = null;
-				_music = new Music("src/music/" + (String)comboBox.getSelectedItem() + ".wav");
-				_music.loop();
-				playingMusic = true;
+				@SuppressWarnings({ "unchecked", "unused" }) JComboBox<String> comboBox = (JComboBox<String>)e.getSource();
+				//_music.stop();
+				//_music = null;
+				//_music = new Music("src/music/" + (String)comboBox.getSelectedItem() + ".wav");
+				//_music.loop();
+				//playingMusic = true;
 				break;
 			case "REDIRECT":
 				JCheckBoxMenuItem redirect = (JCheckBoxMenuItem)e.getSource();
@@ -516,7 +514,7 @@ public class RacingPanel extends MainPanel implements Observable<RacingSimulator
 			observer.reset();
 	}
 	
-	public Music getMusic() {
-		return _music;
-	}
+	//public Music getMusic() {
+		//return _music;
+	//}
 }
